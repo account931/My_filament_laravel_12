@@ -1,5 +1,5 @@
 
-> Laravel 12, PHP 8.4.8 , Filament  mysql 5.6, db: '',
+> Laravel 12.18, PHP 8.4.8 , Filament  mysql 5.6, db: '',
 Visual Studio Code ()
      -> VS package extension -> 
            -> PHP Namespace Resolver (to import class -> RMC -> import class)(https://marketplace.visualstudio.com/items?itemName=MehediDracula.php-namespace-resolver)
@@ -18,6 +18,8 @@ main page =>  http://localhost:8000/     (u screwed ports with phpmyadmin)
 ### Content
 - [1. Install Laravel 12](#1-install-laravel-12)
 - [2. Docker sail](#2-docker-sail)
+- [3. Filament](#3-filament)
+
 
 - [103. Screenshots](#2-screenshots)
 
@@ -73,6 +75,38 @@ main page =>  http://localhost:8000/     (u screwed ports with phpmyadmin)
 <code> docker exec -it my_filament_laravel_12-laravel.test-1 /bin/bash  </code>
 
 
+
+
+
+
+<p> ----------------------------------------------------------------------------------------- </p>
+
+## 3. Filament
+
+
+<code> composer require filament/filament </code>
+
+<code> php artisan filament:install </code>
+
+composer require filament/filament:"^3.3" -W
+php artisan filament:install --panels
+php artisan make:filament-user
+
+php artisan vendor:publish --tag=filament-config     //optional to modify
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+<p> ----------------------------------------------------------------------------------------- </p>
 
 
 <p> ----------------------------------------------------------------------------------------- </p>
