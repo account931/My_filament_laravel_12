@@ -1,15 +1,15 @@
 
-> Laravel 12, Php 7.2, mysql 5.6, db: 'laravel_2024_migration',
+> Laravel 12, PHP 8.4.8 , Filament  mysql 5.6, db: '',
 Visual Studio Code ()
      -> VS package extension -> 
            -> PHP Namespace Resolver (to import class -> RMC -> import class)(https://marketplace.visualstudio.com/items?itemName=MehediDracula.php-namespace-resolver)
            -> Git History, GitLense, Php Intellisense, Prittier, Highlight Matching Tag, GitLens — Git supercharged, Notepad VS theme
 
 
-u screwed ports with phpmyadmin
 
-docker exec -it my_filament_laravel_12-laravel.test-1 /bin/bash
-main page =>  http://localhost:8000/
+
+
+main page =>  http://localhost:8000/     (u screwed ports with phpmyadmin)
 
 
 
@@ -19,17 +19,44 @@ main page =>  http://localhost:8000/
 - [1. Install Laravel 12](#1-install-laravel-12)
 - [2. Docker sail](#2-docker-sail)
 
+- [103. Screenshots](#2-screenshots)
+
+
+
+
+
+
 
 <p> ----------------------------------------------------------------------------------------- </p>
 
 ## 1. Install Laravel 12
 
-<p>1. Install => <code> composer create-project --prefer-dist laravel/laravel NAME_HERE "6.*"  </code> </p>
+<p>1. Install => <code> composer create-project --prefer-dist laravel/laravel my-app "^12.0"  </code> </p>
 <p>2. Install dependencies => <code> composer install </code> </p>
 <p>3. Generates the APP_KEY and writes it to .env => <code> php artisan key:generate </code> </p>
-<p>4. In browser can navigate to /public/  => the project should open </p>
+
+<p>4. In browser can navigate to http://localhost:8000/  => the project should open </p>
 <p>5. In console CLI <code> cd NAME_HERE </code> , and <code>git init   git add.   git commit</code> if necessary </p>
 <p>6. Create DB and set in <code>.env (DB_DATABASE)</code> </p>
+
+<p>7. Install auth Breeze  <code> composer require laravel/breeze --dev </code> 
+          Scaffold the auth system  <code> php artisan breeze:install </code>  and run migratations
+
+ </p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -39,11 +66,19 @@ main page =>  http://localhost:8000/
 
 ## 2. Docker sail
 
-<code>./vendor/bin/sail up</code>
-<code>./vendor/bin/sail shell</code>
-<code>sail down</code>
+<code> ./vendor/bin/sail up </code>
+<code> ./vendor/bin/sail shell </code>
+<code> sail down </code>
+
+<code> docker exec -it my_filament_laravel_12-laravel.test-1 /bin/bash  </code>
 
 
+
+
+<p> ----------------------------------------------------------------------------------------- </p>
+
+## 103. Screenshots
+![Screenshot](public/img/screenshots/owner2.png)
 
 
 
