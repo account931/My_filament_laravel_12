@@ -16,7 +16,7 @@ class Venue extends Model
 	use HasFactory; ////Factory trait has been introduced in Laravel v8.
 	use SoftDeletes;
 	
-    protected $appends = ['location_json'];
+    //protected $appends = ['location_json']; //ells Eloquent to automatically include a custom accessor (getLocationJsonAttribute) in the model's array and JSON representations.
 	
 	 /**
      * The attributes that are mass assignable.
@@ -36,9 +36,9 @@ class Venue extends Model
 	
 	
 
-	
+	//disabled as we use json now, instead of POINT
 	//getter for, column 'location', sql type Point' //    // Accessor: Get lat/lon from POINT column
-	public function getLocationAttribute()
+	public function DISABLED_getLocationAttribute()
     {
 		
         // Extract POINT(lon lat) as text using MySQL's ST_AsText

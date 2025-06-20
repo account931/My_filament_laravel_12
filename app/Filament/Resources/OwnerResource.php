@@ -54,12 +54,12 @@ class OwnerResource extends Resource
                 
                 //HasMany disaply venues name
                 //TextColumn::make('venues')->getStateUsing(fn ($record) => $record->getAttributes()['first_name'] ?? null),
-                /*TextColumn::make('venues.name')->label('Venues')
+                TextColumn::make('venues.venue_name')->label('Venues(first 2)')
                      ->formatStateUsing(fn ($state, $record) => 
-                         $record->venues->pluck('venue_name') //->join(', ')
+                         $record->venues->take(2)->pluck('venue_name')->join(', ')
                     )
-                     ->wrap(),
-                     */
+                    ->wrap(),
+                     
 
                 TextColumn::make('last_name')->searchable()->sortable(),
                 TextColumn::make('email')->searchable()->sortable(),
