@@ -34,8 +34,13 @@
                     </x-slot>
 
                     <x-slot name="content">
+
                         <x-dropdown-link :href="route('profile.edit')">
                             {{ __('Profile') }}
+                        </x-dropdown-link>
+
+                         <x-dropdown-link :href="route('filament.1.pages.dashboard')">
+                            {{ __('Filament') }}
                         </x-dropdown-link>
 
                         <!-- Authentication -->
@@ -48,6 +53,7 @@
                                 {{ __('Log Out') }}
                             </x-dropdown-link>
                         </form>
+
                     </x-slot>
                 </x-dropdown>
             </div>

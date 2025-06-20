@@ -70,7 +70,7 @@ main page =>  http://localhost:8000/     (u screwed ports with phpmyadmin)
 
 <code> ./vendor/bin/sail up </code>
 <code> ./vendor/bin/sail shell </code>
-<code> sail down </code>
+<code> ./vendor/bin/sail down </code>
 
 <code> docker exec -it my_filament_laravel_12-laravel.test-1 /bin/bash  </code>
 
@@ -85,19 +85,20 @@ main page =>  http://localhost:8000/     (u screwed ports with phpmyadmin)
 
 
 
-<code> composer require livewire/livewire:^3.0</code>
+<code> composer require livewire/livewire:^3.0 </code>
 
-composer require filament/filament:"^3.3" -W
-php artisan filament:install --panels
-php artisan make:filament-user
+<code> composer require filament/filament:"^3.3" -W </code>
+<code> php artisan filament:install --panels </code>
+<code> php artisan make:filament-user </code>
 
-php artisan vendor:publish --tag=filament-config
 
-php artisan vendor:publish --tag=filament-config     //optional to modify
+
+php artisan vendor:publish --tag=filament-config     //optional to modify, publish config/filament
  
+If you get an error when accessing your panel, check that the service provider was registered in bootstrap/providers.php (Laravel 11 and above) or config/app.php (Laravel 10 and below). If not, you should manually add it.
+     <code> App\Providers\Filament\AdminPanelProvider::class, </code>
 
-
-
+It was causing issue =>  route was set as admin 1   => /home/dima/Desktop/Development_2025/My_Filament_Laravel_12/app/Providers/Filament
 
 
 
