@@ -98,7 +98,7 @@ php artisan vendor:publish --tag=filament-config     //optional to modify, publi
 If you get an error when accessing your panel, check that the service provider was registered in bootstrap/providers.php (Laravel 11 and above) or config/app.php (Laravel 10 and below). If not, you should manually add it.
      <code> App\Providers\Filament\AdminPanelProvider::class, </code>
 
-It was causing issue =>  route was set as admin 1   => /home/dima/Desktop/Development_2025/My_Filament_Laravel_12/app/Providers/Filament
+It was causing issue =>  route was set as admin 1   => /home/dima/Desktop/Development_2025/My_Filament_Laravel_12/app/Providers/Filament/Admin1PanelProvider 
 
 
 
