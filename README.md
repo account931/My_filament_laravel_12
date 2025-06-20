@@ -78,6 +78,10 @@ main page =>  http://localhost:8000/     (u screwed ports with phpmyadmin)
 
 
 
+If migrations fails because of no "pdo_mysql" driver => 
+        ./vendor/bin/sail build --no-cache --build-arg INSTALL_PHP_EXTENSIONS="pdo_mysql"
+
+
 
 <p> ----------------------------------------------------------------------------------------- </p>
 
