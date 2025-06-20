@@ -78,8 +78,9 @@ main page =>  http://localhost:8000/     (u screwed ports with phpmyadmin)
 
 
 
-If migrations fails because of no "pdo_mysql" driver => 
-        ./vendor/bin/sail build --no-cache --build-arg INSTALL_PHP_EXTENSIONS="pdo_mysql"
+ <p>If migrations fails because of no "pdo_mysql" driver =>  run
+         <code>./vendor/bin/sail build --no-cache --build-arg INSTALL_PHP_EXTENSIONS="pdo_mysql" </code>
+ </p>
 
 
 
@@ -106,7 +107,8 @@ It was causing issue =>  route was set as admin 1   => /home/dima/Desktop/Develo
 
 
 
-
+<p><b> Generate a resource for your model </b><p> 
+ <code> php artisan make:filament-resource Post <code> 
 
 
 
