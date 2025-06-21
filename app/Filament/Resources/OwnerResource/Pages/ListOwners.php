@@ -1,4 +1,5 @@
 <?php
+//ListOwners → Table with rows
 
 namespace App\Filament\Resources\OwnerResource\Pages;
 
@@ -15,5 +16,11 @@ class ListOwners extends ListRecords
         return [
             Actions\CreateAction::make(),
         ];
+    }
+
+     // 👇 This method overrides the row click URL
+    protected function getTableRecordUrl(Model $record): string
+    {
+        return OwnerResource::getUrl('view', ['record' => $record]);
     }
 }

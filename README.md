@@ -78,11 +78,6 @@ main page =>  http://localhost:8000/     (u screwed ports with phpmyadmin)
 
 
 
- <p>If migrations fails because of no "pdo_mysql" driver =>  run
-         <code>./vendor/bin/sail build --no-cache --build-arg INSTALL_PHP_EXTENSIONS="pdo_mysql" </code>
- </p>
-
-
 
 <p> ----------------------------------------------------------------------------------------- </p>
 
@@ -90,25 +85,23 @@ main page =>  http://localhost:8000/     (u screwed ports with phpmyadmin)
 
 
 
-<code> composer require livewire/livewire:^3.0 </code>
+<code> composer require livewire/livewire:^3.0</code>
 
-<code> composer require filament/filament:"^3.3" -W </code>
-<code> php artisan filament:install --panels </code>
-<code> php artisan make:filament-user </code>
+composer require filament/filament:"^3.3" -W
+php artisan filament:install --panels
+php artisan make:filament-user
 
+php artisan vendor:publish --tag=filament-config
 
-
-php artisan vendor:publish --tag=filament-config     //optional to modify, publish config/filament
+php artisan vendor:publish --tag=filament-config     //optional to modify
  
-If you get an error when accessing your panel, check that the service provider was registered in bootstrap/providers.php (Laravel 11 and above) or config/app.php (Laravel 10 and below). If not, you should manually add it.
-     <code> App\Providers\Filament\AdminPanelProvider::class, </code>
-
-It was causing issue =>  route was set as admin 1   => /home/dima/Desktop/Development_2025/My_Filament_Laravel_12/app/Providers/Filament/Admin1PanelProvider 
 
 
+<p> Relation-manager</p> 
+php artisan make:filament-relation-manager OwnerResource venues owner_id
 
-<p><b> Generate a resource for your model </b><p> 
- <code> php artisan make:filament-resource Post <code> 
+
+
 
 
 

@@ -24,6 +24,10 @@ use Filament\Notifications\Notification;  //flash
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Actions\BulkAction;  //bulk actions
 use Illuminate\Database\Eloquent\Collection;
+use Filament\Infolists;                      //infolist 
+use Filament\Infolists\Infolist;             //infolist
+use Filament\Infolists\Components\TextEntry; //infolist entry
+use Filament\Tables\Filters\SelectFilter;
 
 class OwnerResource extends Resource
 {
@@ -92,7 +96,25 @@ class OwnerResource extends Resource
                     ->label('Created Timee'),
                 //End Date filter
 
-                //filter 2...........
+                //filter 2 (is confirmed)
+                SelectFilter::make('confirmed')
+                ->options([
+                    '1'  => 'Confirmed',
+                    '0'   => 'Not Confirmed',
+                ])
+                ->query(function (Builder $query, array $data) {  //dd($data);
+                    if (isset($data['value'])) {     //wtf, it must be $data['confirmed']
+                        $query->where('confirmed', (int) $data['value']);
+                    }
+                })
+                ->label('Confirmed Status'),
+                //end filter 2 (is confirmed)
+
+                //filter 3...........
+                Filter::make('is_confirmed')->query(fn (Builder $query): Builder => $query->where('confirmed', true))
+                //end filter 3...........
+
+              //filter 4...........  
             ])
             // End Filters ---------------------
 
@@ -100,11 +122,13 @@ class OwnerResource extends Resource
 
             //Row actions---------------------------
             ->actions([
-                Tables\Actions\EditAction::make(),
-                EditAction::make(),
+                Tables\Actions\ViewAction::make(),           //view one row action
+                Tables\Actions\EditAction::make(),   //edit action
+                //EditAction::make(),
                 DeleteAction::make(),
+
                 //custom actions-1
-                Tables\Actions\Action::make('view')
+                Tables\Actions\Action::make('flashId')
                     ->label('Flash ID')
                     //->url(fn ($record) => route('your.route.name', $record))
                     //->openUrlInNewTab(),
@@ -147,19 +171,39 @@ class OwnerResource extends Resource
             ]);  //end all Bulk actions------------------------------------------------------
     }
 
+    //view one , viewOwner does not matter?????
+    public static function infolist(Infolist $infolist): Infolist
+    {
+    return $infolist
+        ->schema([
+            Infolists\Components\TextEntry::make('first_name')->getStateUsing(fn ($record) => $record->getAttributes()['first_name'] ?? null), //bypassing an Eloquent accessor)
+            Infolists\Components\TextEntry::make('last_name'),
+            Infolists\Components\TextEntry::make('email'),
+            Infolists\Components\TextEntry::make('phone'),
+            Infolists\Components\TextEntry::make('location'),
+            Infolists\Components\TextEntry::make('confirmed')
+            
+                ->columnSpanFull(),
+        ]);
+     }
+
+    //register relation manager
     public static function getRelations(): array
     {
         return [
             //
+            RelationManagers\VenuesRelationManager::class,
+
         ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListOwners::route('/'),
+            'index'  => Pages\ListOwners::route('/'),
             'create' => Pages\CreateOwner::route('/create'),
-            'edit' => Pages\EditOwner::route('/{record}/edit'),
+            'view'  => Pages\ViewOwner::route('/{record}'), // ✅ Must match ViewOwner.php exactly
+            'edit'  => Pages\EditOwner::route('/{record}/edit'),
         ];
     }
 }
