@@ -19,7 +19,7 @@ main page =>  http://localhost:8000/     (u screwed ports with phpmyadmin)
 - [1. Install Laravel 12](#1-install-laravel-12)
 - [2. Docker sail](#2-docker-sail)
 - [3. Filament3](#3-filament3)
-
+- [4. Pest tests](#3-pest-test)
 
 - [103. Screenshots](#2-screenshots)
 
@@ -87,9 +87,9 @@ main page =>  http://localhost:8000/     (u screwed ports with phpmyadmin)
 
 <code> composer require livewire/livewire:^3.0</code>
 
-composer require filament/filament:"^3.3" -W
-php artisan filament:install --panels
-php artisan make:filament-user
+<code>composer require filament/filament:"^3.3" -W </code>
+<code>php artisan filament:install --panels </code>
+<code>php artisan make:filament-user </code>
 
 php artisan vendor:publish --tag=filament-config
 
@@ -99,6 +99,15 @@ php artisan vendor:publish --tag=filament-config     //optional to modify
 
 <p> Relation-manager</p> 
 php artisan make:filament-relation-manager OwnerResource venues owner_id
+
+
+
+
+
+<p> ----------------------------------------------------------------------------------------- </p>
+## 4. Pest test
+
+<code> ./vendor/bin/pest </code>  run all test (since docker, do it inside container)
 
 
 

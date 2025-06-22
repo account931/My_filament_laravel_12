@@ -20,7 +20,7 @@ use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Actions\EditAction;   //edit icon
 use Filament\Tables\Actions\DeleteAction; //delete icon
-use Filament\Notifications\Notification;  //flash
+use Filament\Notifications\Notification;  //flash message
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Actions\BulkAction;  //bulk actions
 use Illuminate\Database\Eloquent\Collection;
@@ -123,9 +123,9 @@ class OwnerResource extends Resource
             //Row actions---------------------------
             ->actions([
                 Tables\Actions\ViewAction::make(),           //view one row action
-                Tables\Actions\EditAction::make(),   //edit action
+                Tables\Actions\EditAction::make(),           //edit built-in action
                 //EditAction::make(),
-                DeleteAction::make(),
+                DeleteAction::make(),                        // delete built-in action
 
                 //custom actions-1
                 Tables\Actions\Action::make('flashId')
@@ -153,14 +153,32 @@ class OwnerResource extends Resource
             //Bulk actions------------------------------------------------------
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),  //delete bulk action
+                    Tables\Actions\DeleteBulkAction::make(),  //delete built-in bulk action
+
+                    \App\Filament\Resources\OwnerResource\Actions\MarkAsConfirmedBulkAction::make(), //my bulk action moved to separate folder
+
                     //my bulk-1
-                    BulkAction::make('markAsConfirmed')
+                    BulkAction::make('markAsConfirmed1')
                         ->label('Mark as Confirmed')
-                        ->action(fn (Collection $records) => 
-                              Notification::make()->title('Record IDs are: ' . $records->pluck('id'))->send() //send flash message
+                        //add form
+                        ->form([
+                        Forms\Components\Select::make('status')
+                            ->required()
+                            ->options([
+                                'active' => 'Active',
+                                'inactive' => 'Inactive',
+                            ]),
+                        Forms\Components\TextInput::make('message')->required(),
+                        ])
+                        //end add form
+                        ->action(function (Collection $records, array $data) {    // $records -> seelcted ids, $data - form input
+                            //dd($data);
+                            //send flash message      
+                            Notification::make()->title('Record IDs are: ' . $records->pluck('id')  . ', form input is: ' . $data['message']   . ' ' .   $data['status'])
+                                  ->success()
+                                  ->send();
                              //$records->each->update(['confirmed' => true] )
-                        )
+                         })
                         ->requiresConfirmation()
                         ->color('success')
                         ->icon('heroicon-o-check-circle'),
