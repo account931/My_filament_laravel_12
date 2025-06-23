@@ -20,6 +20,8 @@ main page =>  http://localhost:8000/     (u screwed ports with phpmyadmin)
 - [2. Docker sail](#2-docker-sail)
 - [3. Filament3](#3-filament3)
 - [4. Pest tests](#3-pest-test)
+- [5. Spatie permission](#5-spatie-permission)
+
 
 - [103. Screenshots](#2-screenshots)
 
@@ -83,8 +85,9 @@ main page =>  http://localhost:8000/     (u screwed ports with phpmyadmin)
 
 ## 3. Filament3
 
+Available at http://localhost:8000/admin/, could not open /admin because of wrong settings in App\Providers\Filament\Admin1PanelProvider.php
 
-
+<p> Install Filament </p> 
 <code> composer require livewire/livewire:^3.0</code>
 
 <code>composer require filament/filament:"^3.3" -W </code>
@@ -97,8 +100,11 @@ php artisan vendor:publish --tag=filament-config     //optional to modify
  
 
 
-<p> Relation-manager</p> 
+<p> Create Relation-manager</p> 
 php artisan make:filament-relation-manager OwnerResource venues owner_id
+
+
+
 
 
 
@@ -112,6 +118,22 @@ php artisan make:filament-relation-manager OwnerResource venues owner_id
 
 
 
+
+
+
+<p> ----------------------------------------------------------------------------------------- </p>
+## 5. Spatie permission
+
+<code>  composer require spatie/laravel-permission </code> 
+php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"
+php artisan migrate
+Im Models/User   =>  use HasRoles; //Spatie Permission
+
+
+<p><b>  Add GUI to Filament via plugin  </b></p>
+https://filamentphp.com/plugins/tharinda-rodrigo-spatie-roles-permissions#installation
+
+composer require althinect/filament-spatie-roles-permissions
 
 
 

@@ -17,6 +17,7 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Althinect\FilamentSpatieRolesPermissions\FilamentSpatieRolesPermissionsPlugin; //filament-spatie-roles-permissions  GUI plugin
 
 class Admin1PanelProvider extends PanelProvider
 {
@@ -53,6 +54,8 @@ class Admin1PanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ]);
+            ])
+            //add filament-spatie-roles-permissions  GUI plugin
+            ->plugin(FilamentSpatieRolesPermissionsPlugin::make());
     }
 }
