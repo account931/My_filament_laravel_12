@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\OwnerController;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -18,3 +20,9 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+
+
+
+//Api routes
+Route::get('/api/owners', [OwnerController::class, 'test_endpoint'])->name('api.owners.test');

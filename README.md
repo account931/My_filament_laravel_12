@@ -122,7 +122,7 @@ php artisan make:filament-relation-manager OwnerResource venues owner_id
 <p> ----------------------------------------------------------------------------------------- </p>
 
 ## 103. Screenshots
-![Screenshot](public/img/screenshots/owner2.png)
+![Screenshot](public/img/screenshots/filam1.png)
 
 
 

@@ -6,7 +6,7 @@ use App\Filament\Resources\OwnerResource\Pages;
 use App\Filament\Resources\OwnerResource\RelationManagers;
 use App\Models\Owner;
 use Filament\Forms;
-use Filament\Forms\Form;
+use Filament\Forms\Form;    //edit form
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -27,7 +27,10 @@ use Illuminate\Database\Eloquent\Collection;
 use Filament\Infolists;                      //infolist 
 use Filament\Infolists\Infolist;             //infolist
 use Filament\Infolists\Components\TextEntry; //infolist entry
-use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\SelectFilter;   
+use Filament\Tables\Actions\Action;        //header actions
+use Illuminate\Support\Facades\Http;       // Laravel HTTP client
+use App\Enums\ConfirmedEnum;                  //Enum
 
 class OwnerResource extends Resource
 {
@@ -35,11 +38,15 @@ class OwnerResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    // Edit form
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 //
+                Forms\Components\TextInput::make('last_name')->label('Last Name')->required()->maxLength(255),
+                Forms\Components\TextInput::make('first_name')->label('First Name')->required()->maxLength(255),
+
             ]);
     }
 
@@ -99,8 +106,9 @@ class OwnerResource extends Resource
                 //filter 2 (is confirmed)
                 SelectFilter::make('confirmed')
                 ->options([
-                    '1'  => 'Confirmed',
-                    '0'   => 'Not Confirmed',
+                    ConfirmedEnum::Confirmed->value    => ConfirmedEnum::Confirmed->label(),     //'1'  => 'Confirmed',
+                    ConfirmedEnum::NotConfirmed->value => ConfirmedEnum::NotConfirmed->label(),  //'0'   => 'Not Confirmed', 
+                     
                 ])
                 ->query(function (Builder $query, array $data) {  //dd($data);
                     if (isset($data['value'])) {     //wtf, it must be $data['confirmed']
@@ -117,6 +125,54 @@ class OwnerResource extends Resource
               //filter 4...........  
             ])
             // End Filters ---------------------
+
+
+
+
+
+            // Header actions---------------------
+            ->headerActions([
+            Action::make('callApi')
+                ->label('Call External APII')
+                ->icon('heroicon-o-plus')
+                ->action(function () {
+                    // Your logic here
+                    // Send a GET request to external API
+                    //dd(route('api.owners.test', [], true));
+                    //$response = Http::get('http://localhost/api/owners');
+                   // $response = Http::get(route('api.owners.test'));
+                   //$response = Http::get('http://127.0.0.1/api/owners');
+                   //$response = Http::get('http://localhost/api/owners');
+                   //$response = Http::timeout(10)->get('http://laravel.test/api/owners');
+                   $response = Http::timeout(10)->get('http://localhost:8000/api/owners');
+
+
+
+
+
+                    //$response = Http::get('http://host.docker.internal/api/owners');
+                    //$response = Http::get('my_filament_laravel_12-laravel.test-1');
+//my_filament_laravel_12-laravel.test-1
+
+                    
+
+
+                    if ($response->successful()) {
+                        // Process response if needed
+                        $data = $response->json();
+
+                        // Optionally: use notifications to inform user
+                        //\Filament\Facades\Filament::notify('success', 'API called successfully!');
+                        Notification::make()->title('API called successfully!' )->send();  //send flash message
+
+                    } else {
+                        Notification::make()->title('API failed!' )->send();  //send flash message
+                        //\Filament\Facades\Filament::notify('danger', 'Failed to call API.');
+                    }
+                }),
+            ])
+            // End Header actions---------------------
+
 
 
 
