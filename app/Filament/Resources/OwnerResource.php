@@ -12,7 +12,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\TextColumn;  //table input
 use Filament\Tables\Columns\BooleanColumn;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Forms\Components\TextInput;
@@ -30,7 +30,9 @@ use Filament\Infolists\Components\TextEntry; //infolist entry
 use Filament\Tables\Filters\SelectFilter;   
 use Filament\Tables\Actions\Action;        //header actions
 use Illuminate\Support\Facades\Http;       // Laravel HTTP client
-use App\Enums\ConfirmedEnum;                  //Enum
+use App\Enums\ConfirmedEnum;               //Enum
+use App\Enums\LocationEnum;                  //Enum
+
 
 class OwnerResource extends Resource
 {
@@ -38,7 +40,16 @@ class OwnerResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    // Edit form
+    //public $apiResponse = ['title' => 'Ndfdfdfdo data received'];   //for ajax
+
+    //hide resource panel, show for specific role only
+    public static function shouldRegisterNavigation(): bool
+    {
+        //return auth()->user()?->hasRole('admin');
+        return auth()->user()?->hasAnyRole(['admin', 'user']);
+    }
+
+    // Edit form -------------------------
     public static function form(Form $form): Form
     {
         return $form
@@ -46,18 +57,24 @@ class OwnerResource extends Resource
                 //
                 Forms\Components\TextInput::make('last_name')->label('Last Name')->required()->maxLength(255),
                 Forms\Components\TextInput::make('first_name')->label('First Name')->required()->maxLength(255),
-
+                Forms\Components\TextInput::make('email')->label('Email')->required()->email() ->rules(['email']), // Laravel validation rule,
+                Forms\Components\TextInput::make('phone')->label('phone')->required()->tel() // Sets input type="tel"
+                     ->rules(['required', 'regex:/^[+]380[\d]{1,4}[0-9]+$/']), // $RegExp_Phone = '/^[+]380[\d]{1,4}[0-9]+$/'; 
+               Forms\Components\Select::make('location')->label('location')->options( collect(LocationEnum::cases())
+                  ->mapWithKeys(fn ($case) => [$case->value => $case->label()]) ->toArray())->required(),
             ]);
     }
+    // End Edit form --------------------------
+
 
     public static function table(Table $table): Table
     {
         return $table
-            //columns-----------------------------------------
+            //Columns-----------------------------------------
             ->columns([
                 //
                 TextColumn::make('id')->sortable(),
-                TextColumn::make('first_name')->searchable()->sortable()
+                TextColumn::make('first_name')->searchable()->sortable()->visible(fn () => auth()->user()?->can('view owners'))
                    ->getStateUsing(fn ($record) => $record->getAttributes()['first_name'] ?? null), //bypassing an Eloquent accessor)
 
                 //HasMany venues count 
@@ -72,7 +89,7 @@ class OwnerResource extends Resource
                     ->wrap(),
                      
 
-                TextColumn::make('last_name')->searchable()->sortable(),
+                TextColumn::make('last_name')->searchable()->sortable()->myCustomDisplay(), //my custom method, set in App/Providers/AppServiceProvider
                 TextColumn::make('email')->searchable()->sortable(),
                 TextColumn::make('phone')->searchable(),
                 BooleanColumn::make('confirmed')->sortable(),
@@ -135,26 +152,24 @@ class OwnerResource extends Resource
             Action::make('callApi')
                 ->label('Call External APII')
                 ->icon('heroicon-o-plus')
-                ->action(function () {
+                //->form([Forms\Components\Hidden::make('api_response'),])
+                ->action(function ($record, $livewire) {   //pass liveware is a must
                     // Your logic here
                     // Send a GET request to external API
                     //dd(route('api.owners.test', [], true));
                     //$response = Http::get('http://localhost/api/owners');
                    // $response = Http::get(route('api.owners.test'));
                    //$response = Http::get('http://127.0.0.1/api/owners');
-                   //$response = Http::get('http://localhost/api/owners');
+                   //$response = Http::get('http://localhost:8000/api/owners');
                    //$response = Http::timeout(10)->get('http://laravel.test/api/owners');
-                   $response = Http::timeout(10)->get('http://localhost:8000/api/owners');
-
-
-
-
-
-                    //$response = Http::get('http://host.docker.internal/api/owners');
-                    //$response = Http::get('my_filament_laravel_12-laravel.test-1');
-//my_filament_laravel_12-laravel.test-1
-
-                    
+                   //$response = Http::timeout(10)->get('http://localhost:8000/api/owners');
+                   //$response = Http::timeout(10)->get('http://host.docker.internal:8000/api/owners');
+                   //$response = Http::get('http://host.docker.internal/api/owners');
+                   //$response = Http::get('my_filament_laravel_12-laravel.test-1');
+                //my_filament_laravel_12-laravel.test-1
+                   $response = Http::timeout(10)->get('https://jsonplaceholder.typicode.com/posts/1'); //test open api
+                   
+                   
 
 
                     if ($response->successful()) {
@@ -163,13 +178,34 @@ class OwnerResource extends Resource
 
                         // Optionally: use notifications to inform user
                         //\Filament\Facades\Filament::notify('success', 'API called successfully!');
-                        Notification::make()->title('API called successfully!' )->send();  //send flash message
-
+                        Notification::make()->title('API called successfully! Title is: '  . $data['title'])->success()->send();  //send flash message
+                        
+                        // Store response in a property to pass into modal
+                        // Store the API response data in Livewire property
+                        $apiResponse = $response->json();
+                        
+                        //dd($livewire->apiResponse);
+                    
                     } else {
                         Notification::make()->title('API failed!' )->send();  //send flash message
                         //\Filament\Facades\Filament::notify('danger', 'Failed to call API.');
                     }
-                }),
+                }) //end action
+                //open modal with api response
+                /*
+                ->modalHeading('My API Response')
+                ->modalSubmitAction(false)
+                ->modalCancelActionLabel('Close')
+                ->modalContent(function ($record, $livewire) {
+
+                    $response = $apiResponse ?? ['title' => 'No data received'];
+
+                    return view('filament.resource.user-resource.modals.api-response', [
+                        'response' => $response,
+                    ]);
+                })*/
+                ,
+                // end open modal
             ])
             // End Header actions---------------------
 

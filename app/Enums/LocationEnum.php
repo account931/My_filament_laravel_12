@@ -6,17 +6,17 @@
 namespace App\Enums;
 
 //
-enum ConfirmedEnum: int //string
+enum LocationEnum: string //int
 {
-    case Confirmed     = 1;
-    case NotConfirmed  = 0;
+    case EU     = 'EU';
+    case UA     = 'UA';
     
 
     public function label(): string
     {
         return match($this) {
-            self::Confirmed    => 'Confirmed2',
-            self::NotConfirmed => 'Not Confirmed2',
+            self::EU    => 'EU part',
+            self::UA    => 'UA part',
         };
     }
 }

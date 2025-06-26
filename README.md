@@ -9,8 +9,8 @@ Visual Studio Code ()
 
 
 
-main page =>  http://localhost:8000/     (u screwed ports with phpmyadmin)
-
+</br> main page  =>  http://localhost:8000/     (u screwed ports with phpmyadmin)
+</br> phpMyAdmin => http://localhost:8080/   (login=sail, pass=password)
 
 
 
@@ -21,6 +21,7 @@ main page =>  http://localhost:8000/     (u screwed ports with phpmyadmin)
 - [3. Filament3](#3-filament3)
 - [4. Pest tests](#3-pest-test)
 - [5. Spatie permission](#5-spatie-permission)
+- [6. Run Php via built-in web server ](#6-run-php-via-built-server)
 
 
 - [103. Screenshots](#2-screenshots)
@@ -71,10 +72,10 @@ main page =>  http://localhost:8000/     (u screwed ports with phpmyadmin)
 ## 2. Docker sail
 
 <code> ./vendor/bin/sail up </code>
-<code> ./vendor/bin/sail shell </code>
+<code> ./vendor/bin/sail shell </code>    #go to container
 <code> ./vendor/bin/sail down </code>
 
-<code> docker exec -it my_filament_laravel_12-laravel.test-1 /bin/bash  </code>
+<code> docker exec -it my_filament_laravel_12-laravel.test-1 /bin/bash  </code>  #go to container manually
 
 
 
@@ -138,7 +139,25 @@ composer require althinect/filament-spatie-roles-permissions
 
 
 
+
+
+
 <p> ----------------------------------------------------------------------------------------- </p>
+
+## 6. Run Php via built server
+
+go to your folder with php scripts , run <code> php -S localhost:8000 </code> 
+
+Go to your site  <b> http://localhost:8000/yourfile.php </b>, e.g http://localhost:8000/display.php
+
+
+
+
+
+
+
+
+
 
 
 <p> ----------------------------------------------------------------------------------------- </p>

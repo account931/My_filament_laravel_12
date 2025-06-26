@@ -8,6 +8,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Artisan;
 use Database\Seeders\Subfolder\UserSeeder;
 use Database\Seeders\Subfolder\OwnerSeeder;
+use Database\Seeders\Subfolder\RolesPermissionSeeder;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 
@@ -33,7 +34,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
 		    UserSeeder::class,           //create 2 users with venues and equipments
 			//PassportTokenSeeder::class,  //generate Passport personal token that will used later to generate users token later. Or you will have to run it manually in console => php artisan passport:client --personal
-			//RolesPermissionSeeder::class,//create Role/permission
+			RolesPermissionSeeder::class,//create Role/permission
 		    OwnerSeeder::class,  //fill DB table {owners} with data (also include seeding table {venues} vis hasMany)
 			 // NOT USED //VenueSeeder::class,  //fill DB table {venues} with data
 		]); 

@@ -1,12 +1,12 @@
 <?php
 //create Roles, permission and assign them to some users
 //Manual: create some pesrmissions -> assign them to some roles -> assign this role to some user
-namespace Database\Seeds\Subfolder;
+namespace Database\Seeders\Subfolder;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use App\User;
+use App\Models\User;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
@@ -77,7 +77,7 @@ class RolesPermissionSeeder extends Seeder
 		//Create user role and give him permissions and assign role to some user/users ------------------------------------
 		$role = Role::create(['name' => 'user']);
 		$role = Role::findByName('user');
-	    $role->syncPermissions([$permissionViewOwner]);  //multiple permission to role
+	    $role->syncPermissions([$permissionViewOwner, $permissionViewOwners]);  //multiple permission to role
 		
 		//Assign 'User' role to User 2
 	    User::skip(1)->first()->assignRole('user');
