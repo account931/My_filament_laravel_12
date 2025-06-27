@@ -3,7 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\VenueResource\Pages;
-use App\Filament\Resources\VenueResource\RelationManagers;
+use App\Filament\RelationManagers;
 use App\Models\Venue;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -13,24 +13,38 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Tables\Columns\TextColumn;  //table column
+use Filament\Infolists;                      //infolist 
+use Filament\Infolists\Infolist;             //infolist
+use Filament\Infolists\Components\TextEntry; //infolist entry
 
 class VenueResource extends Resource
 {
     protected static ?string $model = Venue::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-arrow-right-circle';
+
+    protected static ?string $navigationGroup = 'Section Main';  //Grouping navigation items
+
+    protected static ?int $navigationSort = 2;  //order to appear in panels
+
+
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 //
+                Forms\Components\TextInput::make('venue_name')->label('Venue Name')->required()->maxLength(255),
             ]);
     }
 
     public static function table(Table $table): Table
     {
         return $table
+
+            //to force open viewOne insted of edit on click
+            ->recordUrl(fn ($record) => static::getUrl(name: 'view', parameters: ['record' => $record]))
+
             //columns-----------------------------------------
             ->columns([
                 TextColumn::make('venue_name')->searchable()->sortable(),
@@ -53,19 +67,34 @@ class VenueResource extends Resource
             ]);
     }
 
+    public static function infolist(Infolist $infolist): Infolist
+    {
+    return $infolist
+        ->schema([
+            Infolists\Components\TextEntry::make('venue_name')->getStateUsing(fn ($record) => $record->getAttributes()['venue_name'] ?? null), //bypassing an Eloquent accessor)
+            Infolists\Components\TextEntry::make('location'),
+            Infolists\Components\TextEntry::make('active'),
+            Infolists\Components\TextEntry::make('created_at'),
+
+        ]);
+     }
+
     public static function getRelations(): array
     {
         return [
             //
+            RelationManagers\EquipmentsRelationManager::class,
+
         ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListVenues::route('/'),
+            'index'  => Pages\ListVenues::route('/'),
             'create' => Pages\CreateVenue::route('/create'),
-            'edit' => Pages\EditVenue::route('/{record}/edit'),
+            'view'   => Pages\ViewVenue::route('/{record}'), // view one owner page
+            'edit'   => Pages\EditVenue::route('/{record}/edit'),
         ];
     }
 }

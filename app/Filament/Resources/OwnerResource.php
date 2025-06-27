@@ -3,7 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\OwnerResource\Pages;
-use App\Filament\Resources\OwnerResource\RelationManagers;
+use App\Filament\RelationManagers;
 use App\Models\Owner;
 use Filament\Forms;
 use Filament\Forms\Form;    //edit form
@@ -12,7 +12,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Filament\Tables\Columns\TextColumn;  //table input
+use Filament\Tables\Columns\TextColumn;  //table textcolumn
 use Filament\Tables\Columns\BooleanColumn;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Forms\Components\TextInput;
@@ -32,6 +32,7 @@ use Filament\Tables\Actions\Action;        //header actions
 use Illuminate\Support\Facades\Http;       // Laravel HTTP client
 use App\Enums\ConfirmedEnum;               //Enum
 use App\Enums\LocationEnum;                  //Enum
+use Filament\Navigation\NavigationItem;    //navifation settings
 
 
 class OwnerResource extends Resource
@@ -40,14 +41,27 @@ class OwnerResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    protected static ?int $navigationSort = 1;  //order to appear in panels
+
+    protected static ?string $navigationGroup = 'Section Main';  //Grouping navigation items
+
+
     //public $apiResponse = ['title' => 'Ndfdfdfdo data received'];   //for ajax
 
-    //hide resource panel, show for specific role only
+    //Fn to hide resource panel, show for specific role only
     public static function shouldRegisterNavigation(): bool
     {
         //return auth()->user()?->hasRole('admin');
         return auth()->user()?->hasAnyRole(['admin', 'user']);
     }
+
+
+    //Adding a badge to a navigation item
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
+
 
     // Edit form -------------------------
     public static function form(Form $form): Form
@@ -149,6 +163,8 @@ class OwnerResource extends Resource
 
             // Header actions---------------------
             ->headerActions([
+
+            //Header action 1 ---------
             Action::make('callApi')
                 ->label('Call External APII')
                 ->icon('heroicon-o-plus')
@@ -206,6 +222,13 @@ class OwnerResource extends Resource
                 })*/
                 ,
                 // end open modal
+                // End Header action 1-------
+
+                // Header action 2 -------
+                \App\Filament\Resources\OwnerResource\Actions\OpenUrlInWindowAction::make(), //my header action 2 moved to separate folder
+                // End Header action 2-------
+
+                // Header action 3 -------
             ])
             // End Header actions---------------------
 
@@ -247,9 +270,9 @@ class OwnerResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),  //delete built-in bulk action
 
-                    \App\Filament\Resources\OwnerResource\Actions\MarkAsConfirmedBulkAction::make(), //my bulk action moved to separate folder
+                    \App\Filament\Resources\OwnerResource\Actions\MarkAsConfirmedBulkAction::make(), //my bulk action 1 moved to separate folder
 
-                    //my bulk-1
+                    //my bulk-2
                     BulkAction::make('markAsConfirmed1')
                         ->label('Mark as Confirmed')
                         //add form
@@ -274,9 +297,9 @@ class OwnerResource extends Resource
                         ->requiresConfirmation()
                         ->color('success')
                         ->icon('heroicon-o-check-circle'),
-                    //end my bulk-1
+                    //end my bulk-2
 
-                    //bulk action 2.........
+                    //bulk action 3.........
                 ]),
             ]);  //end all Bulk actions------------------------------------------------------
     }
@@ -291,9 +314,7 @@ class OwnerResource extends Resource
             Infolists\Components\TextEntry::make('email'),
             Infolists\Components\TextEntry::make('phone'),
             Infolists\Components\TextEntry::make('location'),
-            Infolists\Components\TextEntry::make('confirmed')
-            
-                ->columnSpanFull(),
+            Infolists\Components\TextEntry::make('confirmed')->columnSpanFull(),
         ]);
      }
 
@@ -312,8 +333,8 @@ class OwnerResource extends Resource
         return [
             'index'  => Pages\ListOwners::route('/'),
             'create' => Pages\CreateOwner::route('/create'),
-            'view'  => Pages\ViewOwner::route('/{record}'), // ✅ Must match ViewOwner.php exactly
-            'edit'  => Pages\EditOwner::route('/{record}/edit'),
+            'view'   => Pages\ViewOwner::route('/{record}'), // view one owner page
+            'edit'   => Pages\EditOwner::route('/{record}/edit'),
         ];
     }
 }

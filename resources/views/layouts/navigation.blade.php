@@ -39,9 +39,14 @@
                             {{ __('Profile') }}
                         </x-dropdown-link>
 
-                         <x-dropdown-link :href="route('filament.1.pages.dashboard')">
+                        <x-dropdown-link :href="route('filament.1.pages.dashboard')">
                             {{ __('Filament') }}
                         </x-dropdown-link>
+
+                         <x-dropdown-link :href="route('test-filament')">
+                            {{ __('Test film view') }}
+                        </x-dropdown-link>
+                        
 
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">

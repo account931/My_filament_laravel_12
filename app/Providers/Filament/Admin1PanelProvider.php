@@ -56,6 +56,13 @@ class Admin1PanelProvider extends PanelProvider
                 Authenticate::class,
             ])
             //add filament-spatie-roles-permissions  GUI plugin
-            ->plugin(FilamentSpatieRolesPermissionsPlugin::make());
+            ->plugin(FilamentSpatieRolesPermissionsPlugin::make())
+
+            //Ordering navigation groups
+            ->navigationGroups([
+               'Section Main',
+               'User section',
+               'Settings',
+            ]);
     }
 }
