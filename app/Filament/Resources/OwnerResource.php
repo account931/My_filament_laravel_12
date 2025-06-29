@@ -7,12 +7,14 @@ use App\Filament\RelationManagers;
 use App\Models\Owner;
 use Filament\Forms;
 use Filament\Forms\Form;    //edit form
+use Filament\Forms\Components\FileUpload; //Form upload
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Tables\Columns\TextColumn;  //table textcolumn
+use Filament\Tables\Columns\ImageColumn; //table image
 use Filament\Tables\Columns\BooleanColumn;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Forms\Components\TextInput;
@@ -27,12 +29,14 @@ use Illuminate\Database\Eloquent\Collection;
 use Filament\Infolists;                      //infolist 
 use Filament\Infolists\Infolist;             //infolist
 use Filament\Infolists\Components\TextEntry; //infolist entry
+use Filament\Infolists\Components\ImageEntry;//infolist image
+
 use Filament\Tables\Filters\SelectFilter;   
-use Filament\Tables\Actions\Action;        //header actions
+use Filament\Tables\Actions\Action;        //Header actions
 use Illuminate\Support\Facades\Http;       // Laravel HTTP client
 use App\Enums\ConfirmedEnum;               //Enum
-use App\Enums\LocationEnum;                  //Enum
-use Filament\Navigation\NavigationItem;    //navifation settings
+use App\Enums\LocationEnum;                //Enum
+use Filament\Navigation\NavigationItem;    //navigation settings
 
 
 class OwnerResource extends Resource
@@ -63,6 +67,7 @@ class OwnerResource extends Resource
     }
 
 
+
     // Edit form -------------------------
     public static function form(Form $form): Form
     {
@@ -70,7 +75,18 @@ class OwnerResource extends Resource
             ->schema([
                 //
                 Forms\Components\TextInput::make('last_name')->label('Last Name')->required()->maxLength(255),
-                Forms\Components\TextInput::make('first_name')->label('First Name')->required()->maxLength(255),
+                Forms\Components\TextInput::make('first_name')->label('First Name')->required()->maxLength(255)
+                      ->formatStateUsing(function ($state, $record) {  //bypassing an Eloquent accessor
+                          return $record->getRawOriginal('first_name');
+                }),
+                //image, 'image' as DB column must be in model protected $fillable = [  
+                FileUpload::make('image')->label('Upload Image')
+                ->image() // Ensures only images can be uploaded
+                ->disk('public') // uses storage/app/public
+                ->directory('images') // saves to storage/app/public/images
+                ->imagePreviewHeight('150') // Optional preview height
+                ->maxSize(2048) // in KB (2MB max)
+                ->required(),
                 Forms\Components\TextInput::make('email')->label('Email')->required()->email() ->rules(['email']), // Laravel validation rule,
                 Forms\Components\TextInput::make('phone')->label('phone')->required()->tel() // Sets input type="tel"
                      ->rules(['required', 'regex:/^[+]380[\d]{1,4}[0-9]+$/']), // $RegExp_Phone = '/^[+]380[\d]{1,4}[0-9]+$/'; 
@@ -79,6 +95,10 @@ class OwnerResource extends Resource
             ]);
     }
     // End Edit form --------------------------
+
+
+
+
 
 
     public static function table(Table $table): Table
@@ -102,8 +122,9 @@ class OwnerResource extends Resource
                     )
                     ->wrap(),
                      
-
                 TextColumn::make('last_name')->searchable()->sortable()->myCustomDisplay(), //my custom method, set in App/Providers/AppServiceProvider
+                //image
+                ImageColumn::make('image')->label('Profile Image')->disk('public') ->circular(),   // storage disk, if needed //storage/app/public  
                 TextColumn::make('email')->searchable()->sortable(),
                 TextColumn::make('phone')->searchable(),
                 BooleanColumn::make('confirmed')->sortable(),
@@ -309,12 +330,18 @@ class OwnerResource extends Resource
     {
     return $infolist
         ->schema([
+            ImageEntry::make('image')->label('Profile Image')->disk('public') ->circular(),   // storage disk, if needed
             Infolists\Components\TextEntry::make('first_name')->getStateUsing(fn ($record) => $record->getAttributes()['first_name'] ?? null), //bypassing an Eloquent accessor)
             Infolists\Components\TextEntry::make('last_name'),
             Infolists\Components\TextEntry::make('email'),
             Infolists\Components\TextEntry::make('phone'),
             Infolists\Components\TextEntry::make('location'),
-            Infolists\Components\TextEntry::make('confirmed')->columnSpanFull(),
+            Infolists\Components\TextEntry::make('confirmed')
+                ->label('Confirmed')
+                ->formatStateUsing(fn ($state) => $state
+                    ? '<span style="color: white; background-color: green; padding: 0.2em 0.5em; border-radius: 0.25rem;">Confirmed</span>'
+                    : '<span style="color: white; background-color: red; padding: 0.2em 0.5em; border-radius: 0.25rem;">Not confirmed</span>')
+                ->html(),  // Important: allow HTML rendering
         ]);
      }
 

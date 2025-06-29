@@ -25,7 +25,8 @@ class Owner extends Model
 		'last_name',
 		'email',
 		'phone',
-		'location'
+		'location',
+        'image'
     ];
 	
 	 /**

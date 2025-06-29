@@ -22,7 +22,8 @@ Visual Studio Code ()
 - [4. Pest tests](#3-pest-test)
 - [5. Spatie permission](#5-spatie-permission)
 - [6. Run Php via built-in web server ](#6-run-php-via-built-server)
-
+- [7. Images](#7-images)
+- [8. Postman](#8-postman)
 
 - [103. Screenshots](#2-screenshots)
 
@@ -46,9 +47,11 @@ Visual Studio Code ()
 
 <p>7. Install auth Breeze  <code> composer require laravel/breeze --dev </code> 
           Scaffold the auth system  <code> php artisan breeze:install </code>  and run migratations
+</p>
 
- </p>
+<p>8. Be aware, there is no  <b> routes/api.php </b>, create it manually by  <code> php artisan install:api</code> . It installs Sanctum as well and migration <b>personal_access_tokens_table </b>
 
+</p>
 
 
 
@@ -155,6 +158,38 @@ Go to your site  <b> http://localhost:8000/yourfile.php </b>, e.g http://localho
 
 
 
+<p> ----------------------------------------------------------------------------------------- </p>
+
+## 7. Images
+
+<code>php artisan storage:link</code>
+
+go to  /storage/app/public
+
+
+
+
+
+
+
+
+<p> ----------------------------------------------------------------------------------------- </p>
+
+## 8. Postman
+
+When send Post, for example, to /api/owner/create,  in Postman go to Body-> Raw -> Json
+<code> 
+{
+  "first_name": "John Doe",
+  "last_name": "Name",
+  "location": "UAR",
+  "email": "john@example.com",
+  "phone": "+380976563983",
+  "owner_venue": [1]
+}
+</code> 
+</br> 
+ Make sure to add in Postman "Headers" => <code>  Accept: application/json </code> , so $this->wantsJson() is working, e.g in OwnerRequest.php
 
 
 
