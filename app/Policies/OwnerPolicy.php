@@ -1,6 +1,7 @@
 <?php
 //This policy is for testing purpose mainly. In this case it authorize if user id is 1
-//To work Controller must contain, for example,  $this->authorize('view', Owner::class)  or other ways (see OwnerController/index)
+//To work Controller must contain, for example,  $this->authorize('view', Owner::class)  or other ways (see OwnerController/index),
+ //but needs nothing for Filament
 namespace App\Policies;
 
 use App\Models\User;
@@ -33,7 +34,10 @@ class OwnerPolicy
    */
 
 	
-    //View List
+    /**
+	* see all models, View List
+    *restricting viewAny() in a policy will also restrict access to view, edit, and delete in Filament, unless those other abilities are explicitly allowed.
+	*/
 	public function viewAny(User $user)
 
     {

@@ -204,6 +204,7 @@ class OwnerResource extends Resource
                    //$response = Http::get('http://host.docker.internal/api/owners');
                    //$response = Http::get('my_filament_laravel_12-laravel.test-1');
                 //my_filament_laravel_12-laravel.test-1
+                
                    $response = Http::timeout(10)->get('https://jsonplaceholder.typicode.com/posts/1'); //test open api
                    
                    

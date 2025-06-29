@@ -27,7 +27,12 @@ class VenueResource extends Resource
 
     protected static ?int $navigationSort = 2;  //order to appear in panels
 
-
+    //Fn to hide resource panel, show for specific role only
+    public static function shouldRegisterNavigation(): bool
+    {
+        //return auth()->user()?->hasRole('admin');
+        return auth()->user()?->hasAnyRole(['admin', 'user']);
+    }
 
     public static function form(Form $form): Form
     {
@@ -42,7 +47,7 @@ class VenueResource extends Resource
     {
         return $table
 
-            //to force open viewOne insted of edit on click
+            //to force open viewOne on click instead of edit 
             ->recordUrl(fn ($record) => static::getUrl(name: 'view', parameters: ['record' => $record]))
 
             //columns-----------------------------------------

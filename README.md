@@ -24,6 +24,7 @@ Visual Studio Code ()
 - [6. Run Php via built-in web server ](#6-run-php-via-built-server)
 - [7. Images](#7-images)
 - [8. Postman](#8-postman)
+- [9. Sanctum](#9-sanctum)
 
 - [103. Screenshots](#2-screenshots)
 
@@ -140,6 +141,9 @@ https://filamentphp.com/plugins/tharinda-rodrigo-spatie-roles-permissions#instal
 composer require althinect/filament-spatie-roles-permissions
 
 
+<p> By default, Spatie models Role and Permission go inside /vendor => Spatie\Permission\Models\Role, Spatie\Permission\Models\Role </br>  
+If you want to have these models in your /models and be able to edit them, create /models/Role and extend Spatie\Permission\Models\Role +  update config/permission.php then. See details in /models/Role </br>  
+</p>
 
 
 
@@ -188,8 +192,27 @@ When send Post, for example, to /api/owner/create,  in Postman go to Body-> Raw 
   "owner_venue": [1]
 }
 </code> 
+
 </br> 
  Make sure to add in Postman "Headers" => <code>  Accept: application/json </code> , so $this->wantsJson() is working, e.g in OwnerRequest.php
+
+<p> For Sanctum, generate token and add in Postman in Headers -> Key/Value:  Authorization  Bearer 4|uYx01a2 </p> 
+
+
+
+
+
+<p> ----------------------------------------------------------------------------------------- </p>
+
+## 9. Sanctum
+<code> 
+  //generate token 
+  $user = User::find(1)->first();
+  // Create a token with optional name and scopes
+  $token = $user->createToken('postman-token')->plainTextToken;
+</code> 
+
+
 
 
 

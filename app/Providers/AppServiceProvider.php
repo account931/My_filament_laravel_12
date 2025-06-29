@@ -5,7 +5,9 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Filament\Tables\Columns\TextColumn; //use to create custom method for TextInput
 use Illuminate\Support\Str;
-
+use Illuminate\Support\Facades\Gate;
+use App\Policies\RolePolicy;
+use App\Policies\PermissionPolicy;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -33,5 +35,7 @@ class AppServiceProvider extends ServiceProvider
            });
         });
         //End Add my custom Filament TextColumn method, can use as ->myCustomDisplay()
+
+
     }
 }

@@ -1,13 +1,14 @@
 <?php
-//To work Controller must contain, for example,  $this->authorize('view', Owner::class)  or other ways (see OwnerController/index),  but needs nothing for Filament
+//To work Controller must contain, for example,  $this->authorize('view', Owner::class)  or other ways (see OwnerController/index),
+// but needs nothing for Filament
 namespace App\Policies;
 
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
-use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 use Illuminate\Auth\Access\Response;
 
-class RolePolicy
+class PermissionPolicy
 {
     use HandlesAuthorization;
 
@@ -34,8 +35,7 @@ class RolePolicy
 
    
 	/**
-	* see all models 
-    *restricting viewAny() in a policy will also restrict access to view, edit, and delete in Filament, unless those other abilities are explicitly allowed.
+	* see all models (must be use viewAny instead of index ??)
 	*/
 	public function viewAny(User $user)
     {
