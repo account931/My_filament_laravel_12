@@ -17,19 +17,44 @@ class OwnerSeeder extends Seeder
      */
     public function run()
     {		
-	    Owner::factory(12)                       //Laravel 12
-		//factory(\App\Models\Owner::class, 12)  //Laravel 6
-		    //overriding some factory values in 
+
+        Owner::factory()->count(12)
 		    /*->state([
                 'email'     => 'dimmm@gmail.com',
                 'location'  => 'UA',
-             ])*/
-			 
-		    //sequence is not supported in Laravel 6 (overriding factory values in sequence )
-		    /* ->sequence(
+            ])*/
+			->sequence(
                 ['confirmed' => 1],
                 ['confirmed' => 0]
-            ) */
+            ) 
+           ->has(
+			    Venue::factory()->count(12) // or just Venue::factory() for one
+		            ->hasAttached(
+                        Equipment::factory()->count(3),
+                        [], // pivot attributes if needed
+                        'equipments' // relationship name
+                    )
+				 )
+        ->create();
+
+
+
+
+
+		 /* 	
+	    Owner::factory(12)                       //Laravel 12
+		//factory(\App\Models\Owner::class, 12)  //Laravel 6
+		    //overriding some factory values in 
+		    //->state([
+                //'email'     => 'dimmm@gmail.com',
+                //'location'  => 'UA',
+             //])
+			 
+		    //sequence is not supported in Laravel 6 (overriding factory values in sequence )
+		    // ->sequence(
+                //['confirmed' => 1],
+                //['confirmed' => 0]
+            //) 
             //->has(factory(\App\Models\Venue::class, 1)) //not supported in Laravel 6??
 		    ->create()->each(function ($owner){
 				
@@ -50,5 +75,6 @@ class OwnerSeeder extends Seeder
 				});
 				
 			});
+			*/
     }
 }

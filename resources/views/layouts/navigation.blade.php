@@ -43,8 +43,16 @@
                             {{ __('Filament') }}
                         </x-dropdown-link>
 
-                         <x-dropdown-link :href="route('test-filament')">
+                        <x-dropdown-link :href="route('test-filament')">
                             {{ __('Test film view') }}
+                        </x-dropdown-link>
+
+                        <x-dropdown-link :href="route('api.owners.test')">
+                            {{ __('Api endpoint /api/owners') }}
+                        </x-dropdown-link>
+
+                        <x-dropdown-link :href="route('api.owners.test')">
+                            {{ __('Owners Controller N/A') }}
                         </x-dropdown-link>
                         
 

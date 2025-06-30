@@ -36,6 +36,12 @@ class RolesPermissionSeeder extends Seeder
         $permissionEditOwner    = Permission::create(['name' => 'edit owners']);
 	    $permissionDeleteOwner  = Permission::create(['name' => 'delete owners']);
 	
+		//Venue permissions
+	    $permissionViewVenue    = Permission::create(['name' => 'view venue ']);
+	    $permissionViewVenues   = Permission::create(['name' => 'view venues']);
+        $permissionEditVenue    = Permission::create(['name' => 'edit venue']);
+	    $permissionDeleteVenue  = Permission::create(['name' => 'delete venue']);
+
 	    //Role permission (view my custom Laravel Spatie Gui
 		$permissionViewRole  = Permission::create(['name' => 'view roles']);
 		
@@ -59,10 +65,18 @@ class RolesPermissionSeeder extends Seeder
 	    //$role->givePermissionTo($permission);
 	    $role = Role::findByName('admin');
 	    $role->syncPermissions([
+			//owners
 		    $permissionViewOwner, 
 			$permissionViewOwners, 
 			$permissionEditOwner, 
 			$permissionDeleteOwner,
+
+			//venues
+			$permissionViewVenue, 
+            $permissionViewVenues, 
+			$permissionEditVenue,
+			$permissionDeleteVenue,
+
 			$permissionViewRole,
 			$permissionViewOwnerQauantityAdmin
 		]);  //multiple permission to role
@@ -77,7 +91,7 @@ class RolesPermissionSeeder extends Seeder
 		//Create user role and give him permissions and assign role to some user/users ------------------------------------
 		$role = Role::create(['name' => 'user']);
 		$role = Role::findByName('user');
-	    $role->syncPermissions([$permissionViewOwner, $permissionViewOwners]);  //multiple permission to role
+	    $role->syncPermissions([$permissionViewOwner, $permissionViewOwners, $permissionViewVenue, $permissionViewVenues, ]);  //multiple permission to role
 		
 		//Assign 'User' role to User 2
 	    User::skip(1)->first()->assignRole('user');

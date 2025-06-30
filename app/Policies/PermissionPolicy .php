@@ -35,7 +35,8 @@ class PermissionPolicy
 
    
 	/**
-	* see all models (must be use viewAny instead of index ??)
+	* see all models 
+    *restricting viewAny() in a policy will also restrict access to view, edit, and delete in Filament, unless those other abilities are explicitly allowed.
 	*/
 	public function viewAny(User $user)
     {

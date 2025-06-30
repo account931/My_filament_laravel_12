@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use App\Models\Owner;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
@@ -48,6 +49,7 @@ class VenueFactory extends Factory
             //'location'    =>  DB::raw("ST_GeomFromText('POINT(2.757999 39.599029)')"),  //uses getter in Model to return array of coordinates
 
             'active'     => 1, //$faker->boolean(),
+            'owner_id'   => Owner::factory(), // will auto-create user if not supplied
             //'owner_id'   => 1, //Owner::inRandomOrder()->first()->id //Owner::factory()  //assign BelongsTo
             //'email_verified_at' => now(),
 

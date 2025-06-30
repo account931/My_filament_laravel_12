@@ -5,10 +5,37 @@ use function Pest\Laravel\get;
 use Illuminate\Support\Facades\Session;
 use Filament\Actions\Action;
 use Livewire\Livewire;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
+//before each create a user with role admin and permissions, or the test will fail
+//since Filament is protected by auth middleware by default,
 beforeEach(function () {
-    // Optional: acting as admin/user with access
-    $this->actingAs(\App\Models\User::factory()->create());
+
+    //Create Owner permission
+	$permissionViewOwner    = Permission::create(['name' => 'view owner']);
+	$permissionViewOwners   = Permission::create(['name' => 'view owners']);
+    $permissionEditOwner    = Permission::create(['name' => 'edit owners']);
+	$permissionDeleteOwner  = Permission::create(['name' => 'delete owners']);
+
+    //Create admin role and give him permissions and assign role to some user/users  --------------------------------------
+	$role = Role::create(['name' => 'admin']);
+
+    $role = Role::findByName('admin');
+	$role->syncPermissions([
+			//owners
+		    $permissionViewOwner, 
+			$permissionViewOwners, 
+			$permissionEditOwner, 
+			$permissionDeleteOwner,
+    ]);  //multiple permission to role
+
+    $adminUser = \App\Models\User::factory()->create();
+    //Assign 'Admin' role to User 1, see who is User 1 in UserSeeder
+	$adminUser->assignRole('admin');
+
+    // acting as admin/user with access
+    $this->actingAs($adminUser);
 });
 
 it('can render the owner list page', function () {

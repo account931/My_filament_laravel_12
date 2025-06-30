@@ -8,6 +8,8 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Gate;
 use App\Policies\RolePolicy;
 use App\Policies\PermissionPolicy;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Vite;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -24,6 +26,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        //fix test
+        /*
+        if (App::environment('testing')) {
+            // Prevent Vite from being loaded during tests
+             Vite::useHotFile(public_path('fake-hot'));
+        }
+        */
+
         //Add my custom Filament TextColumn method, can use as ->myCustomDisplay()
          TextColumn::macro('myCustomDisplay', function () {
             return $this->formatStateUsing(function ($state) {

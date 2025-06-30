@@ -1,5 +1,5 @@
 
-> Laravel 12.18, PHP 8.4.8 , Filament  mysql 5.6, db: '',
+> Laravel 12.18, PHP 8.4.8 , Filament mysql  Ver 8.0.42, db: '',
 Visual Studio Code ()
      -> VS package extension -> 
            -> PHP Namespace Resolver (to import class -> RMC -> import class)(https://marketplace.visualstudio.com/items?itemName=MehediDracula.php-namespace-resolver)
@@ -120,6 +120,9 @@ php artisan make:filament-relation-manager OwnerResource venues owner_id
 
 <code> ./vendor/bin/pest </code>  run all test (since docker, do it inside container)
 
+Run one test Class => <code>  ./vendor/bin/pest tests/Feature/App/Filament/RelationManagers/VenuesRelationManagerTest.php  </code> 
+
+Run one method from test Class => --filter {methodName} {pathToClass} =>  <code> ./vendor/bin/pest --filter="can list venues in relation manager" tests/Feature/App/Filament/RelationManagers/VenuesRelationManagerTest.php  </code>
 
 
 
@@ -145,6 +148,30 @@ composer require althinect/filament-spatie-roles-permissions
 If you want to have these models in your /models and be able to edit them, create /models/Role and extend Spatie\Permission\Models\Role +  update config/permission.php then. See details in /models/Role </br>  
 </p>
 
+<p><b>  How restrict access with Spatie </b></p>
+<p>1. Define policy for each model. For Filament, do not need to register them in Controller, like in regular Laravel with  <code>$this->authorize('view', Owner::class); </code>  </br> 
+
+  <b>List of policies for Filament/regular Laravel</b>
+   View list    viewAny(User $user)
+   View Record	view(User $user, Model $model)
+   Create	    create(User $user)
+   Update	    update(User $user, Model $model)
+   Delete	    delete(User $user, Model $model)
+   </code>
+</p>
+
+2. In Filament, you can hide panel by adding to Resource 
+<code>
+public static function shouldRegisterNavigation(): bool {
+    return auth()->user()?->hasAnyRole(['admin', 'user']);  //return auth()->user()?->hasRole('admin');
+}
+</code>
+
+3. In Filament, you can restrict acces to Relation manager by adding 
+
+
+
+
 
 
 
@@ -168,7 +195,7 @@ Go to your site  <b> http://localhost:8000/yourfile.php </b>, e.g http://localho
 
 <code>php artisan storage:link</code>
 
-go to  /storage/app/public
+images go to  /storage/app/public
 
 
 
