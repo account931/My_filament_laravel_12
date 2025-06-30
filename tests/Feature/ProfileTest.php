@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\User;
-Illuminate\Foundation\ViteManifestNotFoundException: Vite manifest not found at: 
 
 test('profile page is displayed', function () {
     $user = User::factory()->create();
