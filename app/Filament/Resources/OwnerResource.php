@@ -30,6 +30,9 @@ use Filament\Infolists;                      //infolist
 use Filament\Infolists\Infolist;             //infolist
 use Filament\Infolists\Components\TextEntry; //infolist entry
 use Filament\Infolists\Components\ImageEntry;//infolist image
+use App\Filament\Components\Infolists\SoftDeletedBadge; //infolist, my custom component
+use App\Filament\Components\Infolists\BooleanEntry; //infolist, my custom component
+
 
 use Filament\Tables\Filters\SelectFilter;   
 use Filament\Tables\Actions\Action;        //Header actions
@@ -330,19 +333,62 @@ class OwnerResource extends Resource
     public static function infolist(Infolist $infolist): Infolist
     {
     return $infolist
+        ->columns(3)
         ->schema([
-            ImageEntry::make('image')->label('Profile Image')->disk('public') ->circular(),   // storage disk, if needed
-            Infolists\Components\TextEntry::make('first_name')->getStateUsing(fn ($record) => $record->getAttributes()['first_name'] ?? null), //bypassing an Eloquent accessor)
-            Infolists\Components\TextEntry::make('last_name'),
-            Infolists\Components\TextEntry::make('email'),
-            Infolists\Components\TextEntry::make('phone'),
-            Infolists\Components\TextEntry::make('location'),
-            Infolists\Components\TextEntry::make('confirmed')
-                ->label('Confirmed')
-                ->formatStateUsing(fn ($state) => $state
-                    ? '<span style="color: white; background-color: green; padding: 0.2em 0.5em; border-radius: 0.25rem;">Confirmed</span>'
-                    : '<span style="color: white; background-color: red; padding: 0.2em 0.5em; border-radius: 0.25rem;">Not confirmed</span>')
-                ->html(),  // Important: allow HTML rendering
+
+            //group entries 1
+            Infolists\Components\Section::make()
+                    ->columnSpan(1)
+                    ->schema([
+                        ImageEntry::make('image')->label('Profile Image')->disk('public') ->circular(),   // storage disk, if needed
+                        Infolists\Components\TextEntry::make('first_name')->getStateUsing(fn ($record) => $record->getAttributes()['first_name'] ?? null), //bypassing an Eloquent accessor)
+                        Infolists\Components\TextEntry::make('last_name'),
+
+                     ]),
+
+            //group entries 2         
+            Infolists\Components\Grid::make(1)
+                ->columnSpan(1)
+                ->schema([
+                    Infolists\Components\Section::make()
+                        ->schema([
+                            Infolists\Components\TextEntry::make('soft deleted')->getStateUsing(fn ($record) => $record->trashed() 
+                                     ? '<span style="color: white; background-color: red; padding: 0.2em 0.5em; border-radius: 0.25rem;"> Soft Deleted</span>'
+                                     : '<span style="color: white; background-color: green; padding: 0.2em 0.5em; border-radius: 0.25rem;">   Not deleted</span>'
+                                )->html(), // <-- Important to render HTML instead of escaping it
+                            SoftDeletedBadge::make(), //my custom, only visible if soft deleted
+                        ]),
+            ]),
+            // end group entries 2  
+
+
+
+            //group entries 3        
+            Infolists\Components\Section::make()
+                ->columnSpan(1)
+                ->schema([
+                    Infolists\Components\TextEntry::make('email'),
+                    Infolists\Components\TextEntry::make('phone'),
+                    Infolists\Components\TextEntry::make('location'),
+            ]),
+            // end group entries 3  
+
+            
+            //group entries 4       
+            Infolists\Components\Section::make()
+                ->columnSpan(1)
+                ->schema([
+                    Infolists\Components\TextEntry::make('confirmed')->label('Confirmed')->formatStateUsing(fn ($state) => $state
+                        ? '<span style="color: white; background-color: green; padding: 0.2em 0.5em; border-radius: 0.25rem;">Confirmed</span>'
+                        : '<span style="color: white; background-color: red; padding: 0.2em 0.5em; border-radius: 0.25rem;">Not confirmed</span>')
+                        ->html(),  // Important: allow HTML rendering
+
+                    BooleanEntry::make('confirmed'), //my custom, only visible if soft deleted
+            ]),
+            // end group entries  4   
+
+
+          
         ]);
      }
 
@@ -364,5 +410,19 @@ class OwnerResource extends Resource
             'view'   => Pages\ViewOwner::route('/{record}'), // view one owner page
             'edit'   => Pages\EditOwner::route('/{record}/edit'),
         ];
+    }
+
+    //modify the query
+    public static function getEloquentQuery(): Builder
+    {
+        // Get the default query
+        $query = parent::getEloquentQuery();
+
+        // Modify the query, for example:
+        // - Filter only active records
+        // - Exclude soft deleted
+        // - Add where clauses or joins
+        //return $query->where('status', 'active');
+        return $query->withTrashed();  // Include soft deleted records in the query
     }
 }

@@ -1,5 +1,11 @@
+<!-- Status badges -->
+[![Laravel](https://github.com/account931/My_filament_laravel_12/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/account931/My_filament_laravel_12/actions/workflows/ci.yml)
+![PHP Version](https://img.shields.io/badge/PHP-8.4.8-blue)
 
-> Laravel 12.18, PHP 8.4.8 , Filament mysql  Ver 8.0.42, db: '',
+
+> Laravel 12.18, PHP 8.4.8 , Filament mysql  Ver 8.0.42, db: '', </br>
+What is new: Filament 3, Sail, Sanctum, CI CD
+
 Visual Studio Code ()
      -> VS package extension -> 
            -> PHP Namespace Resolver (to import class -> RMC -> import class)(https://marketplace.visualstudio.com/items?itemName=MehediDracula.php-namespace-resolver)
@@ -249,6 +255,10 @@ When send Post, for example, to /api/owner/create,  in Postman go to Body-> Raw 
 
 ## 103. Screenshots
 ![Screenshot](public/img/screenshots/filam1.png)
+![Screenshot](public/img/screenshots/filamentList.png)
+![Screenshot](public/img/screenshots/filamentOne.png)
+![Screenshot](public/img/screenshots/filamentOne1.png)
+
 
 
 

@@ -17,11 +17,14 @@ class TestController extends Controller
      */
     public function testFilament(Request $request): View
     {
-        $value = $request->query('value'); // or $request->input('value')
+        $resourceName = $request->query('post'); // owner record from filament
+
+        $value = $request->query('value'); // just my test input // or $request->input('value')
         $value = $value ?? 'sorry, no value was passed from filament';
 
         return view('test-controller.test-filament', [
-            'data' => $value,
+            'data'        => $value,
+            'resourceName' => $resourceName,
         ]);
     }
 

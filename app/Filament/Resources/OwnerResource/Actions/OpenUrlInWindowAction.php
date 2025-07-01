@@ -10,11 +10,16 @@ use Filament\Tables\Actions\Action;        //header actions
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;  //flash message
+use App\Models\Owner;
+use App\Filament\Resources\OwnerResource;
+
 
 class OpenUrlInWindowAction
 {
     public static function make(): Action
     {
+        $resourceName = class_basename(OwnerResource::class); 
+
          return Action::make('openUrl')
                 ->label('OpenUrl')
                 ->icon('heroicon-o-document-plus')
@@ -23,7 +28,7 @@ class OpenUrlInWindowAction
                 //->action(function ($record) {   
                     //Notification::make()->title('Good' )->send();  //send flash message
                //})
-               ->url(fn (/*Owner $record*/): string => route('test-filament', [/*'post' => $record,*/ 'value' =>  'arrived from filament' ]))
+               ->url(fn (/*Owner $record*/): string => route('test-filament', ['post' => $resourceName,'value' =>  'arrived from filament' ]))
                 //->url(fn (Owner $record): string => route('posts.edit', ['post' => $record]))
                //->url(fn ($record) => $record->website_url)
                //->url('https://filamentphp.com/docs')
