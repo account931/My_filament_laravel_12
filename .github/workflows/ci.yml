@@ -100,8 +100,8 @@ jobs:
         DB_PASSWORD: userpassword  # Replace with the correct password or leave empty if not used
       run: php artisan migrate --force  # --force is required to run in CI environment
       
-    #Run phpUnit tests   -------------------
-    - name: Execute tests (Unit and Feature tests) via Pest
+    #Run Pest tests   -------------------
+    - name: Execute Pest tests (Unit and Feature tests) 
       env:
         DB_CONNECTION: mysql
         DB_HOST: 127.0.0.1  # Assuming MySQL is on the same container
@@ -127,7 +127,21 @@ jobs:
 
    
    
-   
+  #---------------------------------------------------------------------------------------------------------------------------
+  # Job 2(run PhpStan static analysis as a separated job. If want can run as in Job 1)
+  job_2_phpstan-static-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.4.8
+      - name: Install dependencies
+        run: composer install
+      - name: Run PhpStan static 
+        run: ./vendor/bin/phpstan analyse   --output-format=github
+        
    
 
    
@@ -137,7 +151,7 @@ jobs:
   # Job-7  send notification "Deploy successful" to telegram  ---------------------------------------------------
   job_7_notify_in_telegram:
     runs-on: ubuntu-latest
-    needs: [job_1_my-pest-tests]  #will run only after these jobs
+    needs: [job_1_my-pest-tests, job_2_phpstan-static-check]  #will run only after these jobs
 
     steps:
       - name: Send message to Telegram

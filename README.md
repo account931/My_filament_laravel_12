@@ -4,7 +4,7 @@
 
 
 > Laravel 12.18, PHP 8.4.8 , Filament mysql  Ver 8.0.42, db: '', </br>
-What is new: Filament 3, Sail, Sanctum, CI CD, Laravel Audit, Neon, Tailwind CSS out of the box
+What is new: Filament 3, Sail, Sanctum, CI CD, Laravel Audit, PHPStan static analysis tool, Tailwind CSS out of the box
 
 Visual Studio Code ()
      -> VS package extension -> 
@@ -34,6 +34,7 @@ git restore .  git clean -fd
 - [7. Images](#7-images)
 - [8. Postman](#8-postman)
 - [9. Sanctum](#9-sanctum)
+- [10.PhpStan](#10-phpstan)
 
 - [103. Screenshots](#2-screenshots)
 
@@ -249,8 +250,13 @@ When send Post, for example, to /api/owner/create,  in Postman go to Body-> Raw 
 </code> 
 
 
+<p> ----------------------------------------------------------------------------------------- </p>
 
+## 10. PhpStan
 
+Run check <code> ./vendor/bin/phpstan analyse  </code>
+Generate baseline "phpstan-baseline.neon" <code> ./vendor/bin/phpstan analyse --generate-baseline=phpstan-baseline.neon code> 
+Add baseline to config in phpstan.neon
 
 
 

@@ -41,7 +41,7 @@ class AppServiceProvider extends ServiceProvider
                 //$state = ucwords(strtolower($state));
                 //$state = str_replace(' ', '', $state);
                 //return lcfirst($state);
-                return $state .  ' (cstm)' ;
+                return $state .  ' (formatStateUsing)' ;
            });
         });
         //End Add my custom Filament TextColumn method, can use as ->myCustomDisplay()

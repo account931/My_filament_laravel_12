@@ -42,7 +42,7 @@ class UserResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-             //to force open viewOne on click instead of edit 
+            //to force open viewOne on click instead of edit 
             ->recordUrl(fn ($record) => static::getUrl(name: 'view', parameters: ['record' => $record]))
             
             //Columns-----------------------------------------
@@ -77,7 +77,7 @@ class UserResource extends Resource
             ]);
     }
 
-    //view one , viewOwner does not matter?????
+    //view one 
     public static function infolist(Infolist $infolist): Infolist
     {
     return $infolist

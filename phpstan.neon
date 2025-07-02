@@ -1,0 +1,8 @@
+includes:
+    - phpstan-baseline.neon  # include baseline at the root level # config to make PHPStan ignore baseline errors:
+
+parameters:
+  level: 2  # analysis strictness (0-8)
+  paths:
+    - app/Models  #so far for testing
+
