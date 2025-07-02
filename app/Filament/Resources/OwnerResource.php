@@ -392,6 +392,33 @@ class OwnerResource extends Resource
             // end group entries  4   
 
 
+            //group entries 5  !!!!!    
+            Infolists\Components\Section::make()
+                ->columnSpan(2)
+                ->schema([
+                    Infolists\Components\TextEntry::make('venues_count')->label('Venues count'), // Automatically eager loads and counts the relation
+                    
+                    //list of all venues
+                    Infolists\Components\TextEntry::make('venues.venue_name')->label('Venues names') //mege error, it was not make('venues.venue_name')
+                          ->formatStateUsing(fn ($state, $record) => 
+                              collect($record->venues)->map(fn ($venue) => 
+                             '<span style="color:white; background-color: green; padding: 0.2em 0.5em; border-radius: 2em;">'  .$venue->venue_name .  '</span>'
+                              )->implode(' ')
+                              )
+                    ->html(), // Important: allow HTML rendering
+
+                    Infolists\Components\TextEntry::make('venues.venue_name')->label('Venues all)')
+                     ->formatStateUsing(fn ($state, $record) => 
+                         $record->venues->pluck('venue_name')->join(', ')
+                    ),
+
+            ]),
+            // end group entries  5
+
+
+
+
+
           
         ]);
      }
@@ -431,6 +458,7 @@ class OwnerResource extends Resource
         //return $query->where('status', 'active');
         return $query
             ->withTrashed()  // Include soft deleted records in the query
-            ->withCount('audits'); //add the audit count eager loading if u want use counting in table/infolist
+            ->withCount('audits') //add the audit count eager loading if u want use counting in table/infolist
+            ->withCount('venues'); //add if want use count in infolist
     }
 }

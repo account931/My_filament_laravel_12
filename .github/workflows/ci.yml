@@ -140,7 +140,7 @@ jobs:
       - name: Install dependencies
         run: composer install
       - name: Run PhpStan static 
-        run: ./vendor/bin/phpstan analyse   --output-format=github
+        run: ./vendor/bin/phpstan analyse
         
    
 
