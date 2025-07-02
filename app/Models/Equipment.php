@@ -7,11 +7,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Builder; //for scope
 use Illuminate\Database\Eloquent\Factories\HasFactory; //Factory traithas been introduced in Laravel v8.
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use OwenIt\Auditing\Contracts\Auditable;  //Laravel Audit
 
-class Equipment extends Model
+class Equipment extends Model implements Auditable  //Laravel Audit
 {
 	use HasFactory; ////Factory trait has been introduced in Laravel v8.
 	use SoftDeletes;
+    use \OwenIt\Auditing\Auditable;   //Laravel Audit
 	
 	 protected $table ='equipments';
 	 /**
@@ -20,6 +22,7 @@ class Equipment extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'trademark_name',
     ];
 	
 	 /**

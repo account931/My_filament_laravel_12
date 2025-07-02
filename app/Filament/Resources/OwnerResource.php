@@ -15,8 +15,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Tables\Columns\TextColumn;  //table textcolumn
 use Filament\Tables\Columns\ImageColumn; //table image
-use Filament\Tables\Columns\BooleanColumn;
-use Filament\Tables\Columns\BadgeColumn;
+use Filament\Tables\Columns\BooleanColumn; //table boolean
+use Filament\Tables\Columns\BadgeColumn;   //table 
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\Select;
@@ -134,8 +134,10 @@ class OwnerResource extends Resource
                 BadgeColumn::make('location')
                     ->colors(['primary' => 'UA','success' => 'EU',])
                     ->sortable(),
-                 TextColumn::make('created_at')->dateTime()->sortable(),
-                 TextColumn::make('updated_at')->dateTime()->sortable(),
+                TextColumn::make('audits_count')->label('Audits'), // counts Audits, must add getEloquentQuery() { return parent::getEloquentQuery()->withCount('audits');
+
+                TextColumn::make('created_at')->dateTime()->sortable(),
+                TextColumn::make('updated_at')->dateTime()->sortable(),
                 //
             ])
 
@@ -370,6 +372,8 @@ class OwnerResource extends Resource
                     Infolists\Components\TextEntry::make('email'),
                     Infolists\Components\TextEntry::make('phone'),
                     Infolists\Components\TextEntry::make('location'),
+                    Infolists\Components\TextEntry::make('audits_count')->label('Audits'), // counts Audits, must add getEloquentQuery() { return parent::getEloquentQuery()->withCount('audits');
+
             ]),
             // end group entries 3  
 
@@ -397,7 +401,9 @@ class OwnerResource extends Resource
     {
         return [
             //
-            RelationManagers\VenuesRelationManager::class,
+            RelationManagers\VenuesRelationManager::class, //venues relation
+            RelationManagers\AuditsRelationManager::class, //Laravel audit
+
 
         ];
     }
@@ -423,6 +429,8 @@ class OwnerResource extends Resource
         // - Exclude soft deleted
         // - Add where clauses or joins
         //return $query->where('status', 'active');
-        return $query->withTrashed();  // Include soft deleted records in the query
+        return $query
+            ->withTrashed()  // Include soft deleted records in the query
+            ->withCount('audits'); //add the audit count eager loading if u want use counting in table/infolist
     }
 }

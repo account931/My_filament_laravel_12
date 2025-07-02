@@ -13,9 +13,12 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Tables\Columns\TextColumn;  //table column
+use Filament\Tables\Columns\BooleanColumn; //table boolean
 use Filament\Infolists;                      //infolist 
 use Filament\Infolists\Infolist;             //infolist
 use Filament\Infolists\Components\TextEntry; //infolist entry
+use App\Filament\Components\Infolists\SoftDeletedBadge; //infolist, my custom component
+use App\Filament\Components\Infolists\BooleanEntry; //infolist, my custom component
 
 class VenueResource extends Resource
 {
@@ -53,6 +56,10 @@ class VenueResource extends Resource
             //columns-----------------------------------------
             ->columns([
                 TextColumn::make('venue_name')->searchable()->sortable(),
+                TextColumn::make('address')->searchable()->sortable(),
+                BooleanColumn::make('active')->sortable(),
+                TextColumn::make('location')->searchable()->sortable(),
+                TextColumn::make('created_at')->searchable()->sortable(),
                 //
             ])
             //end columns-----------------------------------------
@@ -78,7 +85,8 @@ class VenueResource extends Resource
         ->schema([
             Infolists\Components\TextEntry::make('venue_name')->getStateUsing(fn ($record) => $record->getAttributes()['venue_name'] ?? null), //bypassing an Eloquent accessor)
             Infolists\Components\TextEntry::make('location'),
-            Infolists\Components\TextEntry::make('active'),
+            //Infolists\Components\TextEntry::make('active'),
+            BooleanEntry::make('active'), //my custom, only visible if soft deleted
             Infolists\Components\TextEntry::make('created_at'),
 
         ]);
@@ -89,6 +97,8 @@ class VenueResource extends Resource
         return [
             //
             RelationManagers\EquipmentsRelationManager::class,
+            RelationManagers\AuditsRelationManager::class, //Laravel audit
+
 
         ];
     }

@@ -9,11 +9,13 @@ use App\Models\Venue;
 use App\Events\OwnerCreated;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 //use Illuminate\Database\Eloquent\Factories\HasFactory; //Factory traithas been introduced in Laravel v8.
+use OwenIt\Auditing\Contracts\Auditable;  //Laravel Audit
 
-class Owner extends Model
+class Owner extends Model implements Auditable  //Laravel Audit
 {
 	use HasFactory; ////Factory trait has been introduced in Laravel v8.
 	use SoftDeletes;
+    use \OwenIt\Auditing\Auditable;   //Laravel Audit
 	
 	 /**
      * The attributes that are mass assignable.

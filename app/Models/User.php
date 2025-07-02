@@ -10,13 +10,15 @@ use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Spatie\Permission\Traits\HasRoles;  //Spatie Permission
 use Laravel\Sanctum\HasApiTokens; // Sanctum
+use OwenIt\Auditing\Contracts\Auditable;  //Laravel Audit
 
-class User extends Authenticatable implements FilamentUser
+class User extends Authenticatable implements FilamentUser, Auditable  //Laravel Audit
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
     use HasRoles; //Spatie Permission
     use HasApiTokens; //Sanctum
+    use \OwenIt\Auditing\Auditable;   //Laravel Audit
 
     /**
      * The attributes that are mass assignable.
@@ -27,6 +29,9 @@ class User extends Authenticatable implements FilamentUser
         'name',
         'email',
         'password',
+        'description',
+
+        
     ];
 
     /**
@@ -58,4 +63,12 @@ class User extends Authenticatable implements FilamentUser
         return true;
         //return str_ends_with($this->email, '@yourdomain.com') && $this->hasVerifiedEmail();
     }
+
+    //Do not use
+    /*
+    public function audits()
+    {
+        return $this->hasMany(\App\Models\Audit::class, 'user_id');
+    }
+    */
 }

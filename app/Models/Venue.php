@@ -10,11 +10,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use OwenIt\Auditing\Contracts\Auditable;  //Laravel Audit
 
-class Venue extends Model
+class Venue extends Model implements Auditable  //Laravel Audit
 {
 	use HasFactory; ////Factory trait has been introduced in Laravel v8.
 	use SoftDeletes;
+    use \OwenIt\Auditing\Auditable;   //Laravel Audit
 	
     //protected $appends = ['location_json']; //ells Eloquent to automatically include a custom accessor (getLocationJsonAttribute) in the model's array and JSON representations.
 	

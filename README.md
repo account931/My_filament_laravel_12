@@ -4,7 +4,7 @@
 
 
 > Laravel 12.18, PHP 8.4.8 , Filament mysql  Ver 8.0.42, db: '', </br>
-What is new: Filament 3, Sail, Sanctum, CI CD
+What is new: Filament 3, Sail, Sanctum, CI CD, Laravel Audit, Neon, Tailwind CSS out of the box
 
 Visual Studio Code ()
      -> VS package extension -> 

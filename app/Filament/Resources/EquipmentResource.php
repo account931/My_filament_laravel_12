@@ -3,7 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\EquipmentResource\Pages;
-use App\Filament\Resources\EquipmentResource\RelationManagers;
+//use App\Filament\Resources\EquipmentResource\RelationManagers;
 use App\Models\Equipment;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -16,7 +16,7 @@ use Filament\Tables\Columns\TextColumn;  //table textcolumn
 use Filament\Infolists;                      //infolist 
 use Filament\Infolists\Infolist;             //infolist
 use Filament\Infolists\Components\TextEntry; //infolist entry
-
+use App\Filament\RelationManagers;
 
 class EquipmentResource extends Resource
 {
@@ -35,6 +35,7 @@ class EquipmentResource extends Resource
         return $form
             ->schema([
                 //
+                Forms\Components\TextInput::make('trademark_name')->label('Venue Name')->required()->maxLength(255),
             ]);
     }
 
@@ -50,6 +51,8 @@ class EquipmentResource extends Resource
                 TextColumn::make('trademark_name')->searchable()->sortable()->visible(fn () => auth()->user()?->can('view owners'))
                    ->getStateUsing(fn ($record) => $record->getAttributes()['trademark_name'] ?? null), //bypassing an Eloquent accessor)
                 TextColumn::make('model_name')->searchable()->sortable(),
+                TextColumn::make('description')->searchable()->sortable(),
+                TextColumn::make('created_at')->searchable()->sortable(),
             ])
             //end //colums ------
             ->filters([
@@ -73,6 +76,7 @@ class EquipmentResource extends Resource
             Infolists\Components\TextEntry::make('trademark_name')->getStateUsing(fn ($record) => $record->getAttributes()['trademark_name'] ?? null), //bypassing an Eloquent accessor)
             Infolists\Components\TextEntry::make('model_name'),
             Infolists\Components\TextEntry::make('description'),
+            Infolists\Components\TextEntry::make('created_at'),
 
         ]);
      }
@@ -81,6 +85,8 @@ class EquipmentResource extends Resource
     {
         return [
             //
+            RelationManagers\AuditsRelationManager::class, //Laravel audit
+
         ];
     }
 
