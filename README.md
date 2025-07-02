@@ -3,8 +3,11 @@
 ![PHP Version](https://img.shields.io/badge/PHP-8.4.8-blue)
 
 
-> Laravel 12.18, PHP 8.4.8 , Filament mysql  Ver 8.0.42, db: '', </br>
+> Laravel: 12.18, PHP: 8.4.8 , Filament: 3, mysql: 8.0.42, db: '', </br></br>
 What is new: Filament 3, Sail, Sanctum, CI CD, Laravel Audit, PHPStan static analysis tool 2.1.17, Tailwind CSS out of the box
+
+
+<p> Represents data from 3 main tables (owners (HasMany), venues (BelongsToMany), equipments) in 4 ways: REST API, Filament, Vue JS, regular Laravel Controller + Blade </p>
 
 Visual Studio Code ()
      -> VS package extension -> 
@@ -35,6 +38,9 @@ git restore .  git clean -fd
 - [8. Postman](#8-postman)
 - [9. Sanctum](#9-sanctum)
 - [10.PhpStan](#10-phpstan)
+- [11.V.A](#11-va)
+
+
 
 - [103. Screenshots](#2-screenshots)
 
@@ -170,6 +176,8 @@ If you want to have these models in your /models and be able to edit them, creat
    </code>
 </p>
 
+1. Prohibit access to Resouce by adding Policy (works by Model)
+
 2. In Filament, you can hide panel by adding to Resource 
 <code>
 public static function shouldRegisterNavigation(): bool {
@@ -178,8 +186,11 @@ public static function shouldRegisterNavigation(): bool {
 </code>
 
 3. In Filament, you can restrict acces to Relation manager by adding 
-
-
+<code>
+public static function canView(): bool {
+  return auth()->user()->hasRole('admin');
+}
+</code>
 
 
 
@@ -260,13 +271,46 @@ Add baseline to config in phpstan.neon
 
 
 
+
+
+<p> ----------------------------------------------------------------------------------------- </p>
+## 11. V.A
+
+<p> Filament</p> 
+
+ // If u have explicit relation, use ->formatStateUsing, 'venues' - is realtion, 'venue_name' = is column from related table
+ <code>
+ Infolists\Components\TextEntry::make('venues.venue_name')->label('Venues names') 
+ //Infolists\Components\TextEntry::make('permissions.name') //or this for example
+  ->formatStateUsing(fn ($state, $record) => 
+      collect($record->venues)->map(fn ($venue) => 
+        '<span style="color:white; background-color: green; padding: 0.2em 0.5em; border-radius: 2em;">'  .$venue->venue_name .  '</span>'
+      )->implode(' ')
+  )
+  ->html(), // Important: allow HTML rendering
+</code>
+
+// If u dont have explicit relation name , use ->state
+<code>
+Infolists\Components\TextEntry::make('permissions_from_roles')
+  ->label('Permissions via Roles')
+  ->state(function ($record) {
+    return $record->getPermissionsViaRoles()
+      ->map(fn ($perm) => '<span style="color:white; background-color: green; padding: 0.2em 0.5em; border-radius: 2em;">' . e($perm->name) . '</span>')
+      ->implode(' ');
+  })
+  ->html(),
+</code>
+
+
+
 <p> ----------------------------------------------------------------------------------------- </p>
 
 ## 103. Screenshots
-![Screenshot](public/img/screenshots/filam1.png)
-![Screenshot](public/img/screenshots/filamentList.png)
-![Screenshot](public/img/screenshots/filamentOne.png)
-![Screenshot](public/img/screenshots/filamentOne1.png)
+![Screenshot](public/img/screenshots/flmt-1.png)  </br>
+![Screenshot](public/img/screenshots/flmt-2.png)  </br>
+![Screenshot](public/img/screenshots/flmt-3.png)  </br>
+![Screenshot](public/img/screenshots/flmt-4.png)  </br>
 
 
 

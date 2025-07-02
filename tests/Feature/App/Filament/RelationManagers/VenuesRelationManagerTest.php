@@ -30,9 +30,9 @@ beforeEach(function () {
 
     //Create Venue permission
 	$permissionViewVenue    = Permission::create(['name' => 'view venue']);
-	$permissionViewOVenues     = Permission::create(['name' => 'view venues']);
-    $permissionEditVenue      = Permission::create(['name' => 'edit venue']);
-	$permissionDeleteVenue    = Permission::create(['name' => 'delete venue']);
+	$permissionViewOVenues  = Permission::create(['name' => 'view venues']);
+    $permissionEditVenue    = Permission::create(['name' => 'edit venue']);
+	$permissionDeleteVenue  = Permission::create(['name' => 'delete venue']);
 
     //Create admin role and give him permissions and assign role to some user/users  --------------------------------------
 	$role = Role::create(['name' => 'admin']);

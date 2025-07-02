@@ -42,8 +42,11 @@ class RolesPermissionSeeder extends Seeder
         $permissionEditVenue    = Permission::create(['name' => 'edit venue']);
 	    $permissionDeleteVenue  = Permission::create(['name' => 'delete venue']);
 
-	    //Role permission (view my custom Laravel Spatie Gui
+	    //Role permission (view my Role panel in Filament
 		$permissionViewRole  = Permission::create(['name' => 'view roles']);
+
+		//Laravel audit permission
+		$permissionViewAudits  = Permission::create(['name' => 'view audits']);
 		
 		//create Api permission 'view owner admin quantity'
 		//NB: API permission!!!!! Must have 'guard_name' => 'api', but gives an error. Fix: can run like this, then change in DB manually
@@ -77,6 +80,9 @@ class RolesPermissionSeeder extends Seeder
 			$permissionEditVenue,
 			$permissionDeleteVenue,
 
+			//Laravel audit permission
+			$permissionViewAudits,
+
 			$permissionViewRole,
 			$permissionViewOwnerQauantityAdmin
 		]);  //multiple permission to role
@@ -91,7 +97,7 @@ class RolesPermissionSeeder extends Seeder
 		//Create user role and give him permissions and assign role to some user/users ------------------------------------
 		$role = Role::create(['name' => 'user']);
 		$role = Role::findByName('user');
-	    $role->syncPermissions([$permissionViewOwner, $permissionViewOwners, $permissionViewVenue, $permissionViewVenues, ]);  //multiple permission to role
+	    $role->syncPermissions([$permissionViewOwner, $permissionViewOwners, $permissionViewVenue, $permissionViewVenues, $permissionViewAudits ]);  //multiple permission to role
 		
 		//Assign 'User' role to User 2
 	    User::skip(1)->first()->assignRole('user');

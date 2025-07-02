@@ -88,6 +88,32 @@ class UserResource extends Resource
             Infolists\Components\TextEntry::make('audits_count')->label('Audits'), // counts Audits, must add getEloquentQuery() { return parent::getEloquentQuery()->withCount('audits');
             Infolists\Components\TextEntry::make('created_at'),
             
+            // Show Roles
+            Infolists\Components\TextEntry::make('roles.name')
+                ->label('Roles')
+                ->badge()
+                ->color('primary'),
+
+            
+            // Show Permissions via roles
+            Infolists\Components\TextEntry::make('permissions_from_roles')
+                ->label('Permissions via Roles')
+                ->state(function ($record) {
+                    return $record->getPermissionsViaRoles()
+                       ->map(fn ($perm) => '<span style="color:white; background-color: green; padding: 0.2em 0.5em; border-radius: 2em;">' . e($perm->name) . '</span>')
+                       ->implode(' ');
+                })
+            ->html(),
+
+            // Show Permissions direct
+            Infolists\Components\TextEntry::make('permissions.name')
+                ->label('Direct Permissions')
+                ->formatStateUsing(fn ($state, $record) => $record->permissions
+                   ->map(fn ($perm) => '<span style="color:white; background-color: green; padding: 0.2em 0.5em; border-radius: 2em;">' . e($perm->name) . '</span>')
+                   ->implode(' ')
+                )
+                ->html(),
+
         ]);
      }
 

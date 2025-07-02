@@ -125,6 +125,9 @@ jobs:
    
 
 
+
+
+
    
    
   #---------------------------------------------------------------------------------------------------------------------------
@@ -145,13 +148,74 @@ jobs:
    
 
    
-   
+   # Job-3 (test docker-compose.yml & Dockerfile are working, check php/apache & sql containers) ---------------------------------------------------
+  job_3_test-sail-docker-compose-yml-images-build-and-run-containers:
+    runs-on: ubuntu-latest
+
+    
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.4.8
+          extensions: mbstring, pdo, mysql
+          coverage: none
+
+      - name: Install Composer dependencies
+        run: composer install --no-progress --no-interaction --prefer-dist
+
+      - name: Copy .env
+        run: cp .env.example .env
+
+      - name: Run sail
+        run: ./vendor/bin/sail up -d
+
+      - name: Generate application key
+        run: ./vendor/bin/sail artisan key:generate
+
+       # Some general tests to if php/apache containers is OK, see output in github/actions
+      - name: test if Php/apache Docker Sail container  is OK
+        run: |
+          #test php version, 
+          ./vendor/bin/sail php -v
+
+          #see folder structure 
+          ./vendor/bin/sail shell -c "ls -la"   
+
+
+
+          #test if console command is running, returns 'phone is 115'
+          ./vendor/bin/sail php artisan quiz:start -v
+
+
+      # migrations were crashing without it
+      - name: Wait for MySQL to be ready
+        run: |
+          ./vendor/bin/sail exec mysql bash -c 'until mysqladmin ping -h"mysql" --silent; do sleep 1; done'
+
+      #Compile js asserts, as some tests will crash without it-------------------
+      - name: Compile js asserts 
+        run: |
+          ./vendor/bin/sail npm install
+          ./vendor/bin/sail npm run build # version for laravel 12  #version for laravel 6 => #npm run production
+
+      - name: Run migrations
+        run: ./vendor/bin/sail artisan migrate --force
+
+      - name: Run tests (Pest or PHPUnit)
+        run: ./vendor/bin/sail pest
+    
+
+
+
   
 
   # Job-7  send notification "Deploy successful" to telegram  ---------------------------------------------------
   job_7_notify_in_telegram:
     runs-on: ubuntu-latest
-    needs: [job_1_my-pest-tests, job_2_phpstan-static-check]  #will run only after these jobs
+    needs: [job_1_my-pest-tests, job_2_phpstan-static-check, job_3_test-sail-docker-compose-yml-images-build-and-run-containers]  #will run only after these jobs
 
     steps:
       - name: Send message to Telegram

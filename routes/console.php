@@ -8,13 +8,48 @@ use App\Models\User;
 use App\Models\Owner;
 use App\Models\Venue;
 use App\Models\Equipment;
+use Spatie\Permission\Models\Permission;
+
 
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 
 
+// My phone quiz test to run in console
+Artisan::command('quiz:start', function () {
+    $a = '1112031584';
+    $s = '';
 
+    for ($i = 1; $i < strlen($a); $i++) {
+        if (($a[$i] % 2) == $a[($i - 1)]) {
+            $s .= max($a[$i], $a[($i - 1)]);
+        }
+    }
+
+    echo "phone is ".$s;  //"phone is 115"
+        // $this->info("Sending email to: !");
+});
+
+//Test user roles and permissions
+Artisan::command('test_user_permissions', function () {
+
+     $user = User::find(1)->first();
+    //dd($user->roles()->pluck('name'));  //ok
+    //dd($user->permissions()->pluck('name')); //shows nothing as we dont have direct ones
+    dd($user->getPermissionsViaRoles()->pluck('name'));
+});
+
+
+//Test give direct permssion
+Artisan::command('test_direct_permissions', function () {
+
+    // Create a single permission
+    Permission::create(['name' => 'do stuff']);
+    $user = User::find(1)->first();
+    $user->givePermissionTo('do stuff');
+    dd($user->permissions()->pluck('name')); 
+});
 
 
 //Test sail docker route
@@ -26,7 +61,7 @@ Artisan::command('get_route', function () {
 
 
 
-//Get sanctum token
+// Test Get sanctum token
 Artisan::command('get_sanctum_token', function () {
 
     $user = User::find(1)->first();
@@ -36,7 +71,7 @@ Artisan::command('get_sanctum_token', function () {
 });
 
 
-// test Sanctum
+// test Sanctum protected route 
     // to test calling protected api endpoint (by Sanctum) (works), should allow only auth users ------------------------------------
 Artisan::command('test_api_route_protected_by_Sanctum', function () {
     $client      = new Client();
@@ -98,8 +133,7 @@ Artisan::command('test_api_route_owner_create', function () {
 
 
 
-// test api route to update an owner, works
-    
+// test api route to update an owner, works   
 Artisan::command('test_api_route_owner_update', function () {
             // create 6 owners
             $result = Owner::factory(12)                       //Laravel 12
