@@ -13,6 +13,9 @@ Visual Studio Code ()
 
 
 
+GIT_EDITOR="nano" git rebase -i HEAD~11
+git restore .  git clean -fd
+
 
 
 </br> main page  =>  http://localhost:8000/     (u screwed ports with phpmyadmin)
