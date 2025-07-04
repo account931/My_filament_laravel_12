@@ -47,11 +47,11 @@
                             {{ __('Test film view') }}
                         </x-dropdown-link>
 
-                        <x-dropdown-link :href="route('api.owners.test')">
+                        <x-dropdown-link :href="route('api.owners.index')">
                             {{ __('Api endpoint /api/owners') }}
                         </x-dropdown-link>
 
-                        <x-dropdown-link :href="route('api.owners.test')">
+                        <x-dropdown-link :href="route('api.owners.index')">
                             {{ __('Owners Controller N/A') }}
                         </x-dropdown-link>
                         

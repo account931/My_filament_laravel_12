@@ -141,8 +141,8 @@ Run one test Class => <code>  ./vendor/bin/pest tests/Feature/App/Filament/Relat
 Run one method from test Class => --filter {methodName} {pathToClass} =>  <code> ./vendor/bin/pest --filter="can list venues in relation manager" tests/Feature/App/Filament/RelationManagers/VenuesRelationManagerTest.php  </code>
 
 
-
-
+If tests are failing <code> php artisan config:cache --env=testing </code> 
+if have issues  <code> php artisan migrate:fresh --env=testing </code> 
 
 
 <p> ----------------------------------------------------------------------------------------- </p>

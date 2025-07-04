@@ -30,6 +30,7 @@ class ViewOwner extends ViewRecord
             Action::make('callApi')
                 ->label('Call API')
                 ->icon('heroicon-o-cloud')
+                ->color('info') //Sets the button color
                 ->action(function () {
                     // Do something, like call an external API
                     // \Http::get('...');
@@ -46,6 +47,16 @@ class ViewOwner extends ViewRecord
                 ->icon('heroicon-o-pencil')
                 ->url(fn () => OwnerResource::getUrl('edit', ['record' => $this->record])),
             //end action 2
+
+
+            //action 3, Open in Blade one owner
+            Action::make('edit')
+                ->label('Open in Blade')
+                 ->color('success') //Sets the button color
+                ->icon('heroicon-o-pencil')
+                ->url(fn (Owner $record): string => route('test.filament.owner', ['post' => $record, 'value' =>  'arrived from filament resource /owner/id' ]))
+               ->openUrlInNewTab(), // Optional: open in new tab;
+            //end action 3
         ];
     }
 

@@ -14,8 +14,8 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('test-flm', [TestController::class, 'testFilament'])->name('test-filament');
-
+Route::get('test-flm',       [TestController::class, 'testFilament'])->name('test-filament');
+Route::get('test-flm-owner', [TestController::class, 'testFilamentOwner'])->name('test.filament.owner');
 
 // Auth (logged) users only
 Route::middleware('auth')->group(function () {
