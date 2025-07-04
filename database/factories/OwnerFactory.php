@@ -24,7 +24,7 @@ class OwnerFactory extends Factory
         return [
             'first_name' => fake()->firstName('male'|'female'),
 		    'last_name'  => fake()->lastName,
-		    'phone'      => fake()->numerify('+45########'),
+		    'phone'      => fake()->numerify('+380########'),
             'email'      => fake()->unique()->safeEmail,
             'image'      => 'https://loremflickr.com/400/300/people?random=' . fake()->unique()->numberBetween(1, 10000),
             //'image'      => fake()->imageUrl(400, 300, 'people', true, 'User'),  //image url instead of actual image, uses  https://via.placeholder.com/ that does not work

@@ -151,7 +151,11 @@ Run one method from test Class => --filter {methodName} {pathToClass} =>  <code>
 <code>  composer require spatie/laravel-permission </code> 
 php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"
 php artisan migrate
-Im Models/User   =>  use HasRoles; //Spatie Permission
+In Models/User   =>  use HasRoles; //Spatie Permission
+
+
+In regular controllers(not filament) u should use this to restrict access $this->authorize('view_owner_admin_quantity', Owner::class); 
+If it fails, make sure your controller extends base controller <b> App\Http\Controllers\Controller</b> and it has <code>use AuthorizesRequests,</code>
 
 
 <p><b>  Add GUI to Filament via plugin  </b></p>

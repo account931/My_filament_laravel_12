@@ -8,8 +8,8 @@ namespace App\Enums;
 //
 enum LocationEnum: string //int
 {
-    case EU     = 'EU';
-    case UA     = 'UA';
+    case EU     = 'EUU';
+    case UA     = 'UAA';
     
 
     public function label(): string

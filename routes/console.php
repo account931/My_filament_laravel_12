@@ -16,6 +16,7 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 
+
 // My phone quiz test to run in console
 Artisan::command('quiz:start', function () {
     $a = '1112031584';
@@ -31,6 +32,8 @@ Artisan::command('quiz:start', function () {
         // $this->info("Sending email to: !");
 });
 
+
+
 //Test user roles and permissions
 Artisan::command('test_user_permissions', function () {
 
@@ -41,7 +44,7 @@ Artisan::command('test_user_permissions', function () {
 });
 
 
-//Test give direct permssion
+//Test giving direct permssion
 Artisan::command('test_direct_permissions', function () {
 
     // Create a single permission
@@ -52,7 +55,7 @@ Artisan::command('test_direct_permissions', function () {
 });
 
 
-//Test sail docker route
+//Test sail docker route availability
 Artisan::command('get_route', function () {
 
     $response = Http::get('http://localhost/api/owners');
@@ -75,7 +78,7 @@ Artisan::command('get_sanctum_token', function () {
     // to test calling protected api endpoint (by Sanctum) (works), should allow only auth users ------------------------------------
 Artisan::command('test_api_route_protected_by_Sanctum', function () {
     $client      = new Client();
-    $user        = User::find(1);   //dd($user->getAllPermissions()->pluck('name'));
+    $user        = User::find(1);   //dd($user->getAllPermissions()->pluck('name'));  //works if seeder has been run
     $bearerToken = $user->createToken('postman-token2')->plainTextToken;
 
     // $response = $client->get('http://localhost/Laravel_2024_migration/public/api/owners/quantity?access_token=' . $bearerToken); //Does not work
@@ -95,6 +98,31 @@ Artisan::command('test_api_route_protected_by_Sanctum', function () {
 });
 
 
+
+// test Sanctum  + Spatie protected route  (user must have permission 'view owner admin quantity')
+// to test calling protected api endpoint (by Sanctum) (works), should allow only auth users ------------------------------------
+Artisan::command('test_api_route_protected_by_Sanctum_and_Spatie', function () {
+    $client      = new Client();
+    $user        = User::find(1);   //should work, he has 'view owner admin quantity'   //works if seeder has been run
+    //$user        = User::find(2);   //should not work
+    $bearerToken = $user->createToken('postman-token2')->plainTextToken;
+
+    //dd($user->getPermissionsViaRoles()->pluck('name'));
+
+    $response = $client->request(
+        'GET',
+        'http://localhost/api/owners/quantity/admin',   //but in browser is available at 'http://localhost:8000/api/owners/quantity',
+        // this works
+        [
+            'headers' => [
+                'Accept'        => 'application/json',
+                'Authorization' => 'Bearer '.$bearerToken,
+            ],
+        ]
+    );
+
+    dd($response->getBody()->getContents());
+});
 
 
 

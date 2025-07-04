@@ -5,10 +5,11 @@ namespace App\Http\Controllers\Api;
 //use App\Http\Controllers\Controller\Owner;
 use App\Models\Owner;
 use App\Models\Venue;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Api\Collections\Owner\OwnerCollection; //Collection list
 use App\Http\Controllers\Api\Resources\Owner\OwnerResource;    //Resource of 1 record
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Controller; // base controller
 use Illuminate\Validation\Rule; //for in: validation
 use App\Http\Requests\Owner\OwnerRequest; //my custom Form validation via Request Class (to create new blog & images in tables {wpressimages_blog_post} & {wpressimage_imagesstock})
 use Illuminate\Http\JsonResponse;
@@ -132,7 +133,7 @@ class OwnerController extends Controller
 	
     public function destroy(Owner $owner)
     {
-		//$this->authorize('delete owners', Owner::class); //must have, Spatie RBAC Policy permission check (403 if fails (set in Policy). Instead of this you can also use it directly on route =>Route::middleware(['auth:api', 'can:update,post'])
+		$this->authorize('delete owners', Owner::class); //must have, Spatie RBAC Policy permission check (403 if fails (set in Policy). Instead of this you can also use it directly on route =>Route::middleware(['auth:api', 'can:update,post'])
 
         $owner->delete();
 
@@ -154,9 +155,9 @@ class OwnerController extends Controller
 	}
 	
 
-     //not tested
+    
 	/**
-     * Returns owners quantity. Created to test Passport + Spatie RBAC(user must be logged and have permission 'view_owner_admin_quantity' (tested in console)
+     * Returns owners quantity. Created to test Sanctum + Spatie RBAC(user must be logged and have permission 'view_owner_admin_quantity' (tested in console)
      * @return \Illuminate\Http\JsonResponse;
      */
 	public function quantityAdmin(): JsonResponse
