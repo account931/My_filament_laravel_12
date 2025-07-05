@@ -29,7 +29,7 @@
                    <p> {{ Auth::user()->name }} </p>
 
                     {{ __("You're logged in!") }}
-                    <p>  <a href="{{ route('filament.1.pages.dashboard') }}" class="my-link"> go to Filament</a></p>
+                    <p>  <a href="{{ route('filament.1.pages.dashboard') }}" class="my-link"> go to Filament <i class="fas fa-cloud-sun" style="font-size:24px"></i> </a></p>
                   
 
                      

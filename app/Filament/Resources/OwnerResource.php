@@ -5,9 +5,11 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\OwnerResource\Pages;
 use App\Filament\RelationManagers;
 use App\Models\Owner;
+use App\Models\Venue;
 use Filament\Forms;
 use Filament\Forms\Form;    //edit form
 use Filament\Forms\Components\FileUpload; //Form upload
+use Filament\Forms\Components\Repeater;   //Form repeater
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -84,17 +86,41 @@ class OwnerResource extends Resource
                 }),
                 //image, 'image' as DB column must be in model protected $fillable = [  
                 FileUpload::make('image')->label('Upload Image')
-                ->image() // Ensures only images can be uploaded
-                ->disk('public') // uses storage/app/public
-                ->directory('images') // saves to storage/app/public/images
-                ->imagePreviewHeight('150') // Optional preview height
-                ->maxSize(2048) // in KB (2MB max)
-                ->required(),
+                    ->image() // Ensures only images can be uploaded
+                    ->disk('public') // uses storage/app/public
+                    ->directory('images') // saves to storage/app/public/images
+                    ->imagePreviewHeight('150') // Optional preview height
+                    ->maxSize(2048) // in KB (2MB max)
+                    ->required(),
                 Forms\Components\TextInput::make('email')->label('Email')->required()->email() ->rules(['email']), // Laravel validation rule,
                 Forms\Components\TextInput::make('phone')->label('phone')->required()->tel() // Sets input type="tel"
                      ->rules(['required', 'regex:/^[+]380[\d]{1,4}[0-9]+$/']), // $RegExp_Phone = '/^[+]380[\d]{1,4}[0-9]+$/'; 
                Forms\Components\Select::make('location')->label('location')->options( collect(LocationEnum::cases())
                   ->mapWithKeys(fn ($case) => [$case->value => $case->label()]) ->toArray())->required(),
+
+               //hasMany venues
+               Select::make('venues')->label('Venues')->multiple()
+                    ->relationship('venues', 'venue_name') // This links the field to the belongsToMany relationship
+                    ->preload()->searchable()->required(),
+               /*
+               Repeater::make('venues')
+                ->relationship()  // <-- tell filament this is a relationship field
+                //->relationship('venue', 'venue_name') // 👈 This tells Filament how to resolve labels
+
+                ->schema([
+                    //Forms\Components\TextInput::make('venue_name')->label('Venue')->required(),
+                    Select::make('venue_id')->label('Venue')
+                         ->options(fn () => Venue::all()->pluck('venue_name', 'id'))
+                         ->searchable() ->preload()->required()
+                         ->getOptionLabelUsing(fn ($value): ?string => Venue::find($value)?->venue_name),
+
+                ])
+                ->columns(1)
+                ->addActionLabel('Add more venue'),
+                */
+
+                
+
             ]);
     }
     // End Edit form --------------------------
@@ -198,9 +224,9 @@ class OwnerResource extends Resource
                 ->action(function ($record, $livewire) {   //pass liveware is a must
                     // Your logic here
                     // Send a GET request to external API
-                    //dd(route('api.owners.test', [], true));
+                    //dd(route('api.owners.index', [], true));
                     //$response = Http::get('http://localhost/api/owners');
-                   // $response = Http::get(route('api.owners.test'));
+                   // $response = Http::get(route('api.owners.index'));
                    //$response = Http::get('http://127.0.0.1/api/owners');
                    //$response = Http::get('http://localhost:8000/api/owners');
                    //$response = Http::timeout(10)->get('http://laravel.test/api/owners');
@@ -251,11 +277,15 @@ class OwnerResource extends Resource
                 // end open modal
                 // End Header action 1-------
 
-                // Header action 2 -------
+                // Header action 2, open url-------
                 \App\Filament\Resources\OwnerResource\Actions\OpenUrlInWindowAction::make(), //my header action 2 moved to separate folder
                 // End Header action 2-------
 
-                // Header action 3 -------
+                // Header action 3, Send message -------
+                \App\Filament\Resources\OwnerResource\Actions\SendMessage::make(), //my header action 3 moved to separate folder
+
+
+                // Header action 4 -------
             ])
             // End Header actions---------------------
 

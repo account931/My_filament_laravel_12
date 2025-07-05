@@ -30,8 +30,22 @@ it('can list owners with venues', function () {
                     'id',
                     'first_name',
                     'last_name',
+                    'confirmed',
                     'venues' => [
-                        '*' => ['id', 'venue_name', 'equipments'],
+                        '*' => [
+                            'id', 
+                            'venue_name', 
+                            'equipments', 
+                            'active',
+                            'location',
+
+                            'equipments' => [
+						       '*' => [
+							       'trademark_name',
+								   'model_name',
+							    ]
+                            ]	   
+                        ],
                     ],
                 ],
             ],

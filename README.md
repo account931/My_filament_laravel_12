@@ -92,7 +92,7 @@ git restore .  git clean -fd
 ## 2. Docker sail
 
 <code> ./vendor/bin/sail up </code>
-<code> ./vendor/bin/sail shell </code>    #go to container
+<code> ./vendor/bin/sail shell </code>  == <code>./vendor/bin/sail bash </code>  #go to container
 <code> ./vendor/bin/sail down </code>
 
 <code> docker exec -it my_filament_laravel_12-laravel.test-1 /bin/bash  </code>  #go to container manually
@@ -141,8 +141,13 @@ Run one test Class => <code>  ./vendor/bin/pest tests/Feature/App/Filament/Relat
 Run one method from test Class => --filter {methodName} {pathToClass} =>  <code> ./vendor/bin/pest --filter="can list venues in relation manager" tests/Feature/App/Filament/RelationManagers/VenuesRelationManagerTest.php  </code>
 
 
-If tests are failing <code> php artisan config:cache --env=testing </code> 
-if have issues  <code> php artisan migrate:fresh --env=testing </code> 
+ <p> If tests are failing, clear cache in testing environment  <code>  php artisan config:cache --env=testing </code>  </p>
+
+ <p>Before testing, first time ever, do migrate tables to test database (dont seed as we run them in test itself), if have issues  <code> php artisan migrate:fresh --env=testing </code>  </p>
+
+
+
+
 
 
 <p> ----------------------------------------------------------------------------------------- </p>
@@ -315,6 +320,7 @@ Infolists\Components\TextEntry::make('permissions_from_roles')
 ![Screenshot](public/img/screenshots/flmt-2.png)  </br>
 ![Screenshot](public/img/screenshots/flmt-3.png)  </br>
 ![Screenshot](public/img/screenshots/flmt-4.png)  </br>
+![Screenshot](public/img/screenshots/flmt-5.png)  </br>
 
 
 

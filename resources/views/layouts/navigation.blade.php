@@ -51,8 +51,8 @@
                             {{ __('Api endpoint /api/owners') }}
                         </x-dropdown-link>
 
-                        <x-dropdown-link :href="route('api.owners.index')">
-                            {{ __('Owners Controller N/A') }}
+                        <x-dropdown-link :href="route('owners.list')">
+                            {{ __('Owners Controller (regular)') }}
                         </x-dropdown-link>
                         
 

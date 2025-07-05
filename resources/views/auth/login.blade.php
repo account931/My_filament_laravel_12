@@ -42,6 +42,13 @@
             <x-primary-button class="ms-3">
                 {{ __('Log in') }}
             </x-primary-button>
+
         </div>
+
+        <div class="flex items-center justify-end mt-4">
+                <i class=" "></i>
+			    <small>You may check credentials in  => <span class ="text-success">\Seeds\...\UserSeeder;</span> otherwise see Factories\UserFactory </small>
+        </div>
+
     </form>
 </x-guest-layout>
