@@ -10,7 +10,7 @@ use App\Models\Owner;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;  //flash message
 use Filament\Tables;
-
+use Filament\Actions\DeleteAction;
 class ViewOwner extends ViewRecord
 {
     protected static string $resource = OwnerResource::class;
@@ -41,22 +41,26 @@ class ViewOwner extends ViewRecord
             //end action 1
             //Tables\Actions\EditAction::make(),           //edit built-in action
 
-            //action 2
+            //action 2, Edit
             Action::make('edit')
                 ->label('Edit')
                 ->icon('heroicon-o-pencil')
                 ->url(fn () => OwnerResource::getUrl('edit', ['record' => $this->record])),
             //end action 2
 
+            //action 3, Delete
+            DeleteAction::make(),
+            //end action 3
 
-            //action 3, Open in Blade one owner
+
+            //action 4, Open in Blade one owner
             Action::make('edit')
                 ->label('Open in Blade')
                  ->color('success') //Sets the button color
                 ->icon('heroicon-o-pencil')
                 ->url(fn (Owner $record): string => route('test.filament.owner', ['post' => $record, 'value' =>  'arrived from filament resource /owner/id' ]))
                ->openUrlInNewTab(), // Optional: open in new tab;
-            //end action 3
+            //end action 4
         ];
     }
 

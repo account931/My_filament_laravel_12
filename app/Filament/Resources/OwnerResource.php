@@ -26,6 +26,7 @@ use Filament\Tables\Actions\EditAction;   //edit icon
 use Filament\Tables\Actions\DeleteAction; //delete icon
 use Filament\Notifications\Notification;  //flash message
 use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\TrashedFilter; //built‑in TrashedFilter (alias for a ternary filter targeting deleted_at).
 use Filament\Tables\Actions\BulkAction;  //bulk actions
 use Illuminate\Database\Eloquent\Collection;
 use Filament\Infolists;                      //infolist 
@@ -202,10 +203,14 @@ class OwnerResource extends Resource
                 //end filter 2 (is confirmed)
 
                 //filter 3...........
-                Filter::make('is_confirmed')->query(fn (Builder $query): Builder => $query->where('confirmed', true))
+                Filter::make('is_confirmed')->query(fn (Builder $query): Builder => $query->where('confirmed', true)),
                 //end filter 3...........
 
               //filter 4...........  
+              TrashedFilter::make(),  //built‑in TrashedFilter 
+
+              //filter 5........... 
+
             ])
             // End Filters ---------------------
 
