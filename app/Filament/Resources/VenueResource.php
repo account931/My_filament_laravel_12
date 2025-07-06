@@ -19,6 +19,9 @@ use Filament\Infolists\Infolist;             //infolist
 use Filament\Infolists\Components\TextEntry; //infolist entry
 use App\Filament\Components\Infolists\SoftDeletedBadge; //infolist, my custom component
 use App\Filament\Components\Infolists\BooleanEntry; //infolist, my custom component
+use Dotswan\MapPicker\Fields\Map;                       // Form for Dotswan/filament-map-picker
+use Dotswan\MapPicker\Infolists\MapEntry;   //infolist for MapEntry Dotswan/filament-map-picker
+
 
 class VenueResource extends Resource
 {
@@ -43,6 +46,21 @@ class VenueResource extends Resource
             ->schema([
                 //
                 Forms\Components\TextInput::make('venue_name')->label('Venue Name')->required()->maxLength(255),
+
+                //Dotswan/filament-map-picker
+                Map::make('location')->label('Location')->columnSpanFull()
+                // Basic Configuration
+                ->defaultLocation(latitude: 40.4168, longitude: -3.7038)
+                ->draggable(true)
+                ->clickable(true) // click to move marker
+                ->zoom(15)->minZoom(0)->maxZoom(28)
+                ->tilesUrl("https://tile.openstreetmap.de/{z}/{x}/{y}.png")
+                ->detectRetina(true)
+                // Controls
+                ->showFullscreenControl(true)
+                ->showZoomControl(true)
+                // Location Features
+                ->liveLocation(true, true, 5000),
             ]);
     }
 
@@ -88,6 +106,17 @@ class VenueResource extends Resource
             //Infolists\Components\TextEntry::make('active'),
             BooleanEntry::make('active'), //my custom, only visible if soft deleted
             Infolists\Components\TextEntry::make('created_at'),
+
+            //Dotswan/filament-map-picker
+            MapEntry::make('location')->label('Location Map')
+                ->state(fn ($record) => [
+                    'lat' => $record->location['lat'] ?? null,
+                    'lng' => $record->location['lng'] ?? null,  //fix as in L6 we stored as lat/lon, but package wants lat/lng
+                ])
+                ->defaultLocation(latitude: 40.4168, longitude: -3.7038)
+                ->draggable(false)->showMarker()->zoom(7)
+                ->tilesUrl("https://tile.openstreetmap.de/{z}/{x}/{y}.png")
+                ->detectRetina(true)->markerColor("#22c55eff"),
 
         ]);
      }

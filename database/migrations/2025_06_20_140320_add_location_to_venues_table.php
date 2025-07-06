@@ -18,7 +18,7 @@ class AddLocationToVenuesTable extends Migration
 			// Add 'location' as a spatial POINT column and make it nullable with a comment. Uses getter in model to return array of coordinates
 			//Could also use 'json' column, when in SQL 5.7
             //$table->point('location')->nullable()->after('owner_id')->comment('lon, lat'); //Stores lon, lat, in spatial format, save => 'location' => DB::raw("ST_GeomFromText('POINT($longitude $latitude)')")
-            $table->json('location')->nullable()->after('owner_id')->comment('lon, lat'); //fix in filament, changed to json
+            $table->json('location')->nullable()->after('owner_id')->comment('lon, lng'); //fix in filament, changed to json
 
             
         });

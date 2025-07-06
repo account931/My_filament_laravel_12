@@ -4,7 +4,8 @@
 
 
 > Laravel: 12.18, PHP: 8.4.8 , Filament: 3, mysql: 8.0.42, db: '', </br></br>
-What is new: Filament 3, Sail, Sanctum, CI CD, Laravel Audit, PHPStan static analysis tool 2.1.17, Tailwind CSS out of the box, Vue, afsakar/filament-leaflet-map-picker
+What is new: Filament 3, Sail, Sanctum, CI CD, Laravel Audit, PHPStan static analysis tool 2.1.17, Tailwind CSS out of the box, Vue, dotswan/filament-map-picker
+
 
 
 <p> Represents data from 3 main tables (owners (HasMany), venues (BelongsToMany), equipments) in 4 ways: REST API, Filament, Vue JS, regular Laravel Controller + Blade </p>

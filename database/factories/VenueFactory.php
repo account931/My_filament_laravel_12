@@ -40,7 +40,7 @@ class VenueFactory extends Factory
             //V1 from L6  //'location'   =>  DB::raw("ST_GeomFromText('POINT(" . $lon . " " . $lat . ")')"),  //Point type (lon, lat), uses getter in Model to return array of coordinates
             //fill json column
             'location'  => [
-                'lon' => $lon,
+                'lng' => $lon,  //Laravel 12 fix, as most geo package use lon/lng, not lon/lat
                 'lat' => $lat,
                 
             ],
