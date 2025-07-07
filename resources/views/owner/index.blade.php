@@ -1,3 +1,7 @@
+
+{{-- @extends('layouts.app') --}}   {{-- Laravel 12 fix--}}
+{{-- @section('content') --}}
+
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -129,5 +133,7 @@
         </div>
     </div>
 </div>
+
+{{-- @endsection --}}   {{-- Laravel 12 fix--}}
 
 </x-app-layout>

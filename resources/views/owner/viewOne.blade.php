@@ -1,5 +1,5 @@
-<!-- @extends('layouts.app') -->  <!-- Laravel 12 fix -->
-<!-- @section('content') -->
+{{-- @extends('layouts.app') --}}   {{-- Laravel 12 fix--}}
+{{-- @section('content') --}}
  
 <x-app-layout>
     <x-slot name="header">
@@ -97,5 +97,5 @@
     </div>
 </div>
 
-<!-- @endsection -->  <!-- Laravel 12 fix -->
+{{-- @endsection --}}   {{-- Laravel 12 fix--}}
 </x-app-layout>

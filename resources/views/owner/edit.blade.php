@@ -1,11 +1,18 @@
-@extends('layouts.app')
+{{-- @extends('layouts.app') --}}   {{-- Laravel 12 fix--}}
+{{-- @section('content') --}}
 
-@section('content')
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('Edit Owner') }}
+        </h2>
+    </x-slot>
+
 <div class="container">
     <div class="row">
         <div class="col-sm-12 col-xs-12 col-md-8 col-md-offset-2 panel panel-default"> <!-- col-md-offset-2 -->
             <div class="panel-heading"> Edit Owner </div>
-			    <p><br><a href="{{ route('/owners') }}"><button class="btn btn-large btn-success">Back to owners</button></a></p>
+			    <p><br><a href="{{ route('owners.list') }}"><button class="btn btn-large btn-success">Back to owners</button></a></p>
 				
 				
 				<!------------------------------- FORM ----------------------------------->
@@ -55,9 +62,9 @@
                             <!-- First name -->							
                             <div class="form-group {{ $errors->has('first_name') ? ' has-error' : '' }}">
                                 <label for="first_name"> First name:</label>
-                                <input type="text" class="form-control @error('first_name') is-invalid @enderror" name="first_name" value="{{old('first_name', $owner->getOriginal('first_name'))}}"/>	
+                                <input type="text" class="form-control @error('first_name') is-invalid @enderror" name="first_name" value="{{old('first_name', $owner->getRawOriginal('first_name'))}}"/>	<!--  //Laravel 12  fix -->
 							    @if ($errors->has('first_name'))
-                                    <span class="help-block">
+                                    <span class="help-block">                                                                                   
                                         <strong>{{ $errors->first('first_name') }}</strong>
                                     </span>
                                 @endif	
@@ -164,4 +171,5 @@
 	</div>
 </div>
 
-@endsection
+{{-- @endsection --}}   {{-- Laravel 12 fix--}}
+</x-app-layout>

@@ -170,6 +170,8 @@ class OwnerController extends  Controller
      */
 	public function delete(int $id) {
 		
+		$this->authorize('delete', Owner::class); //must have, Spatie RBAC Policy permission check (403 if fails (set in Policy)
+
 	   $owner = Owner::findOrFail($id);
 	   //dd($owner->id);
 	   //dd($owner->venues->first()->venue_name);

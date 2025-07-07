@@ -28,7 +28,7 @@ class OwnerSeeder extends Seeder
                 ['confirmed' => 0]
             ) 
            ->has(
-			    Venue::factory()->count(12) // or just Venue::factory() for one
+			    Venue::factory()->count(2) // or just Venue::factory() for one
 		            ->hasAttached(
                         Equipment::factory()->count(3),
                         [], // pivot attributes if needed

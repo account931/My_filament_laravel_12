@@ -30,11 +30,13 @@ Route::middleware('auth')->group(function () {
     // Create new owner html form
     Route::get('/owner-create', [OwnerController::class, 'create'])->name('owner/create-new');
 
+    // create new owner upon form request // saving owner form fields via POST
+    Route::post('/owner/save',   [OwnerController::class, 'save']) ->name('owner.save');
+
+
     // Owner show one (below 2 possible ways of the same result, 2 different controller methods, one view)
 	// Traditional route by id
     Route::get('/owner/{id}',     [OwnerController::class, 'showById'])->name('ownerOneId');
-
-   
         
     // Implicit Route Model Binding
     Route::get('/owner/{owner}',  [OwnerController::class, 'show'])    ->name('ownerOne');

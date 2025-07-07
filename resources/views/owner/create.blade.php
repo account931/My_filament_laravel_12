@@ -1,10 +1,10 @@
-<!-- @extends('layouts.app') -->  <!-- Laravel 12 fix -->
-<!-- @section('content') -->
+{{-- @extends('layouts.app') --}}   {{-- Laravel 12 fix--}}
+{{-- @section('content') --}}
 
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Owner create') }}
+            {{ __('Create Owner') }}
         </h2>
     </x-slot>
 
@@ -157,5 +157,5 @@
 	</div>
 </div>
 
-<!-- @endsection -->  <!-- Laravel 12 fix -->
+{{-- @endsection --}}   {{-- Laravel 12 fix--}}
 </x-app-layout>
