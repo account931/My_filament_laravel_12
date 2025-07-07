@@ -71,6 +71,7 @@
                             @if( $owner->venues->isEmpty())
                                 <span class="text-danger"> No venue so far. </span>
                             @else
+							    {{ $owner->venues->count() }}
                                 @foreach ($owner->venues as $venue)
 								    <div class="one" style="border: 1px solid black; padding: 1em; margin-bottom:1em; border-radius: 1em;">
                                     <p>Venue {{ $loop->iteration }}: {{ $venue->venue_name }}</p>

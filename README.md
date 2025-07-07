@@ -135,7 +135,8 @@ php artisan make:filament-relation-manager OwnerResource venues owner_id
 <p> ----------------------------------------------------------------------------------------- </p>
 ## 4. Pest test
 
-<code> ./vendor/bin/pest </code>  run all test (since docker, do it inside container)
+<code> ./vendor/bin/pest </code>  run all test (since docker, do it inside container)  ||  <code>composer run-pest-tests</code>
+
 
 Run one test Class => <code>  ./vendor/bin/pest tests/Feature/App/Filament/RelationManagers/VenuesRelationManagerTest.php  </code> 
 
