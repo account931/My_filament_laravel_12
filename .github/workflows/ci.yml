@@ -229,7 +229,7 @@ jobs:
         run: |
           # Create SSH directory and add private key
           mkdir -p ~/.ssh                               #Creates a local .ssh folder on the GitHub runner.
-          cho "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa       #Saves the private key from secrets into a file
+          echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa       #Saves the private key from secrets into a file
           chmod 600 ~/.ssh/id_rsa                       #Secures the key with proper file permissions (600).
 
           # Add remote host to known_hosts to avoid prompt
