@@ -1,0 +1,286 @@
+{
+	"info": {
+		"_postman_id": "8967b86e-1af5-47e7-b037-6e49239ba2b1",
+		"name": "My Filament Owner API  routes",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21090484",
+		"_collection_link": "https://dimateam-9570.postman.co/workspace/DimaApi~7076bd26-c125-4c6f-98d4-1a1cc562a9cc/collection/21090484-8967b86e-1af5-47e7-b037-6e49239ba2b1?action=share&source=collection_link&creator=21090484"
+	},
+	"item": [
+		{
+			"name": "Sanctum routes",
+			"item": [
+				{
+					"name": "api/owners/quantity  =>  protected bySanctum",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer 1|G0x1gasyYyDbg00QYnQxXarVbH8v039JhEwUTHvT07253d0e",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{my_base_url}}/api/owners/quantity",
+							"host": [
+								"{{my_base_url}}"
+							],
+							"path": [
+								"api",
+								"owners",
+								"quantity"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "api/owners/quantity/admin   => Sanctum & Spatie",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer 1|G0x1gasyYyDbg00QYnQxXarVbH8v039JhEwUTHvT07253d0e",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{my_base_url}}/api/owners/quantity/admin",
+							"host": [
+								"{{my_base_url}}"
+							],
+							"path": [
+								"api",
+								"owners",
+								"quantity",
+								"admin"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "/api/owners",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{my_base_url}}/api/owners",
+					"host": [
+						"{{my_base_url}}"
+					],
+					"path": [
+						"api",
+						"owners"
+					],
+					"query": [
+						{
+							"key": "status",
+							"value": "1",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/owner/1",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{my_base_url}}/api/owner/1",
+					"host": [
+						"{{my_base_url}}"
+					],
+					"path": [
+						"api",
+						"owner",
+						"1"
+					],
+					"query": [
+						{
+							"key": "owner_id",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/owner/create",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"first_name\": \"John Doe\",\n  \"last_name\": \"Name\",\n  \"location\": \"UAR\",\n  \"email\": \"john@example.com\",\n  \"phone\": \"+380976563983\",\n  \"owner_venue\": [1]\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{my_base_url}}/api/owner/create",
+					"host": [
+						"{{my_base_url}}"
+					],
+					"path": [
+						"api",
+						"owner",
+						"create"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "Petro",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/owner/update/{owner}",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"first_name\": \"John Doe\",\n  \"last_name\": \"Name\",\n  \"location\": \"UAR\",\n  \"email\": \"john@example.com\",\n  \"phone\": \"+380976563983\",\n  \"owner_venue\": [1]\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{my_base_url}}/api/owner/update/1",
+					"host": [
+						"{{my_base_url}}"
+					],
+					"path": [
+						"api",
+						"owner",
+						"update",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "{{my_base_url}}/owner/delete/{{owner}}",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{my_base_url}}/api/owner/delete/3",
+					"host": [
+						"{{my_base_url}}"
+					],
+					"path": [
+						"api",
+						"owner",
+						"delete",
+						"3"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "my_base_url",
+			"value": "http://localhost:8000",
+			"type": "string"
+		}
+	]
+}

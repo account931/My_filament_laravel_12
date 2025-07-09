@@ -52,9 +52,12 @@
                         </x-dropdown-link>
 
                         <x-dropdown-link :href="route('owners.list')">
-                            {{ __('Owners Controller (regular)') }}
+                            {{ __('Owners Controller (regular web)') }}
                         </x-dropdown-link>
                         
+                         <x-dropdown-link :href="route('vue.start.page')">
+                            {{ __('Vue page') }}
+                        </x-dropdown-link>
 
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">

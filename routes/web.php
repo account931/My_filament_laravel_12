@@ -4,7 +4,8 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api;   //Api cotrollers
 use App\Http\Controllers\TestController\TestController;
-use App\Http\Controllers\OwnerController\OwnerController;
+use App\Http\Controllers\OwnerController\OwnerController;  
+use App\Http\Controllers\VuePages\VuePagesController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -17,7 +18,12 @@ Route::get('/dashboard', function () {
 Route::get('test-flm',       [TestController::class, 'testFilament'])->name('test-filament');
 Route::get('test-flm-owner', [TestController::class, 'testFilamentOwner'])->name('test.filament.owner');
 
-// Auth (logged) users only
+
+
+
+
+// Auth (logged) users only------------------------------------------------------------------------------------------
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile',    [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile',  [ProfileController::class, 'update'])->name('profile.update');
@@ -48,9 +54,17 @@ Route::middleware('auth')->group(function () {
     Route::put('/owner/update/{id}',      [ OwnerController::class, 'update'])  ->name('owner/update');
         
     // Delete owner // delete an owner
-    Route::post('/owner-delete/{id}', [ OwnerController::class, 'delete']) ->name('owner/delete-one-owner');
+    Route::post('/owner-delete/{id}', [OwnerController::class, 'delete']) ->name('owner/delete-one-owner');
+
+
+    
+    // Vue Page (show response from open /api/owners)
+    Route::get('/vue-start-page',     [VuePagesController::class, 'index'])->name('vue.start.page');
+
     
 });
+// End Auth (logged) users only------------------------------------------------------------------------------------------
+
 
 require __DIR__.'/auth.php';
 

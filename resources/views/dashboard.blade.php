@@ -31,10 +31,18 @@
                     {{ __("You're logged in!") }}
                     <p>  <a href="{{ route('filament.1.pages.dashboard') }}" class="my-link"> go to Filament <i class="fas fa-cloud-sun" style="font-size:24px"></i> </a></p>
                   
-
+                    <!-- Vue -->
+                     <div id="app">
+                         <example-component></example-component>
+                    </div>
                      
                 </div>
             </div>
         </div>
     </div>
+
+
+  <!-- Vue js -->
+@vite('resources/js/app.js')
+
 </x-app-layout>

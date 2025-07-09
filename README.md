@@ -4,7 +4,7 @@
 
 
 > Laravel: 12.18, PHP: 8.4.8 , Filament: 3, mysql: 8.0.42, db: '', </br></br>
-What is new: Filament 3, Sail, Sanctum, CI CD, Laravel Audit, PHPStan static analysis tool 2.1.17, Tailwind CSS out of the box, Vue, dotswan/filament-map-picker
+What is new: Filament 3, Sail, Sanctum, CI CD, Laravel Audit, PHPStan static analysis tool 2.1.17, Tailwind CSS out of the box, Vue 3, Pinia insead of Vuex store, dotswan/filament-map-picker
 
 
 
@@ -39,6 +39,8 @@ git restore .  git clean -fd
 - [8. Postman](#8-postman)
 - [9. Sanctum](#9-sanctum)
 - [10.PhpStan](#10-phpstan)
+- [11.Vue](#11-vue)
+
 - [11.V.A](#11-va)
 
 
@@ -255,7 +257,7 @@ When send Post, for example, to /api/owner/create,  in Postman go to Body-> Raw 
 </br> 
  Make sure to add in Postman "Headers" => <code>  Accept: application/json </code> , so $this->wantsJson() is working, e.g in OwnerRequest.php
 
-<p> For Sanctum, generate token and add in Postman in Headers -> Key/Value:  Authorization  Bearer 4|uYx01a2 </p> 
+<p> For Sanctum, generate token in console  with <code> php artisan get_sanctum_token </code>,   and add in Postman in Headers -> Key/Value:  Authorization  Bearer 4|uYx01a2 </p> 
 
 
 
@@ -272,6 +274,10 @@ When send Post, for example, to /api/owner/create,  in Postman go to Body-> Raw 
 </code> 
 
 
+
+
+
+
 <p> ----------------------------------------------------------------------------------------- </p>
 
 ## 10. PhpStan
@@ -279,6 +285,27 @@ When send Post, for example, to /api/owner/create,  in Postman go to Body-> Raw 
 Run check <code> ./vendor/bin/phpstan analyse  </code>
 Generate baseline "phpstan-baseline.neon" <code> ./vendor/bin/phpstan analyse --generate-baseline=phpstan-baseline.neon code> 
 Add baseline to config in phpstan.neon
+
+
+
+
+
+
+
+
+<p> ----------------------------------------------------------------------------------------- </p>
+
+## 11. Vue
+Vue is not installed by default, so 
+1. <code> npm install vue@3 @vitejs/plugin-vue </code> 
+2. in  vite.config.js  -> add vue 
+3. in /resources/js.app.js  -> import vue & init component + create component itself e.g in resources/js/components/ExampleComponent.vue
+4. use in Blade: <example-component></example-component> +  @vite('resources/js/app.js')
+5. <code> npm run build  </code> 
+npm run dev → runs Vite dev server (hot reload, for local development).
+npm run build → builds production assets into public/build.
+
+install axios, sweetalert2, Pinia insead of Vuex store, Element Plus insead of Element UI(supported in Vue 2 only)
 
 
 
