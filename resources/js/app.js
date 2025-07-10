@@ -3,10 +3,16 @@ import './bootstrap';
 import Alpine from 'alpinejs';
 import { createApp } from 'vue';  //vue
 import { createPinia } from 'pinia';     //Piania store instead of Vuex
+import router from './router/index.js';
+//import $ from 'jquery';  //jquery  //import where it is used, e.g login.vue
 import ElementPlus from 'element-plus'; //Element Plus instead of Element UI
 import 'element-plus/dist/index.css';   //Element Plus instead of Element UI
 import ExampleComponent    from './components/ExampleComponent.vue'; //vue example
 import OwnersListComponent from './components/OwnersListComponents/GetOwnersListComponent.vue';
+import RouterMenu from './components/OwnersListComponentsWithRouter/VueRouterMenu.vue';
+
+
+
 
 window.Alpine = Alpine; //used in dashboard menu drop down
 Alpine.start();  //used in dashboard menu drop down
@@ -20,11 +26,15 @@ const pinia = createPinia(); // Piania store
 
 app.component('example-component', ExampleComponent);
 app.component('owners-list-component', OwnersListComponent);
+app.component('vue-router-menu-with-links-component', RouterMenu);
+
 
 app.use(ElementPlus);  //Element Plus instead of Element UI
 app.use(pinia);        //Piania store instead of Vuex
+app.use(router);
 
 app.mount('#app');
+//app.mount('#vue');  //vue with router ID
 
 
 

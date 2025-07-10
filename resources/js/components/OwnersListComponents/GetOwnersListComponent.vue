@@ -112,7 +112,7 @@ export default {
   },
 
   mounted() {
-    this.store.getAllPosts(); // fetch posts
+    this.store.getAllPosts(); // fetch posts in Piania store
   },
 
   methods: {

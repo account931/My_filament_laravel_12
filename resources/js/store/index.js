@@ -14,8 +14,8 @@ export const useOwnerStore = defineStore('myStore', {  //myStore' is the unique 
     count: 0,
     name: 'Pinia Store',
     posts: [],
-    //loggedUser: JSON.parse(localStorage.getItem('loggedStorageUser')) || { name: 'not set', email: 'errorMail' },
-    //passport_api_tokenY: localStorage.getItem('tokenZ') || null,
+    loggedUser: JSON.parse(localStorage.getItem('loggedStorageUser')) || { name: 'not set', email: 'errorMail' },
+    passport_api_tokenY: localStorage.getItem('tokenZ') || null,   //sanctum token
     showLoader: false
   }),
 
@@ -55,8 +55,10 @@ export const useOwnerStore = defineStore('myStore', {  //myStore' is the unique 
     },
 
     changeVuexStoreLogged(dataTestX) {
+      console.log(dataTestX);
+      alert(dataTestX.access_token);
       localStorage.setItem('loggedStorageUser', JSON.stringify(dataTestX.user));
-      localStorage.setItem('tokenZ', dataTestX.access_token);
+      localStorage.setItem('tokenZ', dataTestX.access_token) 
 
       this.loggedUser = dataTestX.user;
       this.passport_api_tokenY = dataTestX.access_token;

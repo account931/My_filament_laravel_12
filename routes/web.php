@@ -6,6 +6,7 @@ use App\Http\Controllers\Api;   //Api cotrollers
 use App\Http\Controllers\TestController\TestController;
 use App\Http\Controllers\OwnerController\OwnerController;  
 use App\Http\Controllers\VuePages\VuePagesController;
+use App\Http\Controllers\VuePagesWithRouter\VuePagesWithRouterController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -61,6 +62,9 @@ Route::middleware('auth')->group(function () {
     // Vue Page (show response from open /api/owners)
     Route::get('/vue-start-page',     [VuePagesController::class, 'index'])->name('vue.start.page');
 
+     // Vue Pages with router (show response from open /api/owners, login, register pages, etc)
+    Route::get('/vue-pages-with-router',  [VuePagesWithRouterController::class, 'index'])->name('vue.pages-with-router');
+		
     
 });
 // End Auth (logged) users only------------------------------------------------------------------------------------------

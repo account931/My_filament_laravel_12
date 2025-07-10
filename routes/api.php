@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Api;   //Api cotrollers
 use App\Http\Controllers\TestController\TestController;
-
+use App\Http\Controllers\Auth_Api\AuthController; //Api login/register, e.x for Vue
 /*
 |--------------------------------------------------------------------------
 | Api routes
@@ -59,7 +59,9 @@ Route::delete('/owner/delete/{owner}',[Api\OwnerController::class, 'destroy'])->
 // ----------------------------- End Open routes (do not require Passport/Sanctum ( does not require token in request) --------------------------------------
 
 
-
+// User Api Registration/Login
+Route::post('/register', [AuthController::class, 'register'])->name('api/register');
+Route::post('/login',    [AuthController::class, 'login'])   ->name('api/login');
 
 
 

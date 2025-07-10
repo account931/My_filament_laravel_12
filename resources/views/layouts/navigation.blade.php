@@ -36,28 +36,41 @@
                     <x-slot name="content">
 
                         <x-dropdown-link :href="route('profile.edit')">
+                            <i class="fas fa-cloud-sun" style="font-size:12px"></i>
                             {{ __('Profile') }}
                         </x-dropdown-link>
 
                         <x-dropdown-link :href="route('filament.1.pages.dashboard')">
+                            <i class="fas fa-cloud-sun" style="font-size:12px"></i>
                             {{ __('Filament') }}
                         </x-dropdown-link>
 
                         <x-dropdown-link :href="route('test-filament')">
+                            <i class="fas fa-cloud-sun" style="font-size:12px"></i>
                             {{ __('Test film view') }}
                         </x-dropdown-link>
 
                         <x-dropdown-link :href="route('api.owners.index')">
+                            <i class="fas fa-cloud-sun" style="font-size:12px"></i>
                             {{ __('Api endpoint /api/owners') }}
                         </x-dropdown-link>
 
                         <x-dropdown-link :href="route('owners.list')">
+                            <i class="fas fa-cloud-sun" style="font-size:12px"></i>
                             {{ __('Owners Controller (regular web)') }}
                         </x-dropdown-link>
                         
-                         <x-dropdown-link :href="route('vue.start.page')">
+                        <x-dropdown-link :href="route('vue.start.page')">
+                            <i class="fas fa-cloud-sun" style="font-size:12px"></i>
                             {{ __('Vue page') }}
                         </x-dropdown-link>
+
+                        <x-dropdown-link :href="route('vue.pages-with-router')">
+                            <i class="fas fa-radiation-alt" style="font-size:14px"></i>
+                            {{ __('Vue with router') }}
+                        </x-dropdown-link>
+
+                        
 
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">
