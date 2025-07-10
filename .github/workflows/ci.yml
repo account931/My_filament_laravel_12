@@ -231,6 +231,13 @@ jobs:
           mkdir -p ~/.ssh                               #Creates a local .ssh folder on the GitHub runner.
           echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa       #Saves the private key from secrets into a file
           chmod 600 ~/.ssh/id_rsa                       #Secures the key with proper file permissions (600).
+           
+          # Create SSH config with IdentitiesOnly yes for the remote host
+          echo "Host $REMOTE_HOST" >> ~/.ssh/config
+          echo "    User $REMOTE_USER" >> ~/.ssh/config
+          echo "    IdentityFile ~/.ssh/id_rsa" >> ~/.ssh/config
+          echo "    IdentitiesOnly yes" >> ~/.ssh/config
+          chmod 600 ~/.ssh/config
 
           # Add remote host to known_hosts to avoid prompt
           ssh-keyscan -H $REMOTE_HOST >> ~/.ssh/known_hosts
