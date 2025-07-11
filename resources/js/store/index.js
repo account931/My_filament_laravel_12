@@ -56,7 +56,7 @@ export const useOwnerStore = defineStore('myStore', {  //myStore' is the unique 
 
     changeVuexStoreLogged(dataTestX) {
       console.log(dataTestX);
-      alert(dataTestX.access_token);
+      //alert(dataTestX.access_token);
       localStorage.setItem('loggedStorageUser', JSON.stringify(dataTestX.user));
       localStorage.setItem('tokenZ', dataTestX.access_token) 
 

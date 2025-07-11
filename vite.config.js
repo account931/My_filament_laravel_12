@@ -12,12 +12,19 @@ export default defineConfig({
         }),
         vue(), //add vue
     ],
-    //add for vue
+    //add for vue fix
     resolve: {
         alias: {
             vue: 'vue/dist/vue.esm-bundler.js',
             '@': path.resolve(__dirname, 'resources/js'),
         },
     },
+
+    //fix for f5 error Not found
+    server: {
+        historyApiFallback: true
+    },
+
+    
 });
 

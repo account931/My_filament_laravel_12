@@ -70,6 +70,11 @@
                             {{ __('Vue with router') }}
                         </x-dropdown-link>
 
+                        <x-dropdown-link :href="route('venue-locator')">
+                            <i class="fas fa-cloud-sun" style="font-size:12px"></i>
+                            {{ __('Vue Geo Locator') }}
+                        </x-dropdown-link>
+
                         
 
                         <!-- Authentication -->

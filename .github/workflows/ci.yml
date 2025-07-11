@@ -232,7 +232,7 @@ jobs:
           echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa       #Saves the private key from secrets into a file
           chmod 600 ~/.ssh/id_rsa                       #Secures the key with proper file permissions (600).
            
-          # Create SSH config with IdentitiesOnly yes for the remote host
+          # Create SSH config with IdentitiesOnly yes for the remote host. Used to suppress CI error "Too many authentication failures"
           echo "Host $REMOTE_HOST" >> ~/.ssh/config
           echo "    User $REMOTE_USER" >> ~/.ssh/config
           echo "    IdentityFile ~/.ssh/id_rsa" >> ~/.ssh/config
@@ -241,7 +241,6 @@ jobs:
 
           # Add remote host to known_hosts to avoid prompt
           ssh-keyscan -H $REMOTE_HOST >> ~/.ssh/known_hosts
-          
           
           #create file last-deploy-info.php which contains current timestamp  dd-mm-yy hh::mm::ss
           echo "<?php echo 'Filament Deployed at  $(TZ='Europe/Kyiv' date -d '-1 hour' '+%d-%m-%y %H:%M:%S')'; ?>" >> last-deploy-info.php #creates a file 'last-deploy-info.php' with current time - 1 hour , >> appends content to file , not overwrite, but since it is a new created in github ci, it always creates a new file

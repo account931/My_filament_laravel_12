@@ -11,6 +11,7 @@ import quantity_pr  from '../components/OwnersListComponentsWithRouter/pages/qua
 import register     from '../components/OwnersListComponentsWithRouter/pages/LoginRegister/subcomponents/register.vue';
 import loginPage    from '../components/OwnersListComponentsWithRouter/pages/LoginRegister/auth-start-page.vue';
 
+
 const routes = [
   {
     path: '/',

@@ -10,6 +10,7 @@ import 'element-plus/dist/index.css';   //Element Plus instead of Element UI
 import ExampleComponent    from './components/ExampleComponent.vue'; //vue example
 import OwnersListComponent from './components/OwnersListComponents/GetOwnersListComponent.vue';
 import RouterMenu from './components/OwnersListComponentsWithRouter/VueRouterMenu.vue';
+import VenuesLocatorComponent from './components/VenuesStoreLocatorComponent/VenuesLocatorComponent.vue';
 
 
 
@@ -24,9 +25,10 @@ Alpine.start();  //used in dashboard menu drop down
 const app = createApp({});
 const pinia = createPinia(); // Piania store
 
-app.component('example-component', ExampleComponent);
-app.component('owners-list-component', OwnersListComponent);
-app.component('vue-router-menu-with-links-component', RouterMenu);
+app.component('example-component',     ExampleComponent);
+app.component('owners-list-component', OwnersListComponent);        //Vue gets data from /api/owners
+app.component('vue-router-menu-with-links-component', RouterMenu);  //Vue with router
+app.component('venues-locator-component', VenuesLocatorComponent);  //Vue VenuesLocatorComponent
 
 
 app.use(ElementPlus);  //Element Plus instead of Element UI
@@ -34,7 +36,8 @@ app.use(pinia);        //Piania store instead of Vuex
 app.use(router);
 
 app.mount('#app');
-//app.mount('#vue');  //vue with router ID
+app.mount('#vue');  //vue with router ID
+app.mount('#venues-store-locator');  //vue Mapbox locator
 
 
 

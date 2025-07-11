@@ -9,11 +9,12 @@
         </center>
         
         <!-- Display Validation errors if any come from Controller Request Php validator -->
-        <div v-for="(book, i) in this.booksGet " :key="i" class="alert alert-danger"> 
-            Error: {{ book }} 
+        <div v-for="(error, i) in this.errorGet " :key="i" class="alert alert-danger"> 
+            Error: {{ error }} 
         </div>
         
         <div class="form-group">
+         <center>
             <div v-if="status_msg" class="alert-danger alert" role="alert">
                 {{ status_msg }}
             </div>
@@ -52,6 +53,7 @@
                 <hr><br><br>
                 <button type="submit" class="btn btn-info"> Register <i class="	fa fa-folder-open-o" style="font-size:12px"></i></button>
             </form>
+            </center>
         </div>
     </div>
 
@@ -72,13 +74,13 @@ export default {
             name            : "",  //form name
             status_msg      : "",  //validate error message
             status          : "",
-            errroList: [],         //list of validations errors of server-side validator
+            errorList: [],         //list of validations errors of server-side validator
         };
     },
   
     computed: { 
-        booksGet () { //compute Back-end validation errors
-            return this.errroList;
+        errorGet () { //compute Back-end validation errors
+            return this.errorList;
         }      
     },
     beforeMount() {},
@@ -97,7 +99,6 @@ export default {
                 return false;
             }
             
-            var that = this; //Fix this issue. 
             let emailX    = this.email; 
             let passwordX = this.password;
             
@@ -130,19 +131,38 @@ export default {
                             var t = data.validateErrors[key][0]; //gets validation err message, e.g validateErrors.title[0]
                             tempoArray.push(t);
                         }
-                        that.errroList = tempoArray; 
+                        that.errorList = tempoArray; 
                         
                     } else {
                         Swal.fire("OK", "Reg is OK, login now", "success");
                         var tempoArray = []; 
-                        that.errroList = tempoArray; //clears validation server-side errors if any. Simple that.errroList = [] won't work
+                        thatX.errorList = tempoArray; //clears validation server-side errors if any. Simple that.errorList = [] won't work
                     }
                 },  
-			    error: function (errorZ) {
-                    alert("error " +  JSON.stringify(errorZ, null, 4));  
-                    //add error disaply here                   
-			    }	  
-            });                             
+			    error: function (errorData) {
+                    alert("error " +  JSON.stringify(errorData, null, 4));  
+                    //alert("error " +  JSON.stringify(errorData.responseJSON, null, 4));  
+                    //alert(errorData.responseJSON.errors.name); 
+                    //add error disaply here 
+                    //thatX.status_msg = errorData.error.responseText;
+
+                    //Laravel 12 fix 
+                    //setting the list of validations errors of server-side validator
+                    if (errorData.responseJSON) {
+                        const tempoArray = [];
+
+                        for (var key in errorData.responseJSON.errors) {
+                            if (errorData.responseJSON.errors.hasOwnProperty(key)) {
+                                const t = errorData.responseJSON.errors[key][0]; // Get first validation error message
+                                //alert(errorData.responseJSON.errors[key][0]);
+                                tempoArray.push(t);
+                            }
+                        }
+
+                        thatX.errorList = tempoArray;                   
+		        } 
+            }
+         });                           
             
         },
         

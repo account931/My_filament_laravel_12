@@ -305,7 +305,8 @@ Vue is not installed by default, so
 npm run dev → runs Vite dev server (hot reload, for local development).
 npm run build → builds production assets into public/build.
 
-install axios, sweetalert2, Pinia insead of Vuex store, Element Plus insead of Element UI(supported in Vue 2 only), vue-router@4, npm install jquery
+install axios, sweetalert2, Pinia insead of Vuex store, Element Plus insead of Element UI(supported in Vue 2 only), vue-router@4, jquery, mapbox-gl
+
 
 </br>
 Piania brief:

@@ -74,7 +74,7 @@
 			
 		
             <!-- GIF Loader (appears while ajax runs)  -->
-           <div v-if="showLoader" class="col-sm-12 col-xs-12" style="position:absolute;top:-15%;left:-5%"> 
+           <div v-if="showLoader" class="col-sm-12 col-xs-12" style="position:absolute;top:-15%;left:35%"> 
 		       <img style="width: 25%;" src ="/public/img/loader-black.gif" alt="loader"/>
 		   </div>
 		   <!------------------ End GIF Loader --------->
