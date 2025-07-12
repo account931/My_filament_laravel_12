@@ -18,6 +18,15 @@ const routes = [
     name: 'my-info-page',
     component: my_info_page,
   },
+
+  //L12 fix, as no default page was working
+  {
+    path: '/vue-pages-with-router',
+    name: 'my-info-page',
+    component: my_info_page,
+  },
+
+
   {
     path: '/my-page',
     name: 'my-info-page-alias',
@@ -58,6 +67,7 @@ const routes = [
     name: 'quantity-protected',
     component: quantity_pr,
   },
+
 ];
 
 const router = createRouter({

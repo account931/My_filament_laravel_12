@@ -88,7 +88,7 @@ class OwnerResource extends Resource
                 Forms\Components\TextInput::make('phone')->label('phone')->required()->tel() // Sets input type="tel"
                     ->rules(['required', 'regex:/^[+]380[\d]{1,4}[0-9]+$/']), // $RegExp_Phone = '/^[+]380[\d]{1,4}[0-9]+$/';
                 Forms\Components\Select::make('location')->label('location')->options(collect(LocationEnum::cases())
-                        ->mapWithKeys(fn ($case) => [$case->value => $case->label()])->toArray())->required(),
+                    ->mapWithKeys(fn ($case) => [$case->value => $case->label()])->toArray())->required(),
 
                 // hasMany venues
                 Select::make('venues')->label('Venues')->multiple()
@@ -373,45 +373,45 @@ class OwnerResource extends Resource
                 Infolists\Components\Section::make()
                     ->columnSpan(1)
                     ->schema([
-                    Infolists\Components\TextEntry::make('email'),
-                    Infolists\Components\TextEntry::make('phone'),
-                    Infolists\Components\TextEntry::make('location'),
-                    Infolists\Components\TextEntry::make('audits_count')->label('Audits'), // counts Audits, must add getEloquentQuery() { return parent::getEloquentQuery()->withCount('audits');
+                        Infolists\Components\TextEntry::make('email'),
+                        Infolists\Components\TextEntry::make('phone'),
+                        Infolists\Components\TextEntry::make('location'),
+                        Infolists\Components\TextEntry::make('audits_count')->label('Audits'), // counts Audits, must add getEloquentQuery() { return parent::getEloquentQuery()->withCount('audits');
 
-                ]),
+                    ]),
                 // end group entries 3
 
                 // group entries 4
                 Infolists\Components\Section::make()
                     ->columnSpan(1)
                     ->schema([
-                    Infolists\Components\TextEntry::make('confirmed')->label('Confirmed')->formatStateUsing(fn ($state) => $state
-                        ? '<span style="color: white; background-color: green; padding: 0.2em 0.5em; border-radius: 0.25rem;">Confirmed</span>'
-                        : '<span style="color: white; background-color: red; padding: 0.2em 0.5em; border-radius: 0.25rem;">Not confirmed</span>')
-                        ->html(),  // Important: allow HTML rendering
+                        Infolists\Components\TextEntry::make('confirmed')->label('Confirmed')->formatStateUsing(fn ($state) => $state
+                            ? '<span style="color: white; background-color: green; padding: 0.2em 0.5em; border-radius: 0.25rem;">Confirmed</span>'
+                            : '<span style="color: white; background-color: red; padding: 0.2em 0.5em; border-radius: 0.25rem;">Not confirmed</span>')
+                            ->html(),  // Important: allow HTML rendering
 
-                    BooleanEntry::make('confirmed'), // my custom, only visible if soft deleted
-                ]),
+                        BooleanEntry::make('confirmed'), // my custom, only visible if soft deleted
+                    ]),
                 // end group entries  4
 
                 // group entries 5  !!!!!
                 Infolists\Components\Section::make()
                     ->columnSpan(2)
                     ->schema([
-                    Infolists\Components\TextEntry::make('venues_count')->label('Venues count'), // Automatically eager loads and counts the relation
+                        Infolists\Components\TextEntry::make('venues_count')->label('Venues count'), // Automatically eager loads and counts the relation
 
-                    // list of all venues
-                    Infolists\Components\TextEntry::make('venues.venue_name')->label('Venues names') // mege error, it was not make('venues.venue_name')
-                        ->formatStateUsing(fn ($state, $record) => collect($record->venues)->map(fn ($venue) => '<span style="color:white; background-color: green; padding: 0.2em 0.5em; border-radius: 2em;">'.$venue->venue_name.'</span>'
-                        )->implode(' ')
-                        )
-                        ->html(), // Important: allow HTML rendering
+                        // list of all venues
+                        Infolists\Components\TextEntry::make('venues.venue_name')->label('Venues names') // mege error, it was not make('venues.venue_name')
+                            ->formatStateUsing(fn ($state, $record) => collect($record->venues)->map(fn ($venue) => '<span style="color:white; background-color: green; padding: 0.2em 0.5em; border-radius: 2em;">'.$venue->venue_name.'</span>'
+                            )->implode(' ')
+                            )
+                            ->html(), // Important: allow HTML rendering
 
-                    Infolists\Components\TextEntry::make('venues.venue_name')->label('Venues all)')
-                        ->formatStateUsing(fn ($state, $record) => $record->venues->pluck('venue_name')->join(', ')
-                        ),
+                        Infolists\Components\TextEntry::make('venues.venue_name')->label('Venues all)')
+                            ->formatStateUsing(fn ($state, $record) => $record->venues->pluck('venue_name')->join(', ')
+                            ),
 
-                ]),
+                    ]),
                 // end group entries  5
 
             ]);

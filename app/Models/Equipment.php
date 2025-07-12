@@ -13,6 +13,7 @@ class Equipment extends Model implements Auditable  // Laravel Audit
 {
     use HasFactory;
     use \OwenIt\Auditing\Auditable;
+
     // //Factory trait has been introduced in Laravel v8.
     use SoftDeletes;   // Laravel Audit
 

@@ -1,5 +1,6 @@
 <?php
-//pint.json is not working
+
+// pint.json is not working
 use Laravel\Pint\Config;
 
 return Config::preset('laravel')
@@ -7,7 +8,7 @@ return Config::preset('laravel')
         'class_attributes_separation' => false, // disables the rule
     ])
     ->setPaths([
-        //'app',
+        // 'app',
         'routes',
     ])
     ->setExcludes([
