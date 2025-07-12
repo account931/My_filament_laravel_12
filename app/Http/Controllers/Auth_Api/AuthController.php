@@ -1,48 +1,46 @@
 <?php
 
-//Auth controller for REST (via token, not session)
+// Auth controller for REST (via token, not session)
+
 namespace App\Http\Controllers\Auth_Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Artisan;
-use Laravel\Passport\ClientRepository;
-use Illuminate\Support\Facades\App;
 
 class AuthController extends Controller
 {
     public function register(Request $request)
-    { 
+    {
         $validatedData = $request->validate([
-            'name'     => 'required|max:55|min:4',
-            'email'    => 'email|required|unique:users',
-            'password' => 'required|min:4|confirmed'
+            'name' => 'required|max:55|min:4',
+            'email' => 'email|required|unique:users',
+            'password' => 'required|min:4|confirmed',
         ]);
 
         $validatedData['password'] = bcrypt($request->password);
 
-        $user = User::create($validatedData); //dd($user); 
-		
-        $accessToken = $user->createToken('authSanctumToken')->plainTextToken;   
-        //$accessToken = $user->createToken('authSanctumToken')->accessToken;   
+        $user = User::create($validatedData); // dd($user);
 
-        return response([ 'user' => $user, 'access_token' => $accessToken ]);
+        $accessToken = $user->createToken('authSanctumToken')->plainTextToken;
+        // $accessToken = $user->createToken('authSanctumToken')->accessToken;
+
+        return response(['user' => $user, 'access_token' => $accessToken]);
     }
 
     public function login(Request $request)
     {
         $loginData = $request->validate([
-            'email'    => 'email|required',
-            'password' => 'required'
+            'email' => 'email|required',
+            'password' => 'required',
         ]);
 
-        if (!auth()->attempt($loginData)) {
+        if (! auth()->attempt($loginData)) {
             return response(['message' => 'Invalid Credentials']);
         }
 
-        $accessToken = auth()->user()->createToken('authSanctumToken')->plainTextToken;   //sanctum token
-       // $accessToken = auth()->user()->createToken('authToken')->accessToken;
+        $accessToken = auth()->user()->createToken('authSanctumToken')->plainTextToken;   // sanctum token
+        // $accessToken = auth()->user()->createToken('authToken')->accessToken;
 
         return response(['user' => auth()->user(), 'access_token' => $accessToken]);
 

@@ -18,10 +18,10 @@ class CreateVenuesTable extends Migration
             $table->string('venue_name');
             $table->string('address');
             $table->boolean('active')->default(true);
-            //hasMany foreign key in 2 steps
+            // hasMany foreign key in 2 steps
             $table->bigInteger('owner_id')->unsigned()->index()->nullable(); // this is working
             $table->foreign('owner_id')->references('id')->on('owners')->onDelete('cascade');
-			//$table->enum('location', ['UA', 'EU']);
+            // $table->enum('location', ['UA', 'EU']);
             $table->timestamps();
             $table->softDeletes();
         });

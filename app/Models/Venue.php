@@ -2,96 +2,92 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Builder; //for scope
-//use Illuminate\Database\Eloquent\Factories\HasFactory; //Factory traithas been introduced in Laravel v8.
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use OwenIt\Auditing\Contracts\Auditable;  //Laravel Audit
+use Illuminate\Database\Eloquent\Model; // for scope
+// use Illuminate\Database\Eloquent\Factories\HasFactory; //Factory traithas been introduced in Laravel v8.
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
+use OwenIt\Auditing\Contracts\Auditable;  // Laravel Audit
 
-class Venue extends Model implements Auditable  //Laravel Audit
+class Venue extends Model implements Auditable  // Laravel Audit
 {
-	use HasFactory; ////Factory trait has been introduced in Laravel v8.
-	use SoftDeletes;
-    use \OwenIt\Auditing\Auditable;   //Laravel Audit
-	
-    //protected $appends = ['location_json']; //ells Eloquent to automatically include a custom accessor (getLocationJsonAttribute) in the model's array and JSON representations.
-	
-	 /**
+    use HasFactory;
+    use \OwenIt\Auditing\Auditable;
+    // //Factory trait has been introduced in Laravel v8.
+    use SoftDeletes;   // Laravel Audit
+
+    // protected $appends = ['location_json']; //ells Eloquent to automatically include a custom accessor (getLocationJsonAttribute) in the model's array and JSON representations.
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
     protected $fillable = [
-        'location', // Spatial column    
-	];
-	
-	 
-    protected $casts = [
-	    // Optional: If you want to handle raw spatial data before saving it
-        //'coordinates' => 'point', // Using 'point' cast to automatically handle POINT type data   //Save =>   $location->coordinates = DB::raw("ST_GeomFromText('POINT(10 20)')"); // Raw SQL to create POINT
-        'location' => 'array',  //json column
+        'location', // Spatial column
     ];
-	
-	
 
-	//disabled as we use json now, instead of POINT
-	//getter for, column 'location', sql type Point' //    // Accessor: Get lat/lon from POINT column
-	public function DISABLED_getLocationAttribute()
+    protected $casts = [
+        // Optional: If you want to handle raw spatial data before saving it
+        // 'coordinates' => 'point', // Using 'point' cast to automatically handle POINT type data   //Save =>   $location->coordinates = DB::raw("ST_GeomFromText('POINT(10 20)')"); // Raw SQL to create POINT
+        'location' => 'array',  // json column
+    ];
+
+    // disabled as we use json now, instead of POINT
+    // getter for, column 'location', sql type Point' //    // Accessor: Get lat/lon from POINT column
+    public function DISABLED_getLocationAttribute()
     {
-		
-        // Extract POINT(lon lat) as text using MySQL's ST_AsText
-        $point = DB::selectOne("SELECT ST_AsText(location) AS point FROM venues WHERE id = ?", [$this->id]);  //return POINT(69.96012 -11.910163
 
-		//dd(gettype($point->point));  //object 
-	    //dd($point->point);   
-		
+        // Extract POINT(lon lat) as text using MySQL's ST_AsText
+        $point = DB::selectOne('SELECT ST_AsText(location) AS point FROM venues WHERE id = ?', [$this->id]);  // return POINT(69.96012 -11.910163
+
+        // dd(gettype($point->point));  //object
+        // dd($point->point);
+
         // Check if the query returns a valid point
         if ($point && preg_match('/POINT\(([-\d.]+) ([-\d.]+)\)/', $point->point, $matches)) {
             // Return the latitude and longitude as floats
-			
-			
+
             return [
                 'lon' => (float) $matches[1],
                 'lat' => (float) $matches[2],
             ];
         } else {
             // Log or handle the error (using dd for now for debugging)
-            //\Log::error('Invalid location data or unable to extract coordinates.', ['point' => $point]);
-            dd('Invalid or missing location data: ' . print_r($point, true));  // Optionally use this to debug the point data
+            // \Log::error('Invalid location data or unable to extract coordinates.', ['point' => $point]);
+            dd('Invalid or missing location data: '.print_r($point, true));  // Optionally use this to debug the point data
         }
 
         // Return null if no valid location data is found
         return null;
     }
-	
-	
-	 /**
+
+    /**
      * @var array<string, string>
      */
     protected $dispatchesEvents = [
     ];
-	
-	 /**
+
+    /**
      * Scope a query to only include active venues (local scope).
      */
     public function scopeActive(Builder $query): void
     {
         $query->where('active', '=', 1);
     }
-	
-	/**
+
+    /**
      * Scope a query to only include venues created last year (local scope).
      */
-	public function scopeCreatedAtLastYear($query)
+    public function scopeCreatedAtLastYear($query)
     {
         return $query->where('created_at', '>=', now()->subYear());
     }
-	
-	/**
+
+    /**
      * BelongsTo: get the owner that owns the venue.
      */
     public function owner(): BelongsTo
@@ -99,7 +95,7 @@ class Venue extends Model implements Auditable  //Laravel Audit
         return $this->belongsTo(Owner::class);
     }
 
-	/**
+    /**
      * BelongsToMany: get equipments that have venues
      */
     public function equipments(): BelongsToMany

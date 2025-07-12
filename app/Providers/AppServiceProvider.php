@@ -2,14 +2,11 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
-use Filament\Tables\Columns\TextColumn; //use to create custom method for TextInput
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Gate;
-use App\Policies\RolePolicy;
-use App\Policies\PermissionPolicy;
-use Illuminate\Support\Facades\App;
+use Filament\Tables\Columns\TextColumn;
+use Illuminate\Support\Facades\App; // use to create custom method for TextInput
 use Illuminate\Support\Facades\Vite;
+use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -26,7 +23,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //fix test
+        // fix test
         /*
         if (App::environment('testing')) {
             // Prevent Vite from being loaded during tests
@@ -34,18 +31,17 @@ class AppServiceProvider extends ServiceProvider
         }
         */
 
-        //Add my custom Filament TextColumn method, can use as ->myCustomDisplay()
-         TextColumn::macro('myCustomDisplay', function () {
+        // Add my custom Filament TextColumn method, can use as ->myCustomDisplay()
+        TextColumn::macro('myCustomDisplay', function () {
             return $this->formatStateUsing(function ($state) {
-                //$state = preg_replace('/[^a-z0-9]+/i', ' ', $state);
-                //$state = ucwords(strtolower($state));
-                //$state = str_replace(' ', '', $state);
-                //return lcfirst($state);
-                return $state .  ' (formatStateUsing)' ;
-           });
+                // $state = preg_replace('/[^a-z0-9]+/i', ' ', $state);
+                // $state = ucwords(strtolower($state));
+                // $state = str_replace(' ', '', $state);
+                // return lcfirst($state);
+                return $state.' (formatStateUsing)';
+            });
         });
-        //End Add my custom Filament TextColumn method, can use as ->myCustomDisplay()
-
+        // End Add my custom Filament TextColumn method, can use as ->myCustomDisplay()
 
     }
 }

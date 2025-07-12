@@ -1,9 +1,9 @@
 <?php
+
 namespace App\Policies;
 
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
-use Spatie\Permission\Models\Role;
 use Illuminate\Auth\Access\Response;
 
 class AuditPolicy
@@ -19,30 +19,24 @@ class AuditPolicy
     {
         //
     }
-	
 
-   /*
-   List of policies for Filament, do not need to register them in Controller, like in regular Laravel
-   View list    viewAny(User $user)
-   View Record	view(User $user, Model $model)
-   Create	    create(User $user)
-   Update	    update(User $user, Model $model)
-   Delete	    delete(User $user, Model $model)
-   */
+    /*
+    List of policies for Filament, do not need to register them in Controller, like in regular Laravel
+    View list    viewAny(User $user)
+    View Record	view(User $user, Model $model)
+    Create	    create(User $user)
+    Update	    update(User $user, Model $model)
+    Delete	    delete(User $user, Model $model)
+    */
 
-
-   
-	/**
-	* see all models 
-    *restricting viewAny() in a policy will also restrict access to view, edit, and delete in Filament, unless those other abilities are explicitly allowed.
-	*/
-	public function viewAny(User $user)
+    /**
+     * see all models
+     *restricting viewAny() in a policy will also restrict access to view, edit, and delete in Filament, unless those other abilities are explicitly allowed.
+     */
+    public function viewAny(User $user)
     {
-		 return $user->can('view audits')   //return $user->id === 1
-		       ? Response::allow()
-			   : Response::deny('Stopped by OwnerPolicy, the User does not have permission "view roles"'); //way to add custom message
-	}
-	
-		
-	
+        return $user->can('view audits')   // return $user->id === 1
+              ? Response::allow()
+              : Response::deny('Stopped by OwnerPolicy, the User does not have permission "view roles"'); // way to add custom message
+    }
 }

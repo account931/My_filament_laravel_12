@@ -10,24 +10,24 @@ it('can create an owner using the factory', function () {
     $owner = Owner::factory()->create();
 
     expect($owner)->toBeInstanceOf(Owner::class)
-                  ->and($owner->id)->not->toBeNull();
+        ->and($owner->id)->not->toBeNull();
 });
 
 it('can mass assign fillable attributes', function () {
     $data = [
         'first_name' => 'john',
-        'last_name'  =>  'doe',
-        'email'      => 'john@example.com',
-        'phone'      => '1234567890',
-        'location'   => 'NY',
+        'last_name' => 'doe',
+        'email' => 'john@example.com',
+        'phone' => '1234567890',
+        'location' => 'NY',
         'image' => 'profile.jpg',
-        //'venues' => [1],
+        // 'venues' => [1],
     ];
 
     $owner = Owner::create($data);
 
     foreach ($data as $key => $value) {
-        expect($owner->getRawOriginal($key))->toBe($value);    //bypassing an Eloquent accessor that we set in model
+        expect($owner->getRawOriginal($key))->toBe($value);    // bypassing an Eloquent accessor that we set in model
     }
 });
 
@@ -35,7 +35,7 @@ it('has an accessor for first_name', function () {
     $owner = Owner::factory()->create(['first_name' => 'alice']);
 
     expect($owner->first_name)->toContain('accessor')
-                              ->and($owner->first_name)->toContain('Alice');
+        ->and($owner->first_name)->toContain('Alice');
 });
 
 it('can be soft deleted', function () {

@@ -6,8 +6,8 @@ use Filament\Infolists\Components\TextEntry;
 
 class SoftDeletedBadge extends TextEntry
 {
-    protected string $view = 'filament.infolists.components.text-badge'; //The component will render using the Blade view located at:
-                                                                //resources/views/filament.infolists.components.text-badge.blade.php
+    protected string $view = 'filament.infolists.components.text-badge'; // The component will render using the Blade view located at:
+    // resources/views/filament.infolists.components.text-badge.blade.php
 
     protected function setUp(): void
     {

@@ -2,21 +2,19 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\RelationManagers;
+// use App\Filament\Resources\EquipmentResource\RelationManagers;
 use App\Filament\Resources\EquipmentResource\Pages;
-//use App\Filament\Resources\EquipmentResource\RelationManagers;
 use App\Models\Equipment;
 use Filament\Forms;
 use Filament\Forms\Form;
-use Filament\Resources\Resource;
-use Filament\Tables;
+use Filament\Infolists;
+use Filament\Infolists\Infolist;
+use Filament\Resources\Resource;  // table textcolumn
+use Filament\Tables;                      // infolist
+use Filament\Tables\Columns\TextColumn;             // infolist
+// infolist entry
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Filament\Tables\Columns\TextColumn;  //table textcolumn
-use Filament\Infolists;                      //infolist 
-use Filament\Infolists\Infolist;             //infolist
-use Filament\Infolists\Components\TextEntry; //infolist entry
-use App\Filament\RelationManagers;
 
 class EquipmentResource extends Resource
 {
@@ -24,11 +22,9 @@ class EquipmentResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-folder-plus';
 
-    protected static ?string $navigationGroup = 'Section Main';  //Grouping navigation items
+    protected static ?string $navigationGroup = 'Section Main';  // Grouping navigation items
 
-    protected static ?int $navigationSort = 3;  //order to appear in panels
-
-
+    protected static ?int $navigationSort = 3;  // order to appear in panels
 
     public static function form(Form $form): Form
     {
@@ -42,19 +38,19 @@ class EquipmentResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            //to force open viewOne on click instead of edit 
+            // to force open viewOne on click instead of edit
             ->recordUrl(fn ($record) => static::getUrl(name: 'view', parameters: ['record' => $record]))
 
             ->columns([
-                //colums ------
+                // colums ------
                 TextColumn::make('id')->sortable(),
                 TextColumn::make('trademark_name')->searchable()->sortable()->visible(fn () => auth()->user()?->can('view owners'))
-                   ->getStateUsing(fn ($record) => $record->getAttributes()['trademark_name'] ?? null), //bypassing an Eloquent accessor)
+                    ->getStateUsing(fn ($record) => $record->getAttributes()['trademark_name'] ?? null), // bypassing an Eloquent accessor)
                 TextColumn::make('model_name')->searchable()->sortable(),
                 TextColumn::make('description')->searchable()->sortable(),
                 TextColumn::make('created_at')->searchable()->sortable(),
             ])
-            //end //colums ------
+            // end //colums ------
             ->filters([
                 //
             ])
@@ -68,24 +64,24 @@ class EquipmentResource extends Resource
             ]);
     }
 
-    //view one , viewOwner does not matter?????
+    // view one , viewOwner does not matter?????
     public static function infolist(Infolist $infolist): Infolist
     {
-    return $infolist
-        ->schema([
-            Infolists\Components\TextEntry::make('trademark_name')->getStateUsing(fn ($record) => $record->getAttributes()['trademark_name'] ?? null), //bypassing an Eloquent accessor)
-            Infolists\Components\TextEntry::make('model_name'),
-            Infolists\Components\TextEntry::make('description'),
-            Infolists\Components\TextEntry::make('created_at'),
+        return $infolist
+            ->schema([
+                Infolists\Components\TextEntry::make('trademark_name')->getStateUsing(fn ($record) => $record->getAttributes()['trademark_name'] ?? null), // bypassing an Eloquent accessor)
+                Infolists\Components\TextEntry::make('model_name'),
+                Infolists\Components\TextEntry::make('description'),
+                Infolists\Components\TextEntry::make('created_at'),
 
-        ]);
-     }
+            ]);
+    }
 
     public static function getRelations(): array
     {
         return [
             //
-            RelationManagers\AuditsRelationManager::class, //Laravel audit
+            RelationManagers\AuditsRelationManager::class, // Laravel audit
 
         ];
     }
@@ -93,10 +89,10 @@ class EquipmentResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => Pages\ListEquipment::route('/'),
+            'index' => Pages\ListEquipment::route('/'),
             'create' => Pages\CreateEquipment::route('/create'),
-            'view'   => Pages\ViewEquipment::route('/{record}'), // view one owner page
-            'edit'   => Pages\EditEquipment::route('/{record}/edit'),
+            'view' => Pages\ViewEquipment::route('/{record}'), // view one owner page
+            'edit' => Pages\EditEquipment::route('/{record}/edit'),
         ];
     }
 }

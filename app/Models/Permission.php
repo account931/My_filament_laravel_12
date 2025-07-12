@@ -1,11 +1,10 @@
 <?php
 
 // my Permission model that extends Spatie\Permission\Models\Permission, so can customize it as wish
-//need to update config/permission.php then :
+// need to update config/permission.php then :
 // 'models' => [
-    //'role' => App\Models\Role::class,
-    //'permission' => App\Models\Permission::class,
-
+// 'role' => App\Models\Role::class,
+// 'permission' => App\Models\Permission::class,
 
 namespace App\Models;
 
@@ -15,4 +14,3 @@ class Permission extends SpatiePermission
 {
     // Add your custom logic or properties here
 }
-

@@ -4,7 +4,7 @@
 
 
 > Laravel: 12.18, PHP: 8.4.8 , Filament: 3, mysql: 8.0.42, db: '', </br></br>
-What is new: Filament 3, Sail, Sanctum, CI CD, Laravel Audit, PHPStan static analysis tool 2.1.17, Tailwind CSS out of the box, Vue 3, Pinia insead of Vuex store, dotswan/filament-map-picker
+What is new: Filament 3, Sail, Sanctum, CI/CD, Laravel Audit, PHPStan static analysis tool 2.1.17, Pint, Tailwind CSS out of the box, Vue 3, Pinia insead of Vuex store, dotswan/filament-map-picker
 
 
 
@@ -40,8 +40,11 @@ git restore .  git clean -fd
 - [9. Sanctum](#9-sanctum)
 - [10.PhpStan](#10-phpstan)
 - [11.Vue](#11-vue)
+- [12.Pint](#12-pint)
 
-- [11.V.A](#11-va)
+
+
+- [111.V.A](#111-va)
 
 
 
@@ -322,8 +325,23 @@ computed: {
 
 
 
+
+
+
 <p> ----------------------------------------------------------------------------------------- </p>
-## 11. V.A
+# 12. Pint
+ Config =>  pint.json
+
+<code>./vendor/bin/pint --test </code>   shows what would be fixed, without changing files.
+<code>./vendor/bin/pint </code>  fix
+
+
+
+
+
+
+<p> ----------------------------------------------------------------------------------------- </p>
+## 111. V.A
 
 <p> Filament</p> 
 

@@ -8,5 +8,5 @@ use Illuminate\Routing\Controller as BaseController;
 
 abstract class Controller extends BaseController
 {
-    use AuthorizesRequests, ValidatesRequests;      //must have for Spatie $this->authorize('view_owner_admin_quantity', Owner::class);
+    use AuthorizesRequests, ValidatesRequests;      // must have for Spatie $this->authorize('view_owner_admin_quantity', Owner::class);
 }

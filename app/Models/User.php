@@ -3,22 +3,24 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Filament\Models\Contracts\FilamentUser;
-use Filament\Panel;
-use Spatie\Permission\Traits\HasRoles;  //Spatie Permission
-use Laravel\Sanctum\HasApiTokens; // Sanctum
-use OwenIt\Auditing\Contracts\Auditable;  //Laravel Audit
+use Laravel\Sanctum\HasApiTokens;  // Spatie Permission
+use OwenIt\Auditing\Contracts\Auditable; // Sanctum
+use Spatie\Permission\Traits\HasRoles;  // Laravel Audit
 
-class User extends Authenticatable implements FilamentUser, Auditable  //Laravel Audit
+class User extends Authenticatable implements Auditable, FilamentUser  // Laravel Audit
 {
+    // Spatie Permission
+    use HasApiTokens;
+
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
-    use HasRoles; //Spatie Permission
-    use HasApiTokens; //Sanctum
-    use \OwenIt\Auditing\Auditable;   //Laravel Audit
+    use HasRoles; // Sanctum
+    use \OwenIt\Auditing\Auditable;   // Laravel Audit
 
     /**
      * The attributes that are mass assignable.
@@ -31,7 +33,6 @@ class User extends Authenticatable implements FilamentUser, Auditable  //Laravel
         'password',
         'description',
 
-        
     ];
 
     /**
@@ -57,14 +58,14 @@ class User extends Authenticatable implements FilamentUser, Auditable  //Laravel
         ];
     }
 
-    //filament staff
+    // filament staff
     public function canAccessPanel(Panel $panel): bool
     {
         return true;
-        //return str_ends_with($this->email, '@yourdomain.com') && $this->hasVerifiedEmail();
+        // return str_ends_with($this->email, '@yourdomain.com') && $this->hasVerifiedEmail();
     }
 
-    //Do not use
+    // Do not use
     /*
     public function audits()
     {

@@ -16,7 +16,6 @@ return new class extends Migration
             $table->text('description')->nullable()->after('email'); // or after whichever column you prefer
             $table->boolean('is_active')->default(true)->after('password');
 
-
         });
     }
 

@@ -1,27 +1,29 @@
 <?php
-//variant with custom view
+
+// variant with custom view
+
 namespace App\Filament\Widgets;
 
-use Carbon\Carbon;
-use App\Models\User;
 use App\Models\Owner;
-use Filament\Widgets\Widget;
+use App\Models\User;
+use Carbon\Carbon;
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
+use Filament\Widgets\Widget;
 
-class MyCustomWidget2 extends StatsOverviewWidget  //Widget
+class MyCustomWidget2 extends StatsOverviewWidget  // Widget
 {
     protected static string $view = 'filament.widgets.my-custom-widget';
 
-    protected int | string | array $columnSpan = 2; // how wide it appears
-
+    protected int|string|array $columnSpan = 2; // how wide it appears
 
     public int $totalUsers;
-    public int $newUsers;
-    public int $totalOwners;
-    public Carbon $carbonDate;
 
-    
+    public int $newUsers;
+
+    public int $totalOwners;
+
+    public Carbon $carbonDate;
 
     public function mount(): void
     {

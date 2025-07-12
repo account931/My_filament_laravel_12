@@ -209,12 +209,29 @@ jobs:
     
 
 
+   # Job-4 Pint ---------------------------------------------------
+  job_4_pint-check:  # job ID
+    runs-on: ubuntu-latest
+    #needs: [job_2_psalm-static-check]  #will run only after Psalm check
+    
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.4.8
+      - name: Install dependencies
+        run: composer install
+      - name: Run Pint
+        run: ./vendor/bin/pint --test
+
+
 
 
   # Job-5 deploy one file 'last-deploy-info.php' to alwaysdata.com to folder/MyFilament_Laravel12  ---------------------------------------------------
   job_5_deploy_one_test_file:
     runs-on: ubuntu-latest
-    needs: [job_1_my-pest-tests, job_2_phpstan-static-check, job_3_test-sail-docker-compose-yml-images-build-and-run-containers]  #will run only after these jobs
+    needs: [job_1_my-pest-tests, job_2_phpstan-static-check, job_3_test-sail-docker-compose-yml-images-build-and-run-containers,job_4_pint-check]  #will run only after these jobs
   
     steps:
       - name: Checkout code
@@ -266,7 +283,7 @@ jobs:
   # Job-7  send notification "Deploy successful" to telegram  ---------------------------------------------------
   job_7_notify_in_telegram:
     runs-on: ubuntu-latest
-    needs: [job_1_my-pest-tests, job_2_phpstan-static-check, job_3_test-sail-docker-compose-yml-images-build-and-run-containers, job_5_deploy_one_test_file]  #will run only after these jobs
+    needs: [job_1_my-pest-tests, job_2_phpstan-static-check, job_3_test-sail-docker-compose-yml-images-build-and-run-containers, job_4_pint-check, job_5_deploy_one_test_file]  #will run only after these jobs
 
     steps:
       - name: Send message to Telegram

@@ -15,15 +15,15 @@ class CreateOwnersTable extends Migration
     {
         Schema::create('owners', function (Blueprint $table) {
             $table->bigIncrements('id');
-			$table->string('first_name');
-			$table->string('last_name');
-			$table->string('email');
-			$table->string('phone');
-			$table->boolean('confirmed')->default(true);
-			$table->string('location');  // i.e ['UA', 'EU'], not lon/lat
-			//$table->enum('location', ['UA', 'EU']);
+            $table->string('first_name');
+            $table->string('last_name');
+            $table->string('email');
+            $table->string('phone');
+            $table->boolean('confirmed')->default(true);
+            $table->string('location');  // i.e ['UA', 'EU'], not lon/lat
+            // $table->enum('location', ['UA', 'EU']);
             $table->timestamps();
-			$table->softDeletes();
+            $table->softDeletes();
         });
     }
 

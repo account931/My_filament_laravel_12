@@ -19,11 +19,11 @@ class BooleanEntry extends TextEntry
             ->badge()
             ->icon(fn (bool $state): string => match ($state != $this->inverted) {
                 false => 'heroicon-o-x-circle',
-                true  => 'heroicon-o-check-circle',
+                true => 'heroicon-o-check-circle',
             })
             ->color(fn (bool $state): string => match ($state != $this->inverted) {
                 false => 'danger',
-                true  => 'success',
+                true => 'success',
             })
             ->hiddenLabel()
             ->formatStateUsing(fn () => $this->getLabel());

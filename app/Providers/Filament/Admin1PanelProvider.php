@@ -2,10 +2,14 @@
 
 namespace App\Providers\Filament;
 
+use Althinect\FilamentSpatieRolesPermissions\FilamentSpatieRolesPermissionsPlugin;
+use App\Filament\Widgets\MyCustomWidget;
+use App\Filament\Widgets\MyCustomWidget2;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\NavigationItem;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -13,33 +17,29 @@ use Filament\Support\Colors\Color;
 use Filament\Widgets;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
-use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
-use Illuminate\Routing\Middleware\SubstituteBindings;
-use Illuminate\Session\Middleware\StartSession;
-use Illuminate\View\Middleware\ShareErrorsFromSession;
-use Althinect\FilamentSpatieRolesPermissions\FilamentSpatieRolesPermissionsPlugin; //filament-spatie-roles-permissions  GUI plugin
-use Filament\Navigation\NavigationItem;  //my custom link
-use App\Filament\Widgets\MyCustomWidget;  //my custom widget
-use App\Filament\Widgets\MyCustomWidget2;  //my custom widget
+use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken; // filament-spatie-roles-permissions  GUI plugin
+use Illuminate\Routing\Middleware\SubstituteBindings;  // my custom link
+use Illuminate\Session\Middleware\StartSession;  // my custom widget
+use Illuminate\View\Middleware\ShareErrorsFromSession;  // my custom widget
 
 class Admin1PanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
         return $panel
-            
-            //my custom link to go back to laravel
+
+            // my custom link to go back to laravel
             ->navigationItems([
                 NavigationItem::make('Go back to Laravel')
                     ->url('/dashboard') // or route('your.route.name')
-                    ->icon('heroicon-o-link')
-                    //->openUrlInNewTab(), // optional
+                    ->icon('heroicon-o-link'),
+                // ->openUrlInNewTab(), // optional
             ])
             // end my custom link
 
             ->default()
             ->id('1')
-            ->path('admin')  //!!!!!
+            ->path('admin')  // !!!!!
             ->login()
             ->colors([
                 'primary' => Color::Amber,
@@ -53,8 +53,8 @@ class Admin1PanelProvider extends PanelProvider
             ->widgets([
                 Widgets\AccountWidget::class,
                 Widgets\FilamentInfoWidget::class,
-                MyCustomWidget::class,  //my custom widget without view
-                MyCustomWidget2::class,  //my custom widget with view
+                MyCustomWidget::class,  // my custom widget without view
+                MyCustomWidget2::class,  // my custom widget with view
 
             ])
             ->middleware([
@@ -71,14 +71,14 @@ class Admin1PanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
-            //add filament-spatie-roles-permissions  GUI plugin
+            // add filament-spatie-roles-permissions  GUI plugin
             ->plugin(FilamentSpatieRolesPermissionsPlugin::make())
 
-            //Ordering navigation groups
+            // Ordering navigation groups
             ->navigationGroups([
-               'Section Main',
-               'User section',
-               'Settings',
+                'Section Main',
+                'User section',
+                'Settings',
             ]);
     }
 }

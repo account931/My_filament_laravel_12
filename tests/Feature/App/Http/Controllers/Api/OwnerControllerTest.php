@@ -1,7 +1,7 @@
 <?php
 
-use App\Models\User;
 use App\Models\Owner;
+use App\Models\User;
 use App\Models\Venue;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\Sanctum;
@@ -21,7 +21,7 @@ it('can list owners with venues', function () {
     });
 
     $response = $this->getJson(route('api.owners.index'));
-    //dd($response);
+    // dd($response);
 
     $response->assertOk()
         ->assertJsonStructure([
@@ -33,18 +33,18 @@ it('can list owners with venues', function () {
                     'confirmed',
                     'venues' => [
                         '*' => [
-                            'id', 
-                            'venue_name', 
-                            'equipments', 
+                            'id',
+                            'venue_name',
+                            'equipments',
                             'active',
                             'location',
 
                             'equipments' => [
-						       '*' => [
-							       'trademark_name',
-								   'model_name',
-							    ]
-                            ]	   
+                                '*' => [
+                                    'trademark_name',
+                                    'model_name',
+                                ],
+                            ],
                         ],
                     ],
                 ],
@@ -114,21 +114,20 @@ it('can delete an owner with permission', function () {
     $response = $this->deleteJson(route('api.owner.destroy', $owner));
 
     $response->assertOk()
-        ->assertJsonFragment(['message' => 'Deleted owner ' . $owner->id]);
+        ->assertJsonFragment(['message' => 'Deleted owner '.$owner->id]);
 
-    //$this->assertDatabaseMissing('owners', ['id' => $owner->id]);  //since it is soft deleted
+    // $this->assertDatabaseMissing('owners', ['id' => $owner->id]);  //since it is soft deleted
 
-    //version for soft deleted
+    // version for soft deleted
     $this->assertNotNull(\DB::table('owners')->where('id', $owner->id)->value('deleted_at'));
 });
-
 
 it('cannot delete owner without permission', function () {
     $user = User::factory()->create();
 
-    //Permission::create(['name' => 'delete owners']);
-     // Assign Spatie permission to user
-    //$user->givePermissionTo('delete owners');
+    // Permission::create(['name' => 'delete owners']);
+    // Assign Spatie permission to user
+    // $user->givePermissionTo('delete owners');
 
     Sanctum::actingAs($user);
 
@@ -138,10 +137,6 @@ it('cannot delete owner without permission', function () {
 
     $response->assertStatus(403);
 });
-
-
-
-
 
 it('returns owners quantity for authenticated user', function () {
     $user = User::factory()->create();

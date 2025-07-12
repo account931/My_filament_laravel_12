@@ -10,7 +10,7 @@ class Audit extends AuditExtended
 {
     // Add your custom logic or properties here
 
-    //already defined in parent model
+    // already defined in parent model
     /*
     public function user()
     {
@@ -18,4 +18,3 @@ class Audit extends AuditExtended
     }
     */
 }
-

@@ -2,15 +2,12 @@
 
 namespace App\Filament\RelationManagers;
 
+use App\Filament\Resources\EquipmentResource;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\EquipmentResource;
-
 
 class EquipmentsRelationManager extends RelationManager
 {
@@ -32,13 +29,13 @@ class EquipmentsRelationManager extends RelationManager
             ->recordTitleAttribute('owner_id')
             ->columns([
                 Tables\Columns\TextColumn::make('id'),
-                //make possible to open trademark_name itself by click    
+                // make possible to open trademark_name itself by click
                 Tables\Columns\TextColumn::make('trademark_name')->url(fn ($record) => EquipmentResource::getUrl('view', ['record' => $record->id])) // or 'view' if using view page
-                         ->openUrlInNewTab()->color('primary'),
+                    ->openUrlInNewTab()->color('primary'),
                 Tables\Columns\TextColumn::make('model_name'),
                 Tables\Columns\TextColumn::make('description'),
-                //HasMany venues count 
-                //Tables\Columns\TextColumn::make('equipments_count')->label('Equipments count')->counts('equipments'), // Automatically eager loads and counts the relation
+                // HasMany venues count
+                // Tables\Columns\TextColumn::make('equipments_count')->label('Equipments count')->counts('equipments'), // Automatically eager loads and counts the relation
             ])
 
             // Filters--------------------------
@@ -60,12 +57,11 @@ class EquipmentsRelationManager extends RelationManager
             ])
              // end actions-------------------------
 
-
-            // Bulck actions------------------------- 
+            // Bulck actions-------------------------
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]); // End Bulck actions------------------------- 
+            ]); // End Bulck actions-------------------------
     }
 }

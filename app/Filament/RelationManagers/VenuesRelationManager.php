@@ -2,14 +2,12 @@
 
 namespace App\Filament\RelationManagers;
 
+use App\Filament\Resources\VenueResource;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\VenueResource;
 
 class VenuesRelationManager extends RelationManager
 {
@@ -31,12 +29,12 @@ class VenuesRelationManager extends RelationManager
             ->recordTitleAttribute('owner_id')
             ->columns([
                 Tables\Columns\TextColumn::make('id'),
-                //make possible to open venue itself by click
+                // make possible to open venue itself by click
                 Tables\Columns\TextColumn::make('venue_name')->url(fn ($record) => VenueResource::getUrl('view', ['record' => $record->id])) // or 'view' if using view page
-                      ->openUrlInNewTab()->color('primary'),  
+                    ->openUrlInNewTab()->color('primary'),
                 Tables\Columns\TextColumn::make('address'),
                 Tables\Columns\TextColumn::make('address'),
-                //HasMany venues count 
+                // HasMany venues count
                 Tables\Columns\TextColumn::make('equipments_count')->label('Equipments count')->counts('equipments'), // Automatically eager loads and counts the relation
             ])
 
@@ -59,12 +57,11 @@ class VenuesRelationManager extends RelationManager
             ])
              // end actions-------------------------
 
-
-            // Bulck actions------------------------- 
+            // Bulck actions-------------------------
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]); // End Bulck actions------------------------- 
+            ]); // End Bulck actions-------------------------
     }
 }

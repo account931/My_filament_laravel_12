@@ -15,11 +15,11 @@ class CreateEquipmentTable extends Migration
     {
         Schema::create('equipments', function (Blueprint $table) {
             $table->bigIncrements('id');
-			$table->string('trademark_name');
+            $table->string('trademark_name');
             $table->string('model_name');
-			$table->string('description');
+            $table->string('description');
             $table->timestamps();
-			$table->softDeletes();
+            $table->softDeletes();
         });
     }
 
