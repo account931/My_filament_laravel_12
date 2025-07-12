@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api;
 use App\Http\Controllers\OwnerController\OwnerController;
 use App\Http\Controllers\ProfileController;   // Api cotrollers
+use App\Http\Controllers\SendNotification\NotificationController;
 use App\Http\Controllers\TestController\TestController;
 use App\Http\Controllers\VenuesStoreLocator\VenuesLocatorController;
 use App\Http\Controllers\VuePages\VuePagesController;
@@ -61,6 +62,10 @@ Route::middleware('auth')->group(function () {
 
     // Venues store locator in Vue (show venues location response from open /api/owners)
     Route::get('/venue-locator', [VenuesLocatorController::class, 'index'])->name('venue-locator');
+
+    // Send Notification
+    Route::get('/send-notification', [NotificationController::class, 'index'])->name('send-notification');
+    Route::post('/send-notif', [NotificationController::class, 'handleNotificationAndSend'])->name('send-notif');
 
 });
 // End Auth (logged) users only------------------------------------------------------------------------------------------

@@ -1,0 +1,142 @@
+{{-- @extends('layouts.app') --}}   {{-- Laravel 12 fix--}}
+{{-- @section('content') --}}
+
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('Send notifications') }}
+        </h2>
+    </x-slot>
+
+<!-- Additional CSS for this page -->
+@section('styles')
+    <!-- Bootstrap Select JS -->
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/js/bootstrap-select.min.js"></script>-->
+@endsection
+
+
+@section('content')
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">Send notification via database & email ( + also it sends usual Facade Mail in queque) <b>  </b> </div>
+
+                <div class="card-body">
+                    @if (session('status'))
+                        <div class="alert alert-success" role="alert">
+                            {{ session('status') }}
+                        </div>
+                    @endif
+
+					<div class="alert alert-sucess">
+					    <p>
+                            <i class="fas fa-user-circle"></i> Hello, <strong>{{Auth::user()->name}}</strong> 
+						</p>
+						
+						<div class="row">
+						    <div class="col-lg-9 col-md-9 col-sm-9">
+						        <!--<p>Owner records via Vue go here.....</p>-->
+							</div>
+							
+							
+							<!-- Flash message success -->
+					        @if(session()->has('flashSuccess'))
+                                <div class=" row alert alert-success">
+					                <i class='fas fa-charging-station' style='font-size:21px'></i> &nbsp;
+                                   {{ session()->get('flashSuccess') }}
+                                </div>
+                            @endif
+					
+					        <!-- Flash message failure -->
+					        @if(session()->has('flashFailure'))
+                                <div class="row alert alert-danger">
+                                    {{ session()->get('flashFailure') }}
+                                </div>
+                            @endif   
+						
+						</div>
+						
+						
+						<div class="send-notification">
+						    
+					        <div class="col-sm-12 col-xs-12">
+					            <h6><b>Send<b></h6>
+								
+								<!-- Display validation errors -->
+								@if ($errors->any())
+                                <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                                </div>
+                                @endif
+								<!-- end Display validation errors -->
+
+								
+								<!------------ Form to create notification ----------------->
+								<form action="{{ route('send-notif') }}" method="POST" class="my-form">
+                                    @csrf
+                                    <div class="form-group">
+                                        <label class="form-label" for="tags">Select Userss:</label>
+								    </div>
+									
+									<!--------- Select usesrs ---------->
+									<div class="form-group">
+									
+                                        <select class="selectpicker" data-live-search="true" name="users[]" id="users" multiple style="width:20em;">
+									        @foreach($users as $user)
+                                            <option  value="{{ $user->id }}"  {{ in_array($user->id , old('users', [])) ? 'selected' : '' }} >   {{ $user->name }}  </option>  <!-- in_array... keeps prev filled values if validation fails -->
+									        @endforeach
+                                        </select>
+									</div>
+									
+									<!--------- Message ---------->
+									<div class="form-group">
+									   <label for="message" class="form-label">Your Message:</label>
+                                       <textarea name="message" id="message" rows="4" class="form-control" placeholder="Enter your message here...">{{ old('message') }}</textarea> <!-- old() keeps prev filled value if validation fails -->
+									</div>
+
+									<div class="form-group">
+                                        <button class="btn btn-primary" type="submit"> Submit </button>
+									</div>
+									
+                                </form>
+								<!------------ End Form to create notification ----------------->
+
+
+								
+								<!------------ Display auth user notifications (from DB) ----------------->
+								<div></br>Logged user's database notifications (emails check at https://mailtrap.io/):</div>
+								@foreach(/*auth()->user()->notifications*/ $currentUserNotifications as $notification)
+                                    <div class="alert alert-info">
+                                       {{ $notification->created_at }}   {{ $notification->data['data'] }} <!-- Display the message -->
+                                    </div>
+                                @endforeach 
+								
+								<!-- Pagination links -->
+                               {{ $currentUserNotifications->links() }}
+                                <!------------ end Display auth user notifications ----------------->
+
+
+
+                            </div>
+							
+						</div> <!-- end of  .venues-store-locator -->
+						 
+						
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- @endsection --}}   {{-- Laravel 12 fix--}}
+
+</x-app-layout>
+
+

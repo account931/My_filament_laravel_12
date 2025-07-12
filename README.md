@@ -332,8 +332,8 @@ computed: {
 # 12. Pint
  Config =>  pint.json
 
-<code>./vendor/bin/pint --test </code>   shows what would be fixed, without changing files.
-<code>./vendor/bin/pint </code>  fix
+<code> ./vendor/bin/pint --test </code>   shows what would be fixed, without changing files.
+<code> ./vendor/bin/pint </code>  fix
 
 
 

@@ -75,7 +75,11 @@
                             {{ __('Vue Geo Locator') }}
                         </x-dropdown-link>
 
-                        
+                        <x-dropdown-link :href="route('send-notification')">
+                            <i class="fas fa-cloud-sun" style="font-size:12px"></i>
+                            {{ __('Send-notification') }}
+                        </x-dropdown-link>
+
 
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">
