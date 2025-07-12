@@ -8,12 +8,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory; // for scope
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 // use Illuminate\Database\Eloquent\Factories\HasFactory; //Factory traithas been introduced in Laravel v8.
-use OwenIt\Auditing\Contracts\Auditable;  // Laravel Audit
+use Illuminate\Notifications\Notifiable;  // Laravel Audit
+use OwenIt\Auditing\Contracts\Auditable; // to send notifications
 
 class Owner extends Model implements Auditable  // Laravel Audit
 {
     use HasFactory;
+    use Notifiable;   // to send notifications in action
     use \OwenIt\Auditing\Auditable;
+
     // //Factory trait has been introduced in Laravel v8.
     use SoftDeletes;   // Laravel Audit
 
