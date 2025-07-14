@@ -203,9 +203,14 @@ public static function shouldRegisterNavigation(): bool {
 
 3. In Filament, you can restrict acces to Relation manager by adding 
 <code>
-public static function canView(): bool {
-  return auth()->user()->hasRole('admin');
-}
+public static function canView(): bool { return auth()->user()->hasRole('admin');}
+
+//disable creation/editing/deletion:
+public static function canCreate(): bool { return false;}
+    
+public static function canEdit(Model $record): bool { return false; }
+   
+public static function canDelete(Model $record): bool { return false;}
 </code>
 
 

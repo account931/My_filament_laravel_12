@@ -39,7 +39,7 @@ class Admin1PanelProvider extends PanelProvider
 
             ->default()
             ->id('1')
-            ->path('admin')  // !!!!!
+            ->path('admin')  // !!!!!fix was here, got 404 on /admin
             ->login()
             ->colors([
                 'primary' => Color::Amber,
