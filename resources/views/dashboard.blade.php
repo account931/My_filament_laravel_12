@@ -32,7 +32,7 @@
                     <p>  <a href="{{ route('filament.1.pages.dashboard') }}" class="my-link"> go to Filament <i class="fas fa-cloud-sun" style="font-size:24px"></i> </a></p>
                   
                     <!-- Vue -->
-                     <div id="app">
+                     <div id="myExample">
                          <example-component></example-component>
                     </div>
                      

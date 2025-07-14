@@ -27,7 +27,7 @@ export const useOwnerStore = defineStore('myStore', {  //myStore' is the unique 
     async getAllPosts() {
       this.showLoader = true;
       try {
-        const response = await axios.get('api/owners', {
+        const response = await axios.get('/api/owners', {
           headers: {
             'Content-Type': 'application/json',
             //'Authorization': `Bearer ${this.passport_api_tokenY}`

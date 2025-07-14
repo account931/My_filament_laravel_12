@@ -12,32 +12,38 @@ import OwnersListComponent from './components/OwnersListComponents/GetOwnersList
 import RouterMenu from './components/OwnersListComponentsWithRouter/VueRouterMenu.vue';
 import VenuesLocatorComponent from './components/VenuesStoreLocatorComponent/VenuesLocatorComponent.vue';
 
-
-
-
 window.Alpine = Alpine; //used in dashboard menu drop down
 Alpine.start();  //used in dashboard menu drop down
 
 
-//Vue.component('owners-list-component', require('./components/OwnersListComponents/GetOwnersListComponent.vue').default); //register component (default is a must fix)
-
 //start vue
-const app = createApp({});
+
 const pinia = createPinia(); // Piania store
 
-app.component('example-component',     ExampleComponent);
-app.component('owners-list-component', OwnersListComponent);        //Vue gets data from /api/owners
-app.component('vue-router-menu-with-links-component', RouterMenu);  //Vue with router
-app.component('venues-locator-component', VenuesLocatorComponent);  //Vue VenuesLocatorComponent
+
+//Vue App 1, jsut example in dashboard
+const app1 = createApp({});  
+app1.component('example-component',  ExampleComponent);
+app1.mount('#myExample');  //div id
 
 
-app.use(ElementPlus);  //Element Plus instead of Element UI
-app.use(pinia);        //Piania store instead of Vuex
-app.use(router);
+//Vue App 2, Vue store locator
+const app2= createApp({});  
+app2.component('venues-locator-component', VenuesLocatorComponent);  //Vue VenuesLocatorComponent
+app2.mount('#venues-store-locator');  //div id
 
-app.mount('#app');
-app.mount('#vue');  //vue with router ID
-app.mount('#venues-store-locator');  //vue Mapbox locator
+//Vue App 3, simple Vue to get data from /api/owners
+const app3 = createApp({});  
+app3.component('owners-list-component', OwnersListComponent);        //Vue gets data from /api/owners
+app3.use(pinia);        //Piania store instead of Vuex
+app3.mount('#simpleVue');  //div id
 
 
 
+//Vue App 4 with router and store
+const appWithRouter = createApp({});  
+appWithRouter.component('vue-router-menu-with-links-component', RouterMenu);  //Vue with router
+appWithRouter.use(ElementPlus);  //Element Plus instead of Element UI
+appWithRouter.use(pinia);        //Piania store instead of Vuex
+appWithRouter.use(router);
+appWithRouter.mount('#vueRouter');  //div id

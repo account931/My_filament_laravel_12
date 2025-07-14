@@ -20,7 +20,7 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header">Send notification via database & email ( + also it sends usual Facade Mail in queque) <b>  </b> </div>
+                <div class="card-header">Send notification via database & email ( + also it sends usual Facade Mail in queque) <br>  <b>Keep in mind, it sends nofication to Users, while Filament sends to Owners </b> </div>
 
                 <div class="card-body">
                     @if (session('status'))

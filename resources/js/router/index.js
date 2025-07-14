@@ -20,11 +20,13 @@ const routes = [
   },
 
   //L12 fix, as no default page was working
+  /*
   {
     path: '/vue-pages-with-router',
     name: 'my-info-page',
     component: my_info_page,
   },
+  */
 
 
   {
@@ -71,7 +73,8 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory(), // to fix getting ocalhost:8000/contact  instead of  localhost:8000/vue-pages-with-router /contact
+  //history: createWebHistory('/vue-pages-with-router'),  //Vue Router takes over all routes under and corrupt routes/web.php
   routes,
 });
 

@@ -57,15 +57,18 @@ Route::middleware('auth')->group(function () {
     // Vue Page (show response from open /api/owners)
     Route::get('/vue-start-page', [VuePagesController::class, 'index'])->name('vue.start.page');
 
-    // Vue Pages with router (show response from open /api/owners, login, register pages, etc)
-    Route::get('/vue-pages-with-router', [VuePagesWithRouterController::class, 'index'])->name('vue.pages-with-router');
-
     // Venues store locator in Vue (show venues location response from open /api/owners)
     Route::get('/venue-locator', [VenuesLocatorController::class, 'index'])->name('venue-locator');
 
     // Send Notification
     Route::get('/send-notification', [NotificationController::class, 'index'])->name('send-notification');
     Route::post('/send-notif', [NotificationController::class, 'handleNotificationAndSend'])->name('send-notif');
+
+    // Vue Pages with router (show response from open /api/owners, login, register pages, etc) with Fix not to get 404 on F5
+    // Route::get('/vue-pages-with-router', [VuePagesWithRouterController::class, 'index'])->name('vue.pages-with-router');
+    Route::get('/vue-pages-with-router/{any?}', [VuePagesWithRouterController::class, 'index'])
+        ->where('any', '.*')
+        ->name('vue.pages-with-router');
 
 });
 // End Auth (logged) users only------------------------------------------------------------------------------------------

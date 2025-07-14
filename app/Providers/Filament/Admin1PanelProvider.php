@@ -32,7 +32,8 @@ class Admin1PanelProvider extends PanelProvider
             ->navigationItems([
                 NavigationItem::make('Go back to Laravel')
                     ->url('/dashboard') // or route('your.route.name')
-                    ->icon('heroicon-o-link'),
+                    ->icon('heroicon-o-link')
+                    ->badge('Go Home'),
                 // ->openUrlInNewTab(), // optional
             ])
             // end my custom link

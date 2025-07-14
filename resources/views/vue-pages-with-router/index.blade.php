@@ -51,7 +51,7 @@
 						</div> <!-- end row -->
 						
 						
-						<div id="app" class="vue-pages col-sm-12 col-12">
+						<div id="vueRouter" class="vue-pages col-sm-12 col-12">
 						    
 						    <!-- Show Hello component -->
 					            <h6><b>Vue router<b></h6>

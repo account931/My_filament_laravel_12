@@ -88,7 +88,7 @@ import youAreNotLogged  from '../subcomponents/you_are_not_logged.vue';
             //Axios method http variant 
             axios({
                 method: 'get', 
-                url: 'api/owners/quantity',
+                url: '/api/owners/quantity',
                 headers: {
                     'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.store.passport_api_tokenY
                 },

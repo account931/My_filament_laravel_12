@@ -53,7 +53,7 @@
 						<div class="vue-pages">
 						    
 						    <!-- Show Hello component -->
-					        <div id="app" class="col-sm-12 col-xs-12">
+					        <div id="simpleVue" class="col-sm-12 col-xs-12">
 					            <h6><b>Owners List on Vue<b></h6>
 					            <owners-list-component><owners-list-component/> <!-- Vue component -->   <!--<example-component/>-->
                             </div>

@@ -1,6 +1,8 @@
 <?php
 
 // action used in App\Filament\Resources\OwnerResource, was moved here to separate folder to make code cleaner
+// send real notification to Mialtrap.io and telegram channel
+// send notification to Owners, while similar page in pure Laravel /send-notification  sends to Users
 
 namespace App\Filament\Resources\OwnerResource\Actions;
 
@@ -8,13 +10,12 @@ use App\Filament\Resources\OwnerResource;        // header actions
 use App\Mail\WelcomeEmail;
 use App\Models\Owner;
 use App\Notifications\SendMyNotification;  // flash message
+use App\Services\TelegramService;
 use Filament\Forms;
 use Filament\Forms\Form;
-use Filament\Notifications\Notification;
-use Filament\Tables\Actions\Action; // to place controller in subfolder
-use Illuminate\Support\Facades\Mail;
-use App\Services\TelegramService;  //Telegram service to send messages
-
+use Filament\Notifications\Notification; // to place controller in subfolder
+use Filament\Tables\Actions\Action;
+use Illuminate\Support\Facades\Mail;  // Telegram service to send messages
 
 class SendMessage
 {
@@ -26,6 +27,7 @@ class SendMessage
             ->label('Send message')
             ->icon('heroicon-o-document-plus')
             ->color('info') // Sets the button color
+            ->requiresConfirmation()
             ->form([
                 Forms\Components\Select::make('selectedUser')
                     ->label('User')->required()
@@ -33,8 +35,15 @@ class SendMessage
 
                 Forms\Components\Textarea::make('message')->label('Message')->placeholder('Enter your message here...')->required()->rows(4),   // number of visible row
 
+                Forms\Components\Checkbox::make('confirm')->label('I confirm sending this message to Owners')->required(),
             ])
+
             ->action(function (array $data) {
+                if (! $data['confirm']) {
+                    Notification::make()->title('You must confirm before sending')->danger()->send();
+
+                    return;
+                }
                 // Handle form submission
                 // $this->selectedUser = $data['selectedUser'];
 
@@ -53,16 +62,15 @@ class SendMessage
                     // Mail::to($user->email)->send(new WelcomeEmail($user, $data['message']));
 
                     // Mail Facade, Variant 2, If you want u can queue the email instead of sending it immediately:
-                    Mail::to($user->email)->queue(new WelcomeEmail($user, $data['message'] . ' (sent from Filament)' ));
+                    Mail::to($user->email)->queue(new WelcomeEmail($user, $data['message'].' (sent from Filament)'));
                 }
                 // end send emails to mailtrap -----------------------------------
 
-                //Send notification to Telegram via service
-                 $telegram = app(TelegramService::class);
-                 $telegram->send('The message was sent to Mailtrap via Filament. Selected Owners are: '.implode(', ', $data['selectedUser']).', form input is: '.$data['message']);
+                // Send notification to Telegram via service
+                $telegram = app(TelegramService::class);
+                $telegram->send('The message was sent to Mailtrap via Filament. Selected Owners are: '.implode(', ', $data['selectedUser']).', form input is: '.$data['message']);
 
-
-                //Filament flash message
+                // Filament flash message
                 Notification::make()->title('Message was sent to Mailtrap. Selected Owners are: '.implode(', ', $data['selectedUser']).', form input is: '.$data['message'])
                     ->success()
                     ->send();
