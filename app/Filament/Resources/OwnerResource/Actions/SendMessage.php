@@ -13,6 +13,8 @@ use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Tables\Actions\Action; // to place controller in subfolder
 use Illuminate\Support\Facades\Mail;
+use App\Services\TelegramService;  //Telegram service to send messages
+
 
 class SendMessage
 {
@@ -50,12 +52,18 @@ class SendMessage
                     // Mail Facade, Variant 1, send usual email via Mail facade (just to test)
                     // Mail::to($user->email)->send(new WelcomeEmail($user, $data['message']));
 
-                    // Mail Facade, Variant 2, If you want to queue the email instead of sending it immediately:
-                    Mail::to($user->email)->queue(new WelcomeEmail($user, $data['message']));
+                    // Mail Facade, Variant 2, If you want u can queue the email instead of sending it immediately:
+                    Mail::to($user->email)->queue(new WelcomeEmail($user, $data['message'] . ' (sent from Filament)' ));
                 }
                 // end send emails to mailtrap -----------------------------------
 
-                Notification::make()->title('Message was sent to Mailtrap.Selected Owners are: '.implode(', ', $data['selectedUser']).', form input is: '.$data['message'])
+                //Send notification to Telegram via service
+                 $telegram = app(TelegramService::class);
+                 $telegram->send('The message was sent to Mailtrap via Filament. Selected Owners are: '.implode(', ', $data['selectedUser']).', form input is: '.$data['message']);
+
+
+                //Filament flash message
+                Notification::make()->title('Message was sent to Mailtrap. Selected Owners are: '.implode(', ', $data['selectedUser']).', form input is: '.$data['message'])
                     ->success()
                     ->send();
             });
