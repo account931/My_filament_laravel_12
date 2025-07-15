@@ -67,7 +67,7 @@ class NotificationController extends Controller
             // Mail::to($user->email)->send(new WelcomeEmail($user, $data['message']));
 
             // Mail Facade, Variant 2, If you want to queue the email instead of sending it immediately:
-            Mail::to($user->email)->queue(new WelcomeEmail($user, $data['message']));
+            Mail::to($user->email)->queue(new WelcomeEmail($user, $data['message']));  // wont run unless u do => php artisan queue:work
         }
 
         return redirect()->back()->with('flashSuccess', 'Your DB + email notifications & Mail Facade letter was sent successfully to user'

@@ -2,7 +2,7 @@
 
 // action used in App\Filament\Resources\OwnerResource, was moved here to separate folder to make code cleaner
 // send real notification to Mialtrap.io and telegram channel
-// send notification to Owners, while similar page in pure Laravel /send-notification  sends to Users
+// send DB notification and emails to Owners, while similar page in pure Laravel /send-notification  sends to Users
 
 namespace App\Filament\Resources\OwnerResource\Actions;
 
@@ -62,7 +62,7 @@ class SendMessage
                     // Mail::to($user->email)->send(new WelcomeEmail($user, $data['message']));
 
                     // Mail Facade, Variant 2, If you want u can queue the email instead of sending it immediately:
-                    Mail::to($user->email)->queue(new WelcomeEmail($user, $data['message'].' (sent from Filament)'));
+                    Mail::to($user->email)->queue(new WelcomeEmail($user, $data['message'].' (sent from Filament)')); // wont run unless u do => php artisan queue:work
                 }
                 // end send emails to mailtrap -----------------------------------
 

@@ -59,10 +59,23 @@ git restore .  git clean -fd
 <p> ----------------------------------------------------------------------------------------- </p>
 
 ## 1. Install Laravel 12
+Doker/Sail variant
 
 <p>1. Install => <code> composer create-project --prefer-dist laravel/laravel my-app "^12.0"  </code> </p>
-<p>2. Install dependencies => <code> composer install </code> </p>
-<p>3. Generates the APP_KEY and writes it to .env => <code> php artisan key:generate </code> </p>
+<p>1.1 cd to folder and <code> php artisan sail:install </code>  You'll be prompted to choose services (e.g., MySQL, Redis, MailHog)</p>
+
+<p>1.2 Install dependencies=> <code> composer install </code>  NOT in container <code> ./vendor/bin/sail composer install </code>  </p>
+
+</p>1.2 Start Docker containers <code> ./vendor/bin/sail up -d </code> </p>
+Copy .env.example to .env if not already done:
+
+
+<p>2. Generates the APP_KEY and writes it to .env in container =>  <code> ./vendor/bin/sail artisan key:generate </code>  OR old version <code> php artisan key:generate </code> </p>
+
+
+
+  Migrate => <code>  ./vendor/bin/sail artisan migrate </code> 
+  NPM      =><code> ./vendor/bin/sail npm install      </code>
 
 <p>4. In browser can navigate to http://localhost:8000/  => the project should open </p>
 <p>5. In console CLI <code> cd NAME_HERE </code> , and <code>git init   git add.   git commit</code> if necessary </p>
@@ -340,6 +353,7 @@ computed: {
 <code> ./vendor/bin/pint --test </code>   shows what would be fixed, without changing files.
 <code> ./vendor/bin/pint </code>  fix
 
+</code> ./vendor/bin/sail pint </code> 
 
 
 
