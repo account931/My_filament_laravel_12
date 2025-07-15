@@ -2,7 +2,7 @@ CI flow for github actions Filament Laravel 12. Runs on every push to main branc
 
 
 
-// --NOT TRUE SO FAR -----
+// --NOT TRUE SO FAR, IT is true for old Laravel 6 -----
 So far, have 7 jobs:
 1. Run PhpUnit tests (& was Codesniffer)
 2. Run Psalm check

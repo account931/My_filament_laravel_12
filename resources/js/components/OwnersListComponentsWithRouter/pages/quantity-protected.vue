@@ -116,7 +116,7 @@ import youAreNotLogged  from '../subcomponents/you_are_not_logged.vue';
             })
 	        .catch(function(err){ 
 			    thatX.showLoader = false;
-			    alert('catch');
+			    alert('catch. If 401 just log out, log in to get new Sanctum');
                 //$('.loader-x').fadeOut(800);  //hide loader
                 //console.log("Getting articles failed ( in store/index.js). Check if ure logged =>  " + err);
                 Swal.fire("Crashed", "You are in catch", "error");

@@ -1,6 +1,6 @@
 //Correct Setup for Vue 3 + vue-router 4
 // router/index.js
-import { createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createWebHistory, createWebHashHistory } from 'vue-router';
 
 import my_info_page from '../components/OwnersListComponentsWithRouter/pages/my-page.vue';
 import services     from '../components/OwnersListComponentsWithRouter/pages/services.vue';
@@ -73,8 +73,9 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(), // to fix getting ocalhost:8000/contact  instead of  localhost:8000/vue-pages-with-router /contact
+  history: createWebHashHistory(), // working fix, was getting localhost:8000/contact  instead of  localhost:8000/vue-pages-with-router /contact
   //history: createWebHistory('/vue-pages-with-router'),  //Vue Router takes over all routes under and corrupt routes/web.php
+  //history: createWebHistory()
   routes,
 });
 
