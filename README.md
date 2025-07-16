@@ -63,10 +63,15 @@ Doker/Sail variant
 
 <p>1. Install => <code> composer create-project --prefer-dist laravel/laravel my-app "^12.0"  </code> </p>
 <p>1.1 cd to folder and <code> php artisan sail:install </code>  You'll be prompted to choose services (e.g., MySQL, Redis, MailHog)</p>
-
-<p>1.2 Install dependencies=> <code> composer install </code>  NOT in container <code> ./vendor/bin/sail composer install </code>  </p>
+1.2 Check in  .env  that  DB_CONNECTION=mysql & optionally for convenience change DB_DATABASE=YOUR_PREFFERED_NAME (Sail will create db with this name) </br>
+1.2 Edit docker-compose.yml and add PhpMyAdmin service, see example in Filament 12, just in port use ports:- 8081:80, not - 8080:80, so u can access it with  http://localhost:8081 and avoid conflicts with laravel app. </br>
+ 
 
 </p>1.2 Start Docker containers <code> ./vendor/bin/sail up -d </code> </p>
+
+<p>1.3 Install dependencies=> <code> ./vendor/bin/sail composer install </code>  or out of container <code> composer install </code>  </p>
+
+
 Copy .env.example to .env if not already done:
 
 
@@ -75,14 +80,33 @@ Copy .env.example to .env if not already done:
 
 
   Migrate => <code>  ./vendor/bin/sail artisan migrate </code> 
-  NPM      =><code> ./vendor/bin/sail npm install      </code>
+  NPM must have    => <code> ./vendor/bin/sail npm install      </code>
+  Build must have || Vite manifest error  => <code> ./vendor/bin/sail npm run build    </code>
 
-<p>4. In browser can navigate to http://localhost:8000/  => the project should open </p>
+</br>
+Mega FIX  when '/' gives 404, but other routes are fine. Try in incognito. Clear cookies and session. In my case it started after u added PhpMyAdmin to docker-compose.yml
+
+FIX if 404  => Give the correct ownership to storage/ and bootstrap/cache/ => in folder, but out of Container
+<code> 
+sudo chown -R $USER:$USER storage bootstrap/cache
+sudo chmod -R 775 storage bootstrap/cache
+</code> 
+In .env add  
+WWWUSER=1000
+WWWGROUP=1000
+
+If table session is missing 
+./vendor/bin/sail artisan session:table
+./vendor/bin/sail artisan migrate
+
+
+
+<p>4. In browser can navigate to http://localhost:8000/  OR http://localhost  depending on docker-compose.yml => the project should open </p>
 <p>5. In console CLI <code> cd NAME_HERE </code> , and <code>git init   git add.   git commit</code> if necessary </p>
-<p>6. Create DB and set in <code>.env (DB_DATABASE)</code> </p>
+<p>6. Create DB and set in <code>.env (DB_DATABASE)  == NO,IT IS CREATED BY SAIL by .env</code> </p>
 
 <p>7. Install auth Breeze  <code> composer require laravel/breeze --dev </code> 
-          Scaffold the auth system  <code> php artisan breeze:install </code>  and run migratations
+     Scaffold the auth system  <code> php artisan breeze:install </code>  and run migratations. It will also install test Pest or PhpUnit and wipe all routes u have added by yourself
 </p>
 
 <p>8. Be aware, there is no  <b> routes/api.php </b>, create it manually by  <code> php artisan install:api</code> . It installs Sanctum as well and migration <b>personal_access_tokens_table </b>
