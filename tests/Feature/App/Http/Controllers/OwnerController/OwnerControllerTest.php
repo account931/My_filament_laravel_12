@@ -53,12 +53,9 @@ it('renders create form', function () {
         ->assertViewHas('venues');
 });
 
-// NOT WORKING!!!!!!!!!!!!!!!!!!!!!!
 it('saves a new owner with valid data', function () {
 
-    return $this->assertTrue(true); // !!!!!!!!!!!!!!!
-
-    // NOT WORKING!!!!!!!!!!!!!!!!!!!!!!
+    // return $this->assertTrue(true); // !!!!!!!!!!!!!!!
 
     Venue::factory(2)->create(['active' => true]);
 
@@ -70,7 +67,10 @@ it('saves a new owner with valid data', function () {
     $response = $this->post(route('owner.save'), $data);
     // $response->assertRedirect('/owner-create');
 
-    $response->assertStatus(200); // Or 200, depending on your route
+    // $response->assertStatus(200); // Or 200, depending on your route
+
+    $response->assertStatus(302); // as on success save it redirects from create page
+    $response->assertSessionDoesntHaveErrors();  // no validation errors
 
     // $this->assertDatabaseCount('owners', 1);
     // $this->assertDatabaseCount('owner_venue', 2); /// or venues if pivot
@@ -92,12 +92,9 @@ it('renders edit form for existing owner', function () {
         ->assertViewHasAll(['owner', 'venues']);
 });
 
-// NOT WORKING!!!!!!!!!!!!!!!!!!!!!!
 it('updates an existing owner successfully', function () {
 
-    return $this->assertTrue(true); // !!!!!!!!!!!!!!!
-
-    // NOT WORKING!!!!!!!!!!!!!!!!!!!!!!
+    // return $this->assertTrue(true); // !!!!!!!!!!!!!!!
 
     Permission::create(['name' => 'edit owners']);
     // Assign Spatie permission to user
@@ -111,27 +108,27 @@ it('updates an existing owner successfully', function () {
     ];
 
     $response = $this->put(route('owner/update', $owner->id), $data);
+
     $response->assertRedirect(route('ownerOne', ['owner' => $owner]))
         ->assertSessionHas('flashSuccess');
+
     $this->assertDatabaseHas('owners', [
         'id' => $owner->id,
         'email' => $data['email'],
     ]);
 });
 
-// NOT WORKING!!!!!!!!!!!!!!!!!!!!!!
 it('soft-deletes an owner and associated venues on delete', function () {
 
-    return $this->assertTrue(true); // !!!!!!!!!!!!!!!
+    // return $this->assertTrue(true); // !!!!!!!!!!!!!!!
 
-    // NOT WORKING!!!!!!!!!!!!!!!!!!!!!!
     Permission::create(['name' => 'delete owners']);
     // Assign Spatie permission to user
     $this->user->givePermissionTo('delete owners');
 
     $owner = Owner::factory()->hasVenues(2)->create();
-    $response = $this->post(route('owner/delete-one-owner', $owner->id));  // delete
-    $response->assertRedirect('owners.list')
+    $response = $this->delete(route('owner/delete-one-owner', $owner->id));  // delete
+    $response->assertRedirect(route('owners.list'))
         ->assertSessionHas('flashSuccess');
 
     $this->assertSoftDeleted($owner);

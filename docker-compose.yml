@@ -9,7 +9,7 @@ services:
         extra_hosts:
             - 'host.docker.internal:host-gateway'
         ports:
-            - '${APP_PORT:-80}:80'
+            - '${APP_PORT:-80}:80'  # available at http://localhost:8080/, ar we wave overriden APP_PORT=8000  in .env
             - '${VITE_PORT:-5173}:${VITE_PORT:-5173}'
         environment:
             WWWUSER: '${WWWUSER}'
@@ -55,7 +55,7 @@ services:
     phpmyadmin:
         image: phpmyadmin/phpmyadmin
         ports:
-            - 8080:80
+            - 8080:80   # next time use - 8081:80 , so u can reach PhpMyAdmin at http://localhost:8081 and avpid conflict with main app
         environment:
             PMA_HOST: mysql
             MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'

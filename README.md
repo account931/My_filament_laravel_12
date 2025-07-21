@@ -32,15 +32,17 @@ git restore .  git clean -fd
 - [1. Install Laravel 12](#1-install-laravel-12)
 - [2. Docker sail](#2-docker-sail)
 - [3. Filament3](#3-filament3)
-- [4. Pest tests](#3-pest-test)
+- [4. Pest tests](#4-pest-test3)
 - [5. Spatie permission](#5-spatie-permission)
 - [6. Run Php via built-in web server ](#6-run-php-via-built-server)
 - [7. Images](#7-images)
 - [8. Postman](#8-postman)
 - [9. Sanctum](#9-sanctum)
-- [10.PhpStan](#10-phpstan)
-- [11.Vue](#11-vue)
-- [12.Pint](#12-pint)
+- [10. PhpStan](#10-phpstan)
+- [11. Vue](#11-vue)
+- [12. Pint](#12-pint)
+
+- [13.Laravel update 6 to 12](#13-laravel-update-6-to-12)
 
 
 
@@ -62,7 +64,8 @@ git restore .  git clean -fd
 Doker/Sail variant
 
 <p>1. Install => <code> composer create-project --prefer-dist laravel/laravel my-app "^12.0"  </code> </p>
-<p>1.1 cd to folder and <code> php artisan sail:install </code>  You'll be prompted to choose services (e.g., MySQL, Redis, MailHog)</p>
+<p>1.1 cd to folder. If Sail is not installed by default <code>composer require laravel/sail --dev</code>
+ and <code> php artisan sail:install </code>  You'll be prompted to choose services (e.g., MySQL, Redis, MailHog)</p>
 1.2 Check in  .env  that  DB_CONNECTION=mysql & optionally for convenience change DB_DATABASE=YOUR_PREFFERED_NAME (Sail will create db with this name) </br>
 1.2 Edit docker-compose.yml and add PhpMyAdmin service, see example in Filament 12, just in port use ports:- 8081:80, not - 8080:80, so u can access it with  http://localhost:8081 and avoid conflicts with laravel app. </br>
  
@@ -101,7 +104,7 @@ If table session is missing
 
 
 
-<p>4. In browser can navigate to http://localhost:8000/  OR http://localhost  depending on docker-compose.yml => the project should open </p>
+<p>4. In browser can navigate to http://localhost:8000/  OR http://localhost  depending on docker-compose.yml => the project should open. Check in .env if u have APP_PORT=SomePort, e.g, if APP_PORT=8000, then http://localhost:8000/  </p>
 <p>5. In console CLI <code> cd NAME_HERE </code> , and <code>git init   git add.   git commit</code> if necessary </p>
 <p>6. Create DB and set in <code>.env (DB_DATABASE)  == NO,IT IS CREATED BY SAIL by .env</code> </p>
 
@@ -175,7 +178,7 @@ php artisan make:filament-relation-manager OwnerResource venues owner_id
 
 
 <p> ----------------------------------------------------------------------------------------- </p>
-## 4. Pest test
+## 4. Pest tests
 
 <code> ./vendor/bin/pest </code>  run all test (since docker, do it inside container)  ||  <code>composer run-pest-tests</code>
 
@@ -378,6 +381,56 @@ computed: {
 <code> ./vendor/bin/pint </code>  fix
 
 </code> ./vendor/bin/sail pint </code> 
+
+
+
+
+
+
+
+<p> ----------------------------------------------------------------------------------------- </p>
+## 13. Laravel update 6 to 12
+<p>Changes</p>
+<ul>
+<li> 1.Change routes in web/routes to syntax <code> Route::get('test-flm', [TestController::class, 'testFilament'])->name('test-filament');</code> </li>
+
+<li> 2.Change in Blade 
+<code> 
+ @extends('layouts.app') 
+ @section('content')
+ //....
+ @endsection 
+</code>   to
+
+<code> 
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('Geo locator') }}
+        </h2>
+    </x-slot>
+//...........
+</x-app-layout>
+</code> 
+</li>
+
+<li> 3. Change in factories(fake() instead of $faker) and in seeder 
+<code> 
+Owner::factory()->count(12) ->create(); 
+//factory(\App\Models\Owner::class, 12)->create();  //Laravel 6
+</code> 
+</li>
+
+
+<li> 4. Changes in Vue:  Vite instead of Mix, Vue 2 instead of Vue 2, Pinia insead of Vuex store, Element Plus insead of Element UI(supported in Vue 2 only), vue-router@4,  <code> npm run build</code>  instead of npm run production, in Blade add <code> @vite('resources/js/app.js')</code> 
+</li>
+</ul>
+
+
+
+
+
+
 
 
 

@@ -40,6 +40,11 @@
                             {{ __('Profile') }}
                         </x-dropdown-link>
 
+                        <x-dropdown-link :href="route('dashboard')">
+                            <i class="fas fa-cloud-sun" style="font-size:12px"></i>
+                            {{ __('Dashboard') }}
+                        </x-dropdown-link>
+
                         <x-dropdown-link :href="route('filament.1.pages.dashboard')">
                             <i class="fas fa-cloud-sun" style="font-size:12px"></i>
                             {{ __('Filament') }}

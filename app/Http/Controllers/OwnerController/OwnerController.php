@@ -198,8 +198,8 @@ class OwnerController extends Controller
         $owner->venues()->delete(); // delete hasMany  //currently just set venues to be soft deleted
         $owner->save();
 
+        $owner->delete();  // soft delete
         // $owner->forceDelete();
-        $owner->forceDelete();
 
         return redirect('/owners')->with('flashSuccess', 'Record '.$id.' was deleted successfully');
     }

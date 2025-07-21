@@ -17,8 +17,10 @@
         <!-- Font Awesome 5 CDN -->
         <!-- <link href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" rel="stylesheet">-->
 
+        <!-- Push your CSS Stack, for example used in /views/dashboard.blade.php -->
+        @stack('styles')
 
-        <!-- Scripts -->
+        <!-- Incluse compiled JS Scripts, CSS. Vital for example for Vue -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans antialiased">

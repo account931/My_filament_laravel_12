@@ -1,11 +1,14 @@
+
+{{-- Custom css. Add to main layout stack('styles') to get working --}}
+
 @push('styles')
 <style>
 .my-link {
-    background-color:red !important;display: inline-block;
-    padding: 10px 15px;
+    color:red !important;display: inline-block;
+    padding: 10px 15px; transition: color 0.5s ease;
 }
 .my-link:hover {
-    background-color: #2779bd; /* Darker on hover */
+    color: #2779bd !important;/* Darker on hover */
 }
 
 .my-link:active {
