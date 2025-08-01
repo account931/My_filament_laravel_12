@@ -20,6 +20,8 @@
         <!-- Push your CSS Stack, for example used in /views/dashboard.blade.php -->
         @stack('styles')
 
+       <!-- Push your JS script Stack at the bottom............... -->
+
         <!-- Incluse compiled JS Scripts, CSS. Vital for example for Vue -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
@@ -41,5 +43,9 @@
                 {{ $slot }}
             </main>
         </div>
+
+        <!-- Push your JS Stack, for example used in /views/stripe/index.blade.php -->
+        @stack('scripts')
+
     </body>
 </html>

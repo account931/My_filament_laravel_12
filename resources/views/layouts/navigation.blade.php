@@ -85,6 +85,12 @@
                             {{ __('Send-notification') }}
                         </x-dropdown-link>
 
+                        <x-dropdown-link :href="route('stripe.main')">
+                            <i class="fas fa-cloud-sun" style="font-size:12px"></i>
+                            {{ __('Stripe') }}
+                        </x-dropdown-link>
+                        
+
 
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">

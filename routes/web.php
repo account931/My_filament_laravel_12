@@ -4,6 +4,7 @@ use App\Http\Controllers\Api;
 use App\Http\Controllers\OwnerController\OwnerController;
 use App\Http\Controllers\ProfileController;   // Api cotrollers
 use App\Http\Controllers\SendNotification\NotificationController;
+use App\Http\Controllers\Stripe\StripeController;
 use App\Http\Controllers\TestController\TestController;
 use App\Http\Controllers\VenuesStoreLocator\VenuesLocatorController;
 use App\Http\Controllers\VuePages\VuePagesController;
@@ -71,6 +72,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/vue-pages-with-router/{any?}', [VuePagesWithRouterController::class, 'index'])
         ->where('any', '.*')
         ->name('vue.pages-with-router');
+
+    // Stripe/Cashier
+    Route::get('/stripe', [StripeController::class, 'index'])->name('stripe.main');             // blade form
+    Route::post('/charge', [StripeController::class, 'oneTimePayment']); // ->middleware('auth'); //handles ajax
+    Route::get('/payment/return', [StripeController::class, 'paymentReturn'])->name('payment.return');  // redirects after payment
 
 });
 // End Auth (logged) users only------------------------------------------------------------------------------------------

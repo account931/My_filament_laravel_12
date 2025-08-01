@@ -41,4 +41,10 @@ return [
         'chat_id' => env('TELEGRAM_CHAT_ID'),
     ],
 
+    // Stripe
+    'stripe' => [
+        'public' => env('STRIPE_PUBLIC'),
+        'secret' => env('STRIPE_SECRET'),
+    ],
+
 ];

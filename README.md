@@ -4,7 +4,7 @@
 
 
 > Laravel: 12.18, PHP: 8.4.8 , Filament: 3, mysql: 8.0.42, db: '', </br></br>
-What is new: Filament 3, Sail, Sanctum, CI/CD, Laravel Audit, PHPStan static analysis tool 2.1.17, Pint, Tailwind CSS out of the box, Vue 3, Pinia insead of Vuex store, dotswan/filament-map-picker
+What is new: Filament 3, Sail, Sanctum, CI/CD, Laravel Audit, PHPStan static analysis tool 2.1.17, Pint, Tailwind CSS out of the box, Vue 3, Pinia insead of Vuex store, dotswan/filament-map-picker, Laravel Cashier with Stripe, Sentry
 
 
 
@@ -41,15 +41,12 @@ git restore .  git clean -fd
 - [10. PhpStan](#10-phpstan)
 - [11. Vue](#11-vue)
 - [12. Pint](#12-pint)
-
 - [13.Laravel update 6 to 12](#13-laravel-update-6-to-12)
-
+- [14. Laravel cashier with Stripe](#14-laravel-cashier-with-stripe)
 
 
 - [111.V.A](#111-va)
-
-
-
+- [112.Known errors ](#112-known-errors)
 - [103. Screenshots](#2-screenshots)
 
 
@@ -435,6 +432,35 @@ Owner::factory()->count(12) ->create();
 
 
 
+<p> ----------------------------------------------------------------------------------------- </p>
+## 14. Laravel cashier with Stripe
+Cashier provides an expressive, fluent interface to Stripe's subscription billing services.
+Laravel Cashier is mainly designed for subscriptions and recurring billing, but you can absolutely use it for one-time payments with Stripe too
+<code>
+composer require stripe/stripe-php
+composer require laravel/cashier
+</code>
+
+Get STRIPE_SECRET and STRIPE_PUBLIC from https://dashboard.stripe.com/  account9*@u**.net   + letter    </br>
+
+Add 'use Billable;'  to modesl/User + migration 'add_cashier_columns_to_users_table'
+ create frontend with js, see /resources/views/stripe/index and public function oneTimePayment in StripeController </br>
+
+ For Stripe you can use 2 variants:
+ Stripe JS  or Stripe Checkout (redirecting to Stripe page)
+
+Card Number	Description	Result
+4242 4242 4242 4242	Basic Visa test card	Successful payment
+4000 0000 0000 9995	Visa card that is declined	Payment declined
+
+ Using .env => config/services =>
+Stripe::setApiKey(config('services.stripe.secret'));  use in config.services  'stripe' => ['public' => env('STRIPE_PUBLIC'),
+
+
+
+
+
+
 
 <p> ----------------------------------------------------------------------------------------- </p>
 ## 111. V.A
@@ -464,6 +490,29 @@ Infolists\Components\TextEntry::make('permissions_from_roles')
   })
   ->html(),
 </code>
+
+
+
+
+
+
+
+<p> ----------------------------------------------------------------------------------------- </p>
+
+## 112. Known errors
+1. If out of sudden docker stopped launching as it was, check if your containers are exited due to error
+<code> docker ps -a </code> , check logs or see Exited error, in my case 139. It happened as u installed Stripe/Cashier which requires additional extensions. Add to docker-compose.yaml to environment:
+<code>
+environment:
+    SAIL_PHP_EXTENSIONS: bcmath,intl,curl,mbstring  #to fix docker crash after Stripe intall, as new extensions are required
+</code>
+
+
+2. Table 'laravel_filament.sessions' doesn't exist => it happens after removing docker volumes, run migrations
+
+
+
+
 
 
 
