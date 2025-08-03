@@ -23,6 +23,7 @@ class User extends Authenticatable implements Auditable, FilamentUser  // Larave
 
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
+
     use HasRoles;   // Sanctum
     use \OwenIt\Auditing\Auditable;                     // Laravel Cashier
 

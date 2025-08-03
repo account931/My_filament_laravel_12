@@ -14,22 +14,41 @@
                  Stripe JS  or Stripe Checkout (redirecting to Stripe page)
             </div> 
             
-            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
+            <div id="stripeJs" class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
                 Stripe JS form 
                 <form id="payment-form">
                     <div id="card-element"></div> <!-- Stripe card input -->
-</br>
+                    </br>
                     <button type="submit" class="mb-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded">Pay $10</button>
                     <div id="card-errors" role="alert"></div>
                 </form>
  
 
                 <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg text-xs">
-                4242 4242 4242 4242	Basic Visa test card	Successful payment
+                    4242 4242 4242 4242	Basic Visa test card	Successful payment   </br>
+                    4000 0000 0000 0002	Card declined   </br>
+                    4000 0000 0000 0127	Incorrect CVC   </br>
+                    use any MM/YY, CVV, Zip    
                 </div> 
 
-            </div>       
+            </div>  <!-- end id="stripeJs" -->  
+            
+            <div id="checkout" class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
+            Stripe Checkout form, redirects to Stripe page
+                <form id="checkout-form" action="{{ route('checkout') }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="price" step="0.01" min="0" value="2000">  <!-- $20.00 -->
+                    </br>
+                    <button type="submit" class="mb-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded">Pay $20</button>
+                </form>
+            </div><!-- end id="checkout" -->             
+
+
         </div>
+    </div>
+
+    <div id="loader"  style="display:none;font-size:3em; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:9999;color:red;">
+         Loading...
     </div>
 
 
@@ -37,9 +56,10 @@
 
 
 
-
 @push('scripts')
-<script src="https://js.stripe.com/v3/"></script>
+<script src="https://js.stripe.com/v3/"></script>  <!-- Stripe card JS-->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- Sweet alert -->
+
 <script>
      //Script if use Stripe JS, then Stripe will create card input itself
 
@@ -82,8 +102,11 @@ form.addEventListener('submit', async (event) => {
   if (error) {
     // Show error in the UI
     document.getElementById('card-errors').textContent = error.message;
+
   } else {
     // Send paymentMethod.id to your backend for charging
+    document.getElementById('loader').style.display = 'block';
+
     fetch('/charge', {
       method: 'POST',
       headers: {
@@ -97,16 +120,27 @@ form.addEventListener('submit', async (event) => {
     })
     .then(response => response.json())
     .then(data => {
+
       //if(data.success){
       if(data.status == 'succeeded'){
-        alert('Payment successful!');
+        Swal.fire('Success!', 'Payment successful!', 'success');
+        //alert('Payment successful!');
+        document.getElementById('payment-form').reset(); //reset form inputs
+        cardElement.clear(); //Clear the Stripe card element input
+
       } else {
-        alert('Payment failed: ' + (data.message || 'Unknown error'));
+        //alert('Payment failed: ' + (data.error || 'Unknown error'));
+        Swal.fire('Failed!', (data.error || 'Unknown error'), 'error');
       }
     })
     .catch(error => {
       console.error('Error:', error);
     });
+
+    //hide loader
+    setTimeout(function() {
+        document.getElementById('loader').style.display = 'none';
+    }, 1000);
   }
 });
 

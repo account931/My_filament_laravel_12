@@ -12,8 +12,9 @@
             </div> 
             
             <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-             
- 
+                <a href="{{ route('stripe.main') }}">
+                    <i class="fas fa-cloud-sun" style="font-size:12px"></i> Go back
+                </a> 
             </div>       
         </div>
     </div>

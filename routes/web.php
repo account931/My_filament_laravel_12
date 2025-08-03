@@ -74,9 +74,17 @@ Route::middleware('auth')->group(function () {
         ->name('vue.pages-with-router');
 
     // Stripe/Cashier
-    Route::get('/stripe', [StripeController::class, 'index'])->name('stripe.main');             // blade form
-    Route::post('/charge', [StripeController::class, 'oneTimePayment']); // ->middleware('auth'); //handles ajax
-    Route::get('/payment/return', [StripeController::class, 'paymentReturn'])->name('payment.return');  // redirects after payment
+    Route::get('/stripe', [StripeController::class, 'index'])->name('stripe.main');             // blade, creates form for Stripe js and Checkout
+    Route::post('/charge', [StripeController::class, 'oneTimePayment'])->name('stripejs.payment'); // ->middleware('auth'); //handles Stripe JS ajax
+    Route::post('/checkout', [StripeController::class, 'checkout'])->name('checkout');
+
+    Route::get('/payment/return', [StripeController::class, 'paymentReturn'])->name('payment.return');  // redirects after payment //not used???
+    Route::get('/success', function () {
+        return view('stripe.success');
+    })->name('checkout.success');  // success route for var 2 Stripe Checkout
+    Route::get('/cancel', function () {
+        return view('stripe.failed');
+    })->name('checkout.cancel');   // fail route for var 2 Stripe Checkout
 
 });
 // End Auth (logged) users only------------------------------------------------------------------------------------------

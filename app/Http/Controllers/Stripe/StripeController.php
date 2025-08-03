@@ -10,6 +10,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests; // my notification class (both db and email)
 use Illuminate\Http\Request;  // usual email
+use Stripe\Checkout\Session;
 use Stripe\PaymentIntent;
 use Stripe\Stripe;
 
@@ -23,6 +24,8 @@ class StripeController extends Controller
     }
 
     /**
+     * renders views with buttons to pay
+     *
      * @return \Illuminate\View\View
      */
     public function index()
@@ -33,7 +36,7 @@ class StripeController extends Controller
         return view('stripe.index'); // ->with(compact('users', 'currentUserNotifications'));
     }
 
-    // handles Stripe JS variant via ajax
+    // handles Stripe JS payment variant via ajax
     public function oneTimePayment(Request $request)
     {
         $request->validate([
@@ -111,5 +114,34 @@ class StripeController extends Controller
         } catch (\Exception $e) {
             return view('stripe.failed', ['error' => $e->getMessage()]);
         }
+    }
+
+    // handles Stripe payment variant 2 via CheckOut  (redirects to Stripe page)
+    public function checkout(Request $request)
+    {
+        $price = $request->input('price');
+        // dd($price);
+
+        // Stripe::setApiKey(env('STRIPE_SECRET'));
+        Stripe::setApiKey(config('services.stripe.secret'));
+
+        $session = Session::create([
+            'payment_method_types' => ['card'],
+            'line_items' => [[
+                'price_data' => [
+                    'currency' => 'usd',
+                    'product_data' => [
+                        'name' => 'T-shirt',
+                    ],
+                    'unit_amount' => $price, // 2000, // $20.00
+                ],
+                'quantity' => 1,
+            ]],
+            'mode' => 'payment',
+            'success_url' => route('checkout.success'),
+            'cancel_url' => route('checkout.cancel'),
+        ]);
+
+        return redirect($session->url);
     }
 }
