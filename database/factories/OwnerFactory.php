@@ -24,7 +24,8 @@ class OwnerFactory extends Factory
             'last_name' => fake()->lastName,
             'phone' => fake()->numerify('+380########'),
             'email' => fake()->unique()->safeEmail,
-            'image' => 'https://loremflickr.com/400/300/people?random='.fake()->unique()->numberBetween(1, 10000),
+            'image' => 'https://picsum.photos/400/300?random='.fake()->unique()->numberBetween(1, 10000), // working, use if loremflickr fails
+            // 'image' => 'https://loremflickr.com/400/300/people?random='.fake()->unique()->numberBetween(1, 10000),
             // 'image'      => fake()->imageUrl(400, 300, 'people', true, 'User'),  //image url instead of actual image, uses  https://via.placeholder.com/ that does not work
             // 'image'      => fake()->image('public/storage/images', 400, 300, null, false), //create a fake 400×300 image in /storage/app/images NOT WORKING
             'confirmed' => fake()->randomElement(ConfirmedEnum::cases())->value,  // fake()->boolean(),

@@ -87,7 +87,12 @@
 
                         <x-dropdown-link :href="route('stripe.main')">
                             <i class="fas fa-cloud-sun" style="font-size:12px"></i>
-                            {{ __('Stripe') }}
+                            {{ __('Stripe 2 var payments') }}
+                        </x-dropdown-link>
+
+                        <x-dropdown-link :href="route('shop.main')">
+                            <i class="fas fa-cloud-sun" style="font-size:12px"></i>
+                            {{ __('Shop') }}
                         </x-dropdown-link>
                         
 

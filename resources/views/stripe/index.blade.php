@@ -14,6 +14,7 @@
                  Stripe JS  or Stripe Checkout (redirecting to Stripe page)
             </div> 
             
+            <!--  Stripe JS variant  --> 
             <div id="stripeJs" class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
                 Stripe JS form 
                 <form id="payment-form">
@@ -31,8 +32,11 @@
                     use any MM/YY, CVV, Zip    
                 </div> 
 
-            </div>  <!-- end id="stripeJs" -->  
+            </div>  <!-- end id="stripeJs" --> 
+            <!-- End  Stripe JS variant  -->   
             
+
+            <!-- Stripe Checkout variant 2, redirects to Stripe page and then back  --> 
             <div id="checkout" class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
             Stripe Checkout form, redirects to Stripe page
                 <form id="checkout-form" action="{{ route('checkout') }}" method="POST">
@@ -41,7 +45,8 @@
                     </br>
                     <button type="submit" class="mb-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded">Pay $20</button>
                 </form>
-            </div><!-- end id="checkout" -->             
+            </div><!-- end id="checkout" --> 
+            <!-- End Stripe Checkout variant 2, redirects to Stripe page and then back  -->            
 
 
         </div>

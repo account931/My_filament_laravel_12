@@ -79,6 +79,7 @@ class Admin1PanelProvider extends PanelProvider
             ->navigationGroups([
                 'Section Main',
                 'User section',
+                'Shop',
                 'Settings',
             ]);
     }

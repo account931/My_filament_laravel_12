@@ -4,6 +4,7 @@ use App\Http\Controllers\Api;
 use App\Http\Controllers\OwnerController\OwnerController;
 use App\Http\Controllers\ProfileController;   // Api cotrollers
 use App\Http\Controllers\SendNotification\NotificationController;
+use App\Http\Controllers\Shop\ShopController;
 use App\Http\Controllers\Stripe\StripeController;
 use App\Http\Controllers\TestController\TestController;
 use App\Http\Controllers\VenuesStoreLocator\VenuesLocatorController;
@@ -73,7 +74,7 @@ Route::middleware('auth')->group(function () {
         ->where('any', '.*')
         ->name('vue.pages-with-router');
 
-    // Stripe/Cashier
+    // Stripe/Cashier, Update: in fact Stripe only
     Route::get('/stripe', [StripeController::class, 'index'])->name('stripe.main');             // blade, creates form for Stripe js and Checkout
     Route::post('/charge', [StripeController::class, 'oneTimePayment'])->name('stripejs.payment'); // ->middleware('auth'); //handles Stripe JS ajax
     Route::post('/checkout', [StripeController::class, 'checkout'])->name('checkout');
@@ -85,6 +86,18 @@ Route::middleware('auth')->group(function () {
     Route::get('/cancel', function () {
         return view('stripe.failed');
     })->name('checkout.cancel');   // fail route for var 2 Stripe Checkout
+
+    // Shop e-commerce
+    Route::get('/shop', [ShopController::class, 'index'])->name('shop.main');
+    Route::get('/cart', [ShopController::class, 'cart'])->name('shop.cart');
+    Route::get('/add-to-cart/{id}', [ShopController::class, 'add'])->name('cart.add');
+    Route::post('/cart/update', [ShopController::class, 'update'])->name('cart.update');
+    Route::delete('/cart/remove/{id}', [ShopController::class, 'remove'])->name('cart.remove');
+
+    Route::post('/order', [ShopController::class, 'storeOrder'])->name('order.store');
+    Route::get('/ordermade-success/{order}', function ($order) {
+        return view('shop.order-success', ['order' => $order]);
+    })->name('ordermade.success');
 
 });
 // End Auth (logged) users only------------------------------------------------------------------------------------------

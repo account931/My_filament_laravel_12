@@ -8,15 +8,14 @@ use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Cashier\Billable;  // Spatie Permission
+use Laravel\Cashier\Billable;  // Laravel Cashier
 use Laravel\Sanctum\HasApiTokens; // Sanctum
 use OwenIt\Auditing\Contracts\Auditable;  // Laravel Audit
-use Spatie\Permission\Traits\HasRoles;           // Laravel Cashier
+use Spatie\Permission\Traits\HasRoles;        // Spatie Permission
 
 class User extends Authenticatable implements Auditable, FilamentUser  // Laravel Audit
 {
-    // Laravel Audit
-    use Billable;
+    use Billable;  // Laravel Cashier
 
     // Spatie Permission
     use HasApiTokens;
@@ -25,7 +24,7 @@ class User extends Authenticatable implements Auditable, FilamentUser  // Larave
     use HasFactory, Notifiable;
 
     use HasRoles;   // Sanctum
-    use \OwenIt\Auditing\Auditable;                     // Laravel Cashier
+    use \OwenIt\Auditing\Auditable;      // Laravel Audit
 
     /**
      * The attributes that are mass assignable.
