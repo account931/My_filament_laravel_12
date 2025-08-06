@@ -14,6 +14,8 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth; // my notification class (both db and email)
 use Stripe\Checkout\Session;
+// use Stripe\PaymentIntent;
+use Stripe\Stripe;
 
 class ShopController extends Controller
 {
@@ -169,10 +171,10 @@ class ShopController extends Controller
             // Add user_id if you want and have auth
         ]);
 
-        // Create order items
-        foreach ($cart as $item) {
+        // Create order items, table 'order_items'
+        foreach ($cart as $productId => $item) {
             $order->items()->create([
-                'product_id' => $item['id'] ?? null,
+                'product_id' => $productId, // $item['id'] ?? null,
                 'product_name' => $item['name'],
                 'quantity' => $item['quantity'],
                 'price' => $item['price'],
@@ -185,5 +187,57 @@ class ShopController extends Controller
 
         // Redirect with success message
         return redirect()->route('ordermade.success', ['order' => $order])->with('message', 'Order placed successfully!');
+    }
+
+    // show my orders list
+    public function myOrders()
+    {
+        $orders = Order::where('user_id', Auth::id())->get();
+
+        return view('shop.my-orders')->with(compact('orders'));
+    }
+
+    // when u placed an order, it shows a page with stripe payment
+    public function orderSuccess($order)
+    {
+        $orderFind = Order::findOrFail($order);
+
+        return view('shop.order-success')->with(compact('orderFind'));
+    }
+
+    // handles Stripe payment variant 2 via CheckOut (redirects to Stripe page)
+    public function stripeCheckout(Request $request)
+    {
+        $price = $request->input('price');
+        $order = $request->input('orderName');
+        // $orderID = $request->input('orderID');
+        // dd($price);
+
+        // Stripe::setApiKey(env('STRIPE_SECRET'));
+        Stripe::setApiKey(config('services.stripe.secret'));
+
+        $session = Session::create([
+            'payment_method_types' => ['card'],
+            'line_items' => [[
+                'price_data' => [
+                    'currency' => 'usd',
+                    'product_data' => [
+                        'name' => $order ? 'Order id: '.$order : 'Unnamed order', // T-shirt'
+                    ],
+                    'unit_amount' => $price, // 2000, // $20.00
+                ],
+                'quantity' => 1,
+            ]],
+            'mode' => 'payment',
+            'success_url' => route('checkout.success').'?session_id={CHECKOUT_SESSION_ID}',  // old stripe routes, may change
+            'cancel_url' => route('checkout.cancel'),
+        ]);
+
+        // save Stripe session id to Order
+        $order = Order::find($order);
+        $order->stripe_session_id = $session->id;
+        $order->save();
+
+        return redirect($session->url);
     }
 }

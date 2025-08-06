@@ -116,10 +116,11 @@ class StripeController extends Controller
         }
     }
 
-    // handles Stripe payment variant 2 via CheckOut  (redirects to Stripe page)
+    // handles Stripe payment variant 2 via CheckOut (redirects to Stripe page)
     public function checkout(Request $request)
     {
         $price = $request->input('price');
+        $name = 'Order ID: '.$request->input('orderName');
         // dd($price);
 
         // Stripe::setApiKey(env('STRIPE_SECRET'));
@@ -131,7 +132,7 @@ class StripeController extends Controller
                 'price_data' => [
                     'currency' => 'usd',
                     'product_data' => [
-                        'name' => 'T-shirt',
+                        'name' => $name ?? 'Unnamed order', // T-shirt'
                     ],
                     'unit_amount' => $price, // 2000, // $20.00
                 ],

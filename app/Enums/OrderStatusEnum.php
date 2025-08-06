@@ -9,14 +9,16 @@ namespace App\Enums;
 //
 enum OrderStatusEnum: string // int
 {
-    case Approved = 'approved';
+    case Confirmed = 'confirmed';
     case Pending = 'pending';
+    case Cancelled = 'cancelled';
 
     public function label(): string
     {
         return match ($this) {
-            self::Approved => 'Orders approved',
+            self::Confirmed => 'Orders confirmed',
             self::Pending => 'Orders pending',
+            self::Cancelled => 'Orders cancelled',
         };
     }
 }

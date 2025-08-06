@@ -77,7 +77,7 @@ Route::middleware('auth')->group(function () {
     // Stripe/Cashier, Update: in fact Stripe only
     Route::get('/stripe', [StripeController::class, 'index'])->name('stripe.main');             // blade, creates form for Stripe js and Checkout
     Route::post('/charge', [StripeController::class, 'oneTimePayment'])->name('stripejs.payment'); // ->middleware('auth'); //handles Stripe JS ajax
-    Route::post('/checkout', [StripeController::class, 'checkout'])->name('checkout');
+    Route::post('/checkout', [StripeController::class, 'checkout'])->name('checkout'); // handles Stripe Checkout payment, variant 2
 
     Route::get('/payment/return', [StripeController::class, 'paymentReturn'])->name('payment.return');  // redirects after payment //not used???
     Route::get('/success', function () {
@@ -87,17 +87,31 @@ Route::middleware('auth')->group(function () {
         return view('stripe.failed');
     })->name('checkout.cancel');   // fail route for var 2 Stripe Checkout
 
-    // Shop e-commerce
+    // Shop e-commerce  ----------------------------
     Route::get('/shop', [ShopController::class, 'index'])->name('shop.main');
     Route::get('/cart', [ShopController::class, 'cart'])->name('shop.cart');
     Route::get('/add-to-cart/{id}', [ShopController::class, 'add'])->name('cart.add');
     Route::post('/cart/update', [ShopController::class, 'update'])->name('cart.update');
     Route::delete('/cart/remove/{id}', [ShopController::class, 'remove'])->name('cart.remove');
 
+    // my orders list
+    Route::get('/shop/my-orders', [ShopController::class, 'myOrders'])->name('shop.my-orders');
+
+    // save the order and redirects to Stripe payment page
     Route::post('/order', [ShopController::class, 'storeOrder'])->name('order.store');
-    Route::get('/ordermade-success/{order}', function ($order) {
-        return view('shop.order-success', ['order' => $order]);
-    })->name('ordermade.success');
+    // Route::get('/ordermade-success/{order}', function ($order) {  //after order is saved it is redirected to payment page
+    // return view('shop.order-success', ['order' => $order]);
+    // })->name('ordermade.success');
+
+    // show Stripe payment page
+    Route::get('/ordermade-success/{order}', [ShopController::class, 'orderSuccess'])->name('ordermade.success');
+
+    // handles Stripe Checkout payment, variant 2
+    Route::post('shop/stripe/checkout', [ShopController::class, 'stripeCheckout'])->name('shop.stripe.checkout');
+
+    // add success and failure redirect pages from stripe, update order as paid........................
+
+    // END Shop e-commerce  ----------------------------
 
 });
 // End Auth (logged) users only------------------------------------------------------------------------------------------

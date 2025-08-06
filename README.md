@@ -526,6 +526,9 @@ environment:
 ![Screenshot](public/img/screenshots/flmt-5.png)  </br>
 ![Screenshot](public/img/screenshots/flmt-6.png)  </br>
 ![Screenshot](public/img/screenshots/flmt-7.png)  </br>
+![Screenshot](public/img/screenshots/flmt-8.png)  </br>
+![Screenshot](public/img/screenshots/flmt-9.png)  </br>
+![Screenshot](public/img/screenshots/flmt-10.png)  </br>
 
 
 

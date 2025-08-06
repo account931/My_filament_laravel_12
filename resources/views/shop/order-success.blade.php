@@ -27,37 +27,55 @@
     <!------------= Flash message --------->
 
 
-    <!------------Success --------->
+    <!------------ Order Success page, show button to pay--------->
     <div class="row">
+
+        <div class="w-full p-2 bg-white border border-gray-300 rounded shadow text-sm mb-2">
+            <p><a href="{{ route('shop.main') }}"> Back to shop <i class="fas fa-external-link-alt" style="font-size:24px"></i> </a> </p></br>
+        </div>
+
+
         <div class="bg-red-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
-            @if(!isset($order))
-               <p>No order id was passed, you are here by mistake</p>
+            @if(!isset($orderFind))
+               <p> No order id was passed, you are here by mistake</p>
                
             @else
             
 
-            <?php
-           //return var_dump ($order);  //returns order id, e.g 11
-            $orderFind = \App\Models\Order::findOrFail($order);
-            echo '<p> Price is ' .   $orderFind->total_amount . ' </p>';
-            echo '<p> Status is ' .  $orderFind->status . ' </p>';
-             ?>
+            <p>Your Order ID is: {{ $orderFind}}</p>
+            <p>Order total: <b>{{ $orderFind->total_amount}} USD </b></p>
+            <p>Your Order status is: <b> {{ $orderFind->status}} </b></p>
 
+            <p>Order created successfully</p>
 
-            <p>Your Order ID is: {{ $order}}</p>
-            <p>Order created successfully, pay it here.......</p>
+            @if($orderFind->status == 'pending') 
+                <p>pay it here.......</p>
+                <button class="px-4 m-2 py-2 bg-red-600 text-white rounded hover:bg-blue-700"> Order not paid  </button>
+            @endif
             
             <!-- Stripe Checkout variant 2, redirects to Stripe page and then back  --> 
+            @if($orderFind->status == 'pending') 
             <div id="checkout" class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-            Stripe Checkout form, redirects to Stripe page
-                <form id="checkout-form" action="{{ route('checkout') }}" method="POST">
+            Stripe Checkout form, redirects to Stripe page <i class='fab fa-gg-circle' style='font-size:24px'></i>
+                <form id="checkout-form" action="{{ route('shop.stripe.checkout') }}" method="POST">
                     @csrf
                     <input type="hidden" name="price" step="0.01" min="0" value="{{ $orderFind->total_amount * 100 }}">  <!--as it should be in cents $20.00 -->
-                    </br>
+                    <input type="hidden" name="orderName" value="{{ $orderFind->id }}">  <!--order id -->     
+                </br>
                     <button type="submit" class="mb-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded">Pay {{$orderFind->total_amount }} $</button>
                 </form>
             </div><!-- end id="checkout" --> 
             <!-- End Stripe Checkout variant 2, redirects to Stripe page and then back  -->
+            
+             <div class="p-4 mt-2 sm:p-8 bg-white shadow sm:rounded-lg text-xs">
+                4242 4242 4242 4242	Basic Visa test card	Successful payment   </br>
+                4000 0000 0000 0002	Card declined   </br>
+                4000 0000 0000 0127	Incorrect CVC   </br>
+                    use any MM/YY, CVV, Zip    
+            </div> 
+            @endif
+
+
 
             @endif
         </div>

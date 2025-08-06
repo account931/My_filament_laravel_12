@@ -163,8 +163,8 @@
     <div class="max-w-md mx-auto bg-white shadow-lg rounded-lg p-6">
     <h2 class="text-2xl font-semibold mb-4"> Place Your Order </h2>
 
-     
-    <form action="/order" method="POST" class="space-y-4">
+    <!------------ On submitting this order form, we submit form 1 as well, in case user changed cart and forgot to update --------->
+    <form action="/order" id="submitOrder" method="POST" class="space-y-4" onsubmit="handleBothSubmissions(event)">
         @csrf <!-- Laravel CSRF token -->
 
     <!-- Name -->
@@ -252,7 +252,7 @@
     });
 
 
-    //this is for price per item and total calc
+    //this is for price per item and total calc -----------------------------------------
     function formatPrice(num) {
     return num.toFixed(2) + ' USD';
 }
@@ -287,6 +287,19 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
+//when submit  Order form 2, submit form 1 as well, to make sure cart is updated
+function handleBothSubmissions(event) {
+    event.preventDefault(); // Prevent default submission of Form 2
+
+    // Submit Form 1 first
+    document.getElementById('update-cart-form').submit();
+
+    // Optional: Delay form2 submission slightly to give form1 time (especially if async)
+    setTimeout(() => {
+      document.getElementById('submitOrder').submit();
+    }, 300);
+}
 
 </script>
 @endpush

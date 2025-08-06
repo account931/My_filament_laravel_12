@@ -20,6 +20,9 @@
     text-align: center; line-height: 1;
     pointer-events: none; /* so it doesn’t interfere with clicks */
 }
+
+.my-orders {
+    margin-right: 4em; font-size: 1.2rem; color: orange;
 </style>
 @endpush
 
@@ -41,9 +44,10 @@
     <h1 class="mb-4">Products</h1>
 
 
-     <!----------- CART ------------>
+     <!----------- CART ICON and My oders link ------------>
     <div class="cart-icon col-span-12">
         <!-- You can use a font-awesome icon, or any other icon you prefer -->
+        <a href="{{ route('shop.my-orders') }}" class="my-orders"> <i class="fas fa-external-link-alt" style="font-size:20px"></i> My orders </a>
         <a href="{{ route('shop.cart') }}"><i class="fa fa-shopping-cart"></i></a>
 
         <!-- Display quantity if > 0 -->
@@ -53,7 +57,7 @@
             <span class="cart-quantity">0</span>
         @endif
     </div>
-    <!----------- ENDCART -------------->
+    <!----------- END CART ICON and My oders link -------------->
 
 
 

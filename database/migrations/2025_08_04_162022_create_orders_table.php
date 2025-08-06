@@ -20,12 +20,11 @@ return new class extends Migration
             $table->string('name');
             $table->string('email');
             $table->text('address');
-
             $table->string('payment_method');
             $table->decimal('total_amount', 10, 2); // e.g. 99999999.99 max
-
             $table->string('status')->default('pending'); // e.g. pending, processing, completed, cancelled
-
+            $table->timestamp('paid_at')->nullable(); //
+            $table->string('stripe_session_id')->nullable()->unique();
             $table->timestamps();
             $table->softDeletes();
         });
