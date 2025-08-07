@@ -21,6 +21,11 @@ class Order extends Model implements Auditable  // Laravel Audit
         'payment_method',
         'total_amount',
         'status',
+        'stripe_session_id',
+    ];
+
+    protected $casts = [
+        'stripe_session_id' => 'array',
     ];
 
     // An order belongs to a user (optional)

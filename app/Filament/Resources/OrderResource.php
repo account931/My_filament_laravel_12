@@ -81,7 +81,7 @@ class OrderResource extends Resource
                 // filter 2 (is confirmed)
                 SelectFilter::make('confirmed')
                     ->options([
-                        OrderStatusEnum::Approved->value => OrderStatusEnum::Approved->label(),     // '1'  => 'Confirmed',
+                        OrderStatusEnum::Confirmed->value => OrderStatusEnum::Confirmed->label(),     // '1'  => 'Confirmed',
                         OrderStatusEnum::Pending->value => OrderStatusEnum::Pending->label(),       // '0'   => 'Not Confirmed',
 
                     ])
@@ -108,11 +108,17 @@ class OrderResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])
+
+            // Bulk actions------------------------------------------------------
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+
+                    // my bulk-2
+                    \App\Filament\Resources\OrderResource\Actions\ChangeOrderStatusBulkAction::make(), // my bulk action 1 moved to separate folder
+
                 ]),
-            ]);
+            ]); // end all Bulk actions------------------------------------------------------
     }
 
     // view one

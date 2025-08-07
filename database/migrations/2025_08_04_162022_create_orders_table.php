@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\OrderStatusEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -22,9 +23,9 @@ return new class extends Migration
             $table->text('address');
             $table->string('payment_method');
             $table->decimal('total_amount', 10, 2); // e.g. 99999999.99 max
-            $table->string('status')->default('pending'); // e.g. pending, processing, completed, cancelled
+            $table->string('status')->default(OrderStatusEnum::Pending->value); // e.g. pending, processing, completed, cancelled
             $table->timestamp('paid_at')->nullable(); //
-            $table->string('stripe_session_id')->nullable()->unique();
+            $table->json('stripe_session_id')->nullable(); // stripe session id
             $table->timestamps();
             $table->softDeletes();
         });

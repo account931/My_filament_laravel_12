@@ -24,7 +24,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
     @endif
-    <!------------= Flash message --------->
+    <!------------ Flash message --------->
 
 
     <!------------ Order Success page, show button to pay--------->
@@ -35,7 +35,7 @@
         </div>
 
 
-        <div class="bg-red-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+        <div class="bg-white-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
             @if(!isset($orderFind))
                <p> No order id was passed, you are here by mistake</p>
                
@@ -44,17 +44,24 @@
 
             <p>Your Order ID is: {{ $orderFind}}</p>
             <p>Order total: <b>{{ $orderFind->total_amount}} USD </b></p>
-            <p>Your Order status is: <b> {{ $orderFind->status}} </b></p>
+            <p>Your Order status is: 
+               <span class="@if($orderFind->status === \App\Enums\OrderStatusEnum::Pending->value ) text-red-500
+                    @elseif($orderFind->status === \App\Enums\OrderStatusEnum::Confirmed->value ) text-green-600
+                    @else text-gray-700
+                    @endif"> <b>  {{ ucfirst($orderFind->status) }}  </b>
+                </span>
+            </p>
 
             <p>Order created successfully</p>
 
-            @if($orderFind->status == 'pending') 
+            @if($orderFind->status == \App\Enums\OrderStatusEnum::Pending->value )   <!--'pending'----->
+
                 <p>pay it here.......</p>
                 <button class="px-4 m-2 py-2 bg-red-600 text-white rounded hover:bg-blue-700"> Order not paid  </button>
             @endif
             
             <!-- Stripe Checkout variant 2, redirects to Stripe page and then back  --> 
-            @if($orderFind->status == 'pending') 
+            @if($orderFind->status == \App\Enums\OrderStatusEnum::Pending->value )   <!--'pending'----->
             <div id="checkout" class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
             Stripe Checkout form, redirects to Stripe page <i class='fab fa-gg-circle' style='font-size:24px'></i>
                 <form id="checkout-form" action="{{ route('shop.stripe.checkout') }}" method="POST">

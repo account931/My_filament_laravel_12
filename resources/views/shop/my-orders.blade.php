@@ -17,7 +17,7 @@
 
 
 
-    <!------------= Flash message --------->
+    <!------------ Flash message --------->
     @if(session('success'))
     <div class="alert alert-success alert-dismissible fade show" role="alert">
         {{ session('success') }}
@@ -34,7 +34,7 @@
         </div>
 
         <div class="border border-green-400 text-green-700 px-4 py-3 rounded relative">
-            @if(!isset($orders))
+            @if(count($orders) == 0)
                <p>No order so far</p>
                
             @else
@@ -43,6 +43,15 @@
                      <div class="mt-auto border border-black-400 mb-12 bg-navy-100">
                         <p> Ordered  : <b> {{ $order->id }} </b> </p>
                         <p> Ordered to : {{ $order->name }} </p>
+                        <p> Ordered status : 
+                            <span class="@if($order->status === \App\Enums\OrderStatusEnum::Pending->value ) text-red-500
+                                  @elseif($order->status === \App\Enums\OrderStatusEnum::Confirmed->value ) text-green-600
+                                  @else text-gray-700
+                                  @endif
+                              "> {{ ucfirst($order->status) }}
+                            </span>
+                            
+                        </p>
                         <p> Order total_amount:  {{ $order->total_amount }},  created:  {{ $order->created_at }}  </p>
                         
                         <!------------ Order items --------->

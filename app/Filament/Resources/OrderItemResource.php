@@ -62,6 +62,11 @@ class OrderItemResource extends Resource
                 // Infolists\Components\TextEntry::make('product_name')->label('ProductName'),
                 Infolists\Components\TextEntry::make('product_name')->url(fn ($record) => ProductResource::getUrl('view', ['record' => $record->id])) // or 'view' if using view page
                     ->openUrlInNewTab()->color('primary'),
+                Infolists\Components\TextEntry::make('order.id')->url(fn ($record) => OrderResource::getUrl('view', ['record' => $record->order->id])) // or 'view' if using view page
+                    ->openUrlInNewTab()->color('primary')->label('Order id'),
+                Infolists\Components\TextEntry::make('quantity'),
+                Infolists\Components\TextEntry::make('price'),
+                Infolists\Components\TextEntry::make('subtotal'),
             ]);
     }
 

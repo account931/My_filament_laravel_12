@@ -115,7 +115,7 @@
     <!------------ Update is handled via regular form, Delete via JS ajax (see JS at bottom)--------->
     <div class="space-y-6">
     @if(session('cart'))
-    <form id="update-cart-form" action="{{ route('cart.update') }}" method="POST" class="space-y-6">
+    <form id="update-cart-form" action="{{ route('cart.update') }}"  method="POST" class="space-y-6">
         @csrf
 
         @foreach(session('cart') as $id => $details)
@@ -130,7 +130,7 @@
 
                 <span class="flex-grow">{{ $details['name'] }}</span>
 
-                <input type="number" name="quantities[{{ $id }}]" value="{{ $details['quantity'] }}" min="1" class="w-16 border rounded px-2 py-1 quantity-input">
+                <input type="number" name="quantities[{{ $id }}]" data-id="{{ $id }}"  value="{{ $details['quantity'] }}" min="1" class="w-16 border rounded px-2 py-1 quantity-input">
 
                 {{-- Subtotal --}}
                 <span class="w-24 subtotal"></span>
@@ -141,7 +141,7 @@
             </div>
         @endforeach
 
-        <button type="submit" class="mt-4 px-4 py-2 bg-blue-600 text-white rounded">Update Cart</button>
+        <button type="submit" class="mt-4 px-4 py-2 bg-blue-600 text-white rounded">Update Cart (useless as we use ajax now)</button>
 
         {{-- Total price display --}}
         <div class="mt-4 text-right text-lg font-bold">
@@ -163,8 +163,8 @@
     <div class="max-w-md mx-auto bg-white shadow-lg rounded-lg p-6">
     <h2 class="text-2xl font-semibold mb-4"> Place Your Order </h2>
 
-    <!------------ On submitting this order form, we submit form 1 as well, in case user changed cart and forgot to update --------->
-    <form action="/order" id="submitOrder" method="POST" class="space-y-4" onsubmit="handleBothSubmissions(event)">
+    <!------------  --------->
+    <form action="/order" id="submitOrder" method="POST" class="space-y-4">  <!-- was onsubmit="handleBothSubmissions(event)" ----->
         @csrf <!-- Laravel CSRF token -->
 
     <!-- Name -->
@@ -216,6 +216,12 @@
 
 
 
+<!------------ Ajax loader when update cart --------->
+<div id="cart-loader" style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    background: rgba(255, 255, 255, 0.9); padding: 20px 40px; border-radius: 8px; z-index: 9999;border:1px solid red;">
+    <span class="text-gray-700 font-semibold">Updating cart...</span>
+</div>
+<!------------ End Ajax loader when update cart --------->
 
 </div>
 
@@ -275,6 +281,15 @@ function recalcCart() {
     document.getElementById('cart-total').textContent = formatPrice(total);
 }
 
+//update cart back end via ajax
+function updateCartViaAjax() {
+    //to be added from the bottom
+    
+}
+
+
+
+
 // Run on page load
 document.addEventListener('DOMContentLoaded', () => {
     recalcCart();
@@ -284,11 +299,74 @@ document.addEventListener('DOMContentLoaded', () => {
         input.addEventListener('input', () => {
             if(input.value < 1) input.value = 1;  // enforce minimum quantity 1
             recalcCart();
+
+            //update cart via ajax
+            //updateCartViaAjax();
         });
     });
 });
 
+
+//cart update automatically when the user changes the quantity input via ajax
+document.addEventListener('DOMContentLoaded', function () {
+
+    const loader = document.getElementById('cart-loader');
+
+    document.querySelectorAll('.quantity-input').forEach(function (input) {
+        input.addEventListener('change', function () {
+            const id = this.dataset.id;
+            const quantity = this.value;
+            
+            //alert(this.dataset.id);
+
+            loader.style.display = 'block'; //show loader
+
+            fetch("{{ route('cart.update') }}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                    "X-Requested-With": "XMLHttpRequest" 
+                },
+                body: JSON.stringify({
+                    id: id,
+                    quantity: quantity
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const productRow = document.querySelector(`.product-row[data-id="${id}"]`);
+                    const price = parseFloat(productRow.dataset.price);
+                    productRow.querySelector('.subtotal').textContent = (price * quantity).toFixed(2) + " USD";
+
+                    // Optionally update cart total somewhere else on the page
+                    if (document.querySelector('#cart-total')) {
+                        document.querySelector('#cart-total').textContent = data.total + " USD";
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Cart update failed:', error);
+            })
+            .finally(() => {
+                //Hide loader after response
+                 setTimeout(() => {
+                    loader.style.display = 'none';
+                }, 1000);
+            });
+        });
+    });
+});
+//end cart update automatically when the user changes the quantity input via ajax
+
+
+
+
+//NOT USED ANY MORE
 //when submit  Order form 2, submit form 1 as well, to make sure cart is updated
+/*
 function handleBothSubmissions(event) {
     event.preventDefault(); // Prevent default submission of Form 2
 
@@ -300,7 +378,7 @@ function handleBothSubmissions(event) {
       document.getElementById('submitOrder').submit();
     }, 300);
 }
-
+*/
 </script>
 @endpush
 

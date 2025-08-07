@@ -18,7 +18,7 @@ class ViewOrderItem extends ViewRecord
     // Set the title shown in the browser tab and page header
     public function getTitle(): string
     {
-        return 'Order Id: '.$this->record->id;
+        return 'Order Item Id: '.$this->record->id;
     }
 
     // header action

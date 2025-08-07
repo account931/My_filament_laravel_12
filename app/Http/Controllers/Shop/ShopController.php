@@ -4,17 +4,18 @@
 
 namespace App\Http\Controllers\Shop;
 
+use App\Enums\OrderStatusEnum;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Foundation\Bus\DispatchesJobs;  // usual email
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;  // usual email
+use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth; // my notification class (both db and email)
-use Stripe\Checkout\Session;
+use Illuminate\Http\Request; // my notification class (both db and email)
+use Illuminate\Support\Facades\Auth;
 // use Stripe\PaymentIntent;
+use Stripe\Checkout\Session;
 use Stripe\Stripe;
 
 class ShopController extends Controller
@@ -76,9 +77,34 @@ class ShopController extends Controller
         return redirect()->back()->with('success', 'Product '.$product->name.' added to cart!');
     }
 
-    // update the cart, from the cart itself
+    // update the cart, from the cart itself  via regular http or ajax
     public function update(Request $request)
     {
+        // case it is ajax, triggered every time u change quantity
+        if ($request->expectsJson()) {  // dd(8);
+            $id = $request->id;
+            $quantity = (int) $request->quantity;
+            // dd($id);
+
+            if (session()->has("cart.$id")) {
+                session()->put("cart.$id.quantity", $quantity);
+            }
+
+            // Recalculate total
+            $cart = session('cart');
+            $total = 0;
+            foreach ($cart as $item) {
+                $total += $item['price'] * $item['quantity'];
+            }
+
+            return response()->json([
+                'success' => true,
+                'total' => number_format($total, 2),
+            ]);
+        }
+
+        // no use for this, as quantity is now updated via ajax every time u change quantity
+        // case regular form submissions, you can update manually by button
         // Validate that quantities is an array and each quantity is numeric and min 1
         $request->validate([
             'quantities' => 'required|array',
@@ -99,16 +125,6 @@ class ShopController extends Controller
 
         return redirect()->back()->with('success', 'Cart updated successfully.');
 
-        /*
-        $cart = session()->get('cart', []);
-
-        if (isset($cart[$id])) {
-            $cart[$id]['quantity'] = $request->input('quantity');
-            session()->put('cart', $cart);
-        }
-
-        return redirect()->back()->with('success', 'Cart updated successfully!');
-        */
     }
 
     // remove 1 product from cart, (performed in cart)
@@ -167,7 +183,7 @@ class ShopController extends Controller
             'address' => $validated['address'],
             'payment_method' => $validated['payment_method'],
             'total_amount' => $total,
-            'status' => 'pending',
+            'status' => OrderStatusEnum::Pending->value, // 'pending',
             // Add user_id if you want and have auth
         ]);
 
@@ -229,15 +245,64 @@ class ShopController extends Controller
                 'quantity' => 1,
             ]],
             'mode' => 'payment',
-            'success_url' => route('checkout.success').'?session_id={CHECKOUT_SESSION_ID}',  // old stripe routes, may change
-            'cancel_url' => route('checkout.cancel'),
+            'success_url' => route('shop.payment.success').'?session_id={CHECKOUT_SESSION_ID}',
+            'cancel_url' => route('shop.payment.failed'),
+            'metadata' => [
+                'order_id' => $order,  // my order id
+            ],
         ]);
 
-        // save Stripe session id to Order
+        // save Stripe session id to Order, save as array of ids, so it includes old ones, when user did not pay
         $order = Order::find($order);
-        $order->stripe_session_id = $session->id;
+        // $order->stripe_session_id = $session->id;
+        // $order->save();
+
+        $stripeSessions = $order->stripe_session_id ?? []; // Get current array or empty
+        $stripeSessions[] = $session->id;                    // Add new item
+        $order->stripe_session_id = $stripeSessions;       // ✅ Re-assign modified array
         $order->save();
+        // End save Stripe session id to Order
 
         return redirect($session->url);
+    }
+
+    public function shopPaymentSuccess(Request $request)
+    {
+
+        $sessionId = $request->get('session_id');
+
+        if (! $sessionId) {
+            return redirect()->route('home')->with('error', 'Missing session ID.');
+        }
+
+        Stripe::setApiKey(config('services.stripe.secret')); // Or env('STRIPE_SECRET')
+
+        try {
+            $session = Session::retrieve($sessionId);
+
+            // Find your order by session ID (assuming you stored it when creating the order)
+            $order = Order::whereJsonContains('stripe_session_id', $sessionId)->first();
+
+            if (! $order) {
+                return redirect()->route('home')->with('error', 'Order not found.');
+            }
+
+            // Update status to confirmed
+            $order->status = OrderStatusEnum::Confirmed->value; // 'confirmed';
+            $order->save();
+
+            return view('shop.payment-success')->with(compact('order'));
+
+        } catch (\Exception $e) {
+            return redirect()->route('shop.main')->with('error', 'Something went wrong: '.$e->getMessage());
+        }
+
+    }
+
+    public function shopPaymentFailed()
+    {
+
+        return view('shop.payment-failed');
+
     }
 }

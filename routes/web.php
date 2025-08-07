@@ -109,7 +109,8 @@ Route::middleware('auth')->group(function () {
     // handles Stripe Checkout payment, variant 2
     Route::post('shop/stripe/checkout', [ShopController::class, 'stripeCheckout'])->name('shop.stripe.checkout');
 
-    // add success and failure redirect pages from stripe, update order as paid........................
+    Route::get('shop/payment/success', [ShopController::class, 'shopPaymentSuccess'])->name('shop.payment.success');  // success route for var 2 Stripe Checkout
+    Route::get('shop/payment/failed', [ShopController::class, 'shopPaymentFailed'])->name('shop.payment.failed');    // failed route for var 2 Stripe Checkout
 
     // END Shop e-commerce  ----------------------------
 
