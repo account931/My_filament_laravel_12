@@ -4,6 +4,7 @@
 
 
 > Laravel: 12.18, PHP: 8.4.8 , Filament: 3, mysql: 8.0.42, db: '', </br></br>
+Contains 80% of Laravel_2024_migration transffered from Laravel 6 to 12 + Filament + Stripe + E-commerce, etc</br>
 What is new: Filament 3, Sail, Sanctum, CI/CD, Laravel Audit, PHPStan static analysis tool 2.1.17, Pint, Tailwind CSS out of the box, Vue 3, Pinia insead of Vuex store, dotswan/filament-map-picker, Laravel Cashier with Stripe, Sentry
 
 
@@ -43,6 +44,9 @@ git restore .  git clean -fd
 - [12. Pint](#12-pint)
 - [13.Laravel update 6 to 12](#13-laravel-update-6-to-12)
 - [14. Laravel cashier with Stripe](#14-laravel-cashier-with-stripe)
+- [15. Laravel Expose](#15-laravel-expose)
+- [16. Sentry with Laravel](#16-sentry-with-laravel)
+
 
 
 - [111.V.A](#111-va)
@@ -455,6 +459,40 @@ Card Number	Description	Result
 
  Using .env => config/services =>
 Stripe::setApiKey(config('services.stripe.secret'));  use in config.services  'stripe' => ['public' => env('STRIPE_PUBLIC'),
+
+
+
+
+
+
+
+
+<p> ----------------------------------------------------------------------------------------- </p>
+## 15. Laravel Expose
+NOT LOADING
+https://expose.dev   </br>
+
+1.Intall globally in any folder  <code> composer global require exposedev/expose</code>    <code> composer global require beyondcode/expose </code>  </br>
+2.Get token  from   https://expose.dev/dashboard    and run in cli  <code>expose token 74e*************************** </code> </br>
+3.Expose, run outside of container <code>expose 8000 </code> || <code> expose share http://localhost:8000  </code> If get an error install sqlite globally <code> sudo apt install php-sqlite3</code> 
+
+
+
+
+
+
+
+<p> ----------------------------------------------------------------------------------------- </p>
+## 16. Sentry with Laravel
+https://sentry.io
+1.<code> composer require sentry/sentry-laravel </code> 
+2.<code> php artisan vendor:publish --provider="Sentry\Laravel\ServiceProvider" </code> 
+3. add to .env  by running (u get this in sentry.io) <code>  php artisan sentry:publish --dsn=https://2703***.ingest.de.sentry.io/45* </code> 
+
+SENTRY_LARAVEL_DSN=https://yourPublicKey@o0.ingest.sentry.io/yourProjectId
+
+ U may test error with manual <code>php artisan sentry:test </code>
+
 
 
 
