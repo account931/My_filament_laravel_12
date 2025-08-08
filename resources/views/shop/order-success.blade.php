@@ -1,3 +1,8 @@
+{{-- Custom css. Add to main layout stack('styles') to get working --}}
+{{-- Add bootstrap 5 css for dropdown --}}
+@push('styles')
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+@endpush
 
 
 <x-app-layout>
@@ -42,7 +47,20 @@
             @else
             
 
-            <p>Your Order ID is: {{ $orderFind}}</p>
+            
+
+            <!-- Bootstrap 5 Dropdown -->
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                Order json
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <p>Your Order ID is: {{ $orderFind}}</p>
+                </div>
+            </div>
+            <!-- End Bootstrap 5 Dropdown -->
+
+            <p>Your Order ID is: {{ $orderFind->id}}</p>
             <p>Order total: <b>{{ $orderFind->total_amount}} USD </b></p>
             <p>Your Order status is: 
                <span class="@if($orderFind->status === \App\Enums\OrderStatusEnum::Pending->value ) text-red-500
@@ -53,6 +71,16 @@
             </p>
 
             <p>Order created successfully</p>
+
+            <!------------ Order items --------->
+            <p> Order items :  </p>
+            <ul class="list-disc list-inside space-y-1 text-gray-700">
+                @foreach ($orderFind->items as $item) 
+                    <li class="ml-4"> Item: {{ $item->product_name }}, price: {{ $item->price }}, quantity: {{ $item->quantity }} USD </li>
+                @endforeach
+            </ul>
+            <!------------ End Order items --------->
+
 
             @if($orderFind->status == \App\Enums\OrderStatusEnum::Pending->value )   <!--'pending'----->
 
@@ -90,5 +118,13 @@
         
 </div>
 
+@push('scripts')
+{{-- Add bootstrap 5 js for dropdown --}}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+@endpush
 
 </x-app-layout>
+
+
+
+

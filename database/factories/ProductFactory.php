@@ -23,12 +23,26 @@ class ProductFactory extends Factory
 
     public function definition()
     {
+        static $brands;
+
+        // Initialize and shuffle only once
+        if (! $brands || $brands->isEmpty()) {
+            $brands = collect([
+                'Pioneer DJ', 'Denon DJ', 'Numark', 'Native Instruments', 'Rane',
+                'Allen & Heath', 'Gemini', 'Roland', 'Hercules', 'Vestax',
+                'AKAI Professional', 'Behringer', 'Korg', 'Technics', 'Novation',
+                'Mackie', 'Audio-Technica', 'Soundcraft', 'Serato', 'DJ Tech',
+            ])->shuffle();
+        }
+
+        $brandName = $brands->pop();
+
         // $name = $this->faker->unique()->words(3, true);
-        $brands = ['Pioneer DJ', 'Denon DJ', 'Numark', 'Native Instruments', 'Rane', 'Allen & Heath', 'Gemini', 'Roland', 'Hercules', 'Vestax', 'AKAI Professional', 'Behringer', 'Korg', 'Technics', 'Novation', 'Mackie', 'Audio-Technica', 'Soundcraft', 'Serato', 'DJ Tech'];
-        $brandName = fake()->unique($reset = true)->randomElement($brands);
+        // $brands = ['Pioneer DJ', 'Denon DJ', 'Numark', 'Native Instruments', 'Rane', 'Allen & Heath', 'Gemini', 'Roland', 'Hercules', 'Vestax', 'AKAI Professional', 'Behringer', 'Korg', 'Technics', 'Novation', 'Mackie', 'Audio-Technica', 'Soundcraft', 'Serato', 'DJ Tech'];
+        // $brandName = fake()->unique($reset = true)->randomElement($brands);
 
         return [
-            'name' => $brandName, // $name,
+            'name' => $brandName, // Get one unique brand  $brandName, // $name,
             'slug' => $this->generateUniqueSlug($brandName), // Str::slug($productBrand),
             'description' => $this->faker->sentence(15),
             'sku' => strtoupper($this->faker->bothify('SKU-####??')),

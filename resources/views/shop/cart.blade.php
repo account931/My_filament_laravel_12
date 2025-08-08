@@ -185,7 +185,7 @@
     <div>
       <label for="address" class="block text-sm font-medium mb-1">Shipping Address</label>
       <textarea name="address" id="address" rows="3" required
-                class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                class="w-full border border-gray-300 rounded px-1 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 {{ old('address') }}
       </textarea>
     </div>

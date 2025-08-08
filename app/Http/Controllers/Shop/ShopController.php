@@ -266,13 +266,14 @@ class ShopController extends Controller
         return redirect($session->url);
     }
 
+    // 'success_url' for Stripe, when stripe payment is successfull, mark order as confirmed. 'success_url' is set in public function stripeCheckout(Request $request)
     public function shopPaymentSuccess(Request $request)
     {
 
         $sessionId = $request->get('session_id');
 
         if (! $sessionId) {
-            return redirect()->route('home')->with('error', 'Missing session ID.');
+            return redirect()->route('shop.main')->with('error', 'Missing session ID.');
         }
 
         Stripe::setApiKey(config('services.stripe.secret')); // Or env('STRIPE_SECRET')
@@ -280,11 +281,16 @@ class ShopController extends Controller
         try {
             $session = Session::retrieve($sessionId);
 
+            // Confirm session status is "paid"  Additional API check to confirm Payment status
+            if ($session->payment_status !== 'paid') {
+                return redirect()->route('shop.main')->with('error', 'Payment not completed.');
+            }
+
             // Find your order by session ID (assuming you stored it when creating the order)
             $order = Order::whereJsonContains('stripe_session_id', $sessionId)->first();
 
             if (! $order) {
-                return redirect()->route('home')->with('error', 'Order not found.');
+                return redirect()->route('shop.main')->with('error', 'Order not found.');
             }
 
             // Update status to confirmed
