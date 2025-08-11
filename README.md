@@ -5,7 +5,7 @@
 
 > Laravel: 12.18, PHP: 8.4.8 , Filament: 3, mysql: 8.0.42, db: '', </br></br>
 Contains 80% of Laravel_2024_migration transffered from Laravel 6 to 12 + Filament + Stripe + E-commerce, etc</br>
-What is new: Filament 3, Sail, Sanctum, CI/CD, Laravel Audit, PHPStan static analysis tool 2.1.17, Pint, Tailwind CSS out of the box, Vue 3, Pinia insead of Vuex store, dotswan/filament-map-picker, Laravel Cashier with Stripe, Sentry
+What is new: Filament 3, Sail, Sanctum, CI/CD, Laravel Audit, PHPStan static analysis tool 2.1.17, Pint, Tailwind CSS out of the box, Vue 3, Pinia insead of Vuex store, dotswan/filament-map-picker, Laravel Cashier with Stripe, Sentry, Prometheus_and_Grafana
 
 
 
@@ -46,7 +46,7 @@ git restore .  git clean -fd
 - [14. Laravel cashier with Stripe](#14-laravel-cashier-with-stripe)
 - [15. Laravel Expose](#15-laravel-expose)
 - [16. Sentry with Laravel](#16-sentry-with-laravel)
-
+- [17. Prometheus and Grafana](#17-prometheus-and-grafana)
 
 
 - [111.V.A](#111-va)
@@ -495,6 +495,9 @@ SENTRY_LARAVEL_DSN=https://yourPublicKey@o0.ingest.sentry.io/yourProjectId
 
 
 
+<p> ----------------------------------------------------------------------------------------- </p>
+## 17. Prometheus and Grafana
+composer require romanpitak/laravel-prometheus-exporter
 
 
 
