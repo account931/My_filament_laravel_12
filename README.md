@@ -496,8 +496,35 @@ SENTRY_LARAVEL_DSN=https://yourPublicKey@o0.ingest.sentry.io/yourProjectId
 
 
 <p> ----------------------------------------------------------------------------------------- </p>
-## 17. Prometheus and Grafana
-composer require romanpitak/laravel-prometheus-exporter
+## 17. Prometheus and Grafana and Redis
+1. Create a folder with Prometheus and Grafana on Docker 
+2.<code> composer require jimdo/prometheus_client_php </code>
+3. php artisan make:middleware PrometheusMiddleware and register to bootrsap/app.php. The kernels were removed in Laravel 11. You should now configure middleware via the application builder instance in your bootstrap/app.php file.
+
+
+If store to sql, create migration, but we we will use Redis
+
+--------------------------------------------------------
+<p>From /Prometheus_and_Grafana/readme.md</p>
+<p>Both prometheus and grafana  </p>
+
+<code>docker-compose up -d </code>  OR <code> docker-compose up -d </code>
+
+Access Prometheus: http://localhost:9090  </br>
+Access Grafana: http://localhost:3000 (default login: admin / admin)
+
+</br></br>
+
+Connect Grafana to filament sql container and set Grafana datasource:
+<code> docker network connect filament-net grafana  </code>
+<code> docker network connect filament-net my_filament_laravel_12-mysql-1 </code>
+
+
+Grafana datasource set up:  Host:	my_filament_laravel_12-mysql-1:3306
+
+Command to enter Grafana container:   <code> docker exec -it grafana sh </code>  </br>
+
+Command to enter Filament sql container: <code> docker exec -it my_filament_laravel_12-mysql-1 bash </code>
 
 
 
