@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api;
 use App\Http\Controllers\OwnerController\OwnerController;
 use App\Http\Controllers\ProfileController;   // Api cotrollers
+use App\Http\Controllers\PrometheusMetrics\PrometheusMetricsController;
 use App\Http\Controllers\SendNotification\NotificationController;
 use App\Http\Controllers\Shop\ShopController;
 use App\Http\Controllers\Stripe\StripeController;
@@ -10,6 +11,8 @@ use App\Http\Controllers\TestController\TestController;
 use App\Http\Controllers\VenuesStoreLocator\VenuesLocatorController;
 use App\Http\Controllers\VuePages\VuePagesController;
 use App\Http\Controllers\VuePagesWithRouter\VuePagesWithRouterController;
+// Prometheus_and_Redis
+// use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Route;
 
 // open routes--------------------------------
@@ -116,5 +119,9 @@ Route::middleware('auth')->group(function () {
 
 });
 // End Auth (logged) users only------------------------------------------------------------------------------------------
+
+// Prometheus_and_Redis
+Route::get('/metrics', [PrometheusMetricsController::class, 'index']); // ->middleware('prometheus.auth');
+// End Prometheus_and_Redis
 
 require __DIR__.'/auth.php';

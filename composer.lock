@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b8b066c8bb1e91de2574105ee6988e3b",
+    "content-hash": "08db79a73cf0cc0c3a37f8e9ed81cd26",
     "packages": [
         {
             "name": "althinect/filament-spatie-roles-permissions",
@@ -1123,6 +1123,57 @@
                 }
             ],
             "time": "2025-03-06T22:45:56+00:00"
+        },
+        {
+            "name": "endclothing/prometheus_client_php",
+            "version": "v0.6.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/endclothing/prometheus_client_php.git",
+                "reference": "43fc3bd312e790fa79457bb5b146ef4132ed9b83"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/endclothing/prometheus_client_php/zipball/43fc3bd312e790fa79457bb5b146ef4132ed9b83",
+                "reference": "43fc3bd312e790fa79457bb5b146ef4132ed9b83",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6.3"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.1.0"
+            },
+            "suggest": {
+                "ext-apc": "Required if using APCu.",
+                "ext-redis": "Required if using Redis.",
+                "guzzlehttp/guzzle": "~6.0 for running the blackbox tests."
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Prometheus\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Joscha",
+                    "email": "joscha@schnipseljagd.org"
+                },
+                {
+                    "name": "Jan Brauer",
+                    "email": "jan.brauer@jimdo.com"
+                }
+            ],
+            "support": {
+                "issues": "https://github.com/endclothing/prometheus_client_php/issues",
+                "source": "https://github.com/endclothing/prometheus_client_php/tree/v0.6.0"
+            },
+            "time": "2016-09-07T13:52:03+00:00"
         },
         {
             "name": "filament/actions",
@@ -5873,16 +5924,16 @@
         },
         {
             "name": "symfony/console",
-            "version": "v7.3.1",
+            "version": "v7.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "9e27aecde8f506ba0fd1d9989620c04a87697101"
+                "reference": "5f360ebc65c55265a74d23d7fe27f957870158a1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/9e27aecde8f506ba0fd1d9989620c04a87697101",
-                "reference": "9e27aecde8f506ba0fd1d9989620c04a87697101",
+                "url": "https://api.github.com/repos/symfony/console/zipball/5f360ebc65c55265a74d23d7fe27f957870158a1",
+                "reference": "5f360ebc65c55265a74d23d7fe27f957870158a1",
                 "shasum": ""
             },
             "require": {
@@ -5947,7 +5998,7 @@
                 "terminal"
             ],
             "support": {
-                "source": "https://github.com/symfony/console/tree/v7.3.1"
+                "source": "https://github.com/symfony/console/tree/v7.3.2"
             },
             "funding": [
                 {
@@ -5959,11 +6010,15 @@
                     "type": "github"
                 },
                 {
+                    "url": "https://github.com/nicolas-grekas",
+                    "type": "github"
+                },
+                {
                     "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-06-27T19:55:54+00:00"
+            "time": "2025-07-30T17:13:41+00:00"
         },
         {
             "name": "symfony/css-selector",
@@ -6332,16 +6387,16 @@
         },
         {
             "name": "symfony/finder",
-            "version": "v7.3.0",
+            "version": "v7.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/finder.git",
-                "reference": "ec2344cf77a48253bbca6939aa3d2477773ea63d"
+                "reference": "2a6614966ba1074fa93dae0bc804227422df4dfe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/finder/zipball/ec2344cf77a48253bbca6939aa3d2477773ea63d",
-                "reference": "ec2344cf77a48253bbca6939aa3d2477773ea63d",
+                "url": "https://api.github.com/repos/symfony/finder/zipball/2a6614966ba1074fa93dae0bc804227422df4dfe",
+                "reference": "2a6614966ba1074fa93dae0bc804227422df4dfe",
                 "shasum": ""
             },
             "require": {
@@ -6376,7 +6431,7 @@
             "description": "Finds files and directories via an intuitive fluent interface",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/finder/tree/v7.3.0"
+                "source": "https://github.com/symfony/finder/tree/v7.3.2"
             },
             "funding": [
                 {
@@ -6388,11 +6443,15 @@
                     "type": "github"
                 },
                 {
+                    "url": "https://github.com/nicolas-grekas",
+                    "type": "github"
+                },
+                {
                     "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-12-30T19:00:26+00:00"
+            "time": "2025-07-15T13:41:35+00:00"
         },
         {
             "name": "symfony/html-sanitizer",
@@ -7922,16 +7981,16 @@
         },
         {
             "name": "symfony/string",
-            "version": "v7.3.0",
+            "version": "v7.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/string.git",
-                "reference": "f3570b8c61ca887a9e2938e85cb6458515d2b125"
+                "reference": "42f505aff654e62ac7ac2ce21033818297ca89ca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/string/zipball/f3570b8c61ca887a9e2938e85cb6458515d2b125",
-                "reference": "f3570b8c61ca887a9e2938e85cb6458515d2b125",
+                "url": "https://api.github.com/repos/symfony/string/zipball/42f505aff654e62ac7ac2ce21033818297ca89ca",
+                "reference": "42f505aff654e62ac7ac2ce21033818297ca89ca",
                 "shasum": ""
             },
             "require": {
@@ -7989,7 +8048,7 @@
                 "utf8"
             ],
             "support": {
-                "source": "https://github.com/symfony/string/tree/v7.3.0"
+                "source": "https://github.com/symfony/string/tree/v7.3.2"
             },
             "funding": [
                 {
@@ -8001,11 +8060,15 @@
                     "type": "github"
                 },
                 {
+                    "url": "https://github.com/nicolas-grekas",
+                    "type": "github"
+                },
+                {
                     "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-04-20T20:19:01+00:00"
+            "time": "2025-07-10T08:47:49+00:00"
         },
         {
             "name": "symfony/translation",

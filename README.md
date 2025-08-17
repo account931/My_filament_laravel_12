@@ -498,33 +498,76 @@ SENTRY_LARAVEL_DSN=https://yourPublicKey@o0.ingest.sentry.io/yourProjectId
 <p> ----------------------------------------------------------------------------------------- </p>
 ## 17. Prometheus and Grafana and Redis
 1. Create a folder with Prometheus and Grafana on Docker 
-2.<code> composer require jimdo/prometheus_client_php </code>
-3. php artisan make:middleware PrometheusMiddleware and register to bootrsap/app.php. The kernels were removed in Laravel 11. You should now configure middleware via the application builder instance in your bootstrap/app.php file.
+2. Intsall <code>  composer require endclothing/prometheus_client_php </code>, use this  - it is well-maintained fork of the original Jimdo package.
+    <code> composer require jimdo/prometheus_client_php </code> it is abandoned
 
 
-If store to sql, create migration, but we we will use Redis
+3. By default prometheus_client_php automatically outputs miniaml info at /metrics.
+You have to add middlewares and register to bootrsap/app.php. E.g CountExceptions, CountHttpStatusCodes, CountVisits, etc
+The kernel.php were removed in Laravel 11. You should now configure middleware via the application builder instance in your bootstrap/app.php file.
 
---------------------------------------------------------
-<p>From /Prometheus_and_Grafana/readme.md</p>
-<p>Both prometheus and grafana  </p>
 
-<code>docker-compose up -d </code>  OR <code> docker-compose up -d </code>
+If u want to store metrics to sql, create migration, but we we will use Redis, so add to .env 
+    REDIS_HOST=redis
+    REDIS_PASSWORD=null
+    REDIS_PORT=6379
+    REDIS_CLIENT=phpredis
+    REDIS_PASSWORD=null
 
-Access Prometheus: http://localhost:9090  </br>
-Access Grafana: http://localhost:3000 (default login: admin / admin)
+4. Metrics are available at http://localhost:8000/metrics, set up Prometheus to use this endpoint, prometheus.yml =>
+    - targets: ['my_filament_laravel_12-laravel.test-1:80']  # dont foregt to create common network first before , see Readme
+
+5. In Grafana use Prometheus as datasource
+
+
+
+
+<<<<<<<<<------------copy from  /Prometheus_and_Grafanareadme.md-------->>>>>>>>>
+<p> Both prometheus and grafana  </p>
+
+<code>docker compose up -d </code>  OR <code> docker-compose up -d </code>
+
+Access Prometheus: http://localhost:9090  OR  UI => http://localhost:9090/targets  </br>
+
+Access Grafana: http://localhost:3000 (default login: admin / admin)                   </br>
 
 </br></br>
 
-Connect Grafana to filament sql container and set Grafana datasource:
+<p> How connect Grafana and Prometheus to my_filament_laravel_12 (need to run every time) </p>
+Connect Grafana to Laravel Filament sql container and set Grafana datasource, create one network 'filament-net':
 <code> docker network connect filament-net grafana  </code>
 <code> docker network connect filament-net my_filament_laravel_12-mysql-1 </code>
+Grafana SQL datasource set up for SQL:  Host:	my_filament_laravel_12-mysql-1:3306  
+
+</br></br>
 
 
-Grafana datasource set up:  Host:	my_filament_laravel_12-mysql-1:3306
+Connect Prometheus and Laravel to same network filament-net'                </br>
+docker network connect filament-net my_filament_laravel_12-laravel.test-1   </br>
+docker network connect filament-net prometheus                              </br>
+Then in prometheus.yml =>  targets: ['laravel-container-name:8000']         </br>
+Grafana Prometheus datasource set up:  Prometheus server URL :	http://prometheus:9090  </br>
+
+</br></br>
+
+Connect Infinity dataset </br>
+Go inside Laravel container and run =>    php artisan serve --host=0.0.0.0 --port=8000  </br>
+Now can use URL =>  http://my_filament_laravel_12-laravel.test-1:8000/api/owners        </br>
+In Parsing options =>  in Rows/Root set =>  $.data
+
+
+
+</br></br>
+
 
 Command to enter Grafana container:   <code> docker exec -it grafana sh </code>  </br>
 
 Command to enter Filament sql container: <code> docker exec -it my_filament_laravel_12-mysql-1 bash </code>
+
+<<<<<<<<<------------ End copy from  /Prometheus_and_Grafanareadme.md-------->>>>>>>>>
+
+
+
 
 
 
@@ -597,7 +640,7 @@ environment:
 ![Screenshot](public/img/screenshots/flmt-8.png)  </br>
 ![Screenshot](public/img/screenshots/flmt-9.png)  </br>
 ![Screenshot](public/img/screenshots/flmt-10.png)  </br>
-
+[Screenshot](public/img/screenshots/flmt-12-grafana.png)  </br>
 
 
 
