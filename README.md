@@ -622,6 +622,18 @@ environment:
     SAIL_PHP_EXTENSIONS: bcmath,intl,curl,mbstring  #to fix docker crash after Stripe intall, as new extensions are required
 </code>
 
+1.2 All containers are fine, but any url just gives 500, no logs in /storage/logs.php
+a. go to /public/index.php and tempo put this to see detailed error on page
+<code>
+   ini_set('display_errors', 1);  ini_set('display_startup_errors', 1);   error_reporting(E_ALL);
+</code>
+
+This was the issue
+if (getenv('APP_ENV') !== 'testing') { //fix to prevent github action Pest tests from failing
+//if (!app()->environment('testing')) {//caused error Uncaught ReflectionException: Class "env" does not exist as is not safe to call inside bootstrap/app.php or before the app is fully
+    $middleware->append(\App\Http\Middleware\Prometheus_metrcis\CountVisits::class);           // Prometheus metrics, how 
+}
+
 
 2. Table 'laravel_filament.sessions' doesn't exist => it happens after removing docker volumes, run migrations
 

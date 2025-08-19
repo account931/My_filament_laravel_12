@@ -3,6 +3,7 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Support\Facades\App;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -15,14 +16,14 @@ return Application::configure(basePath: dirname(__DIR__))
         // Global middleware (applied to every request)
         // register middleware here
         // Prometheus metrics
-        if (!app()->environment('testing')) { //fix to prevent github action Pest tests from failing
+        if (getenv('APP_ENV') !== 'testing') { //fix to prevent github action Pest tests from failing
+        //if (!app()->environment('testing')) {//caused error Uncaught ReflectionException: Class "env" does not exist as is not safe to call inside bootstrap/app.php or before the app is fully
             $middleware->append(\App\Http\Middleware\Prometheus_metrcis\CountVisits::class);           // Prometheus metrics, how many times a page is visited
             $middleware->append(\App\Http\Middleware\Prometheus_metrcis\TrackRequestDuration::class); // Prometheus metrics, measure how long requests take
             $middleware->append(\App\Http\Middleware\Prometheus_metrcis\CountHttpStatusCodes::class); // Prometheus metrics, counts 200/400/500 responses
-            $middleware->append(\App\Http\Middleware\Prometheus_metrcis\CountExceptions::class);      // Prometheus metrics, tracks exceptions thrown during requests
-        // End Prometheus metrics
-
+            $middleware->append(\App\Http\Middleware\Prometheus_metrcis\CountExceptions::class);      // Prometheus metrics, tracks exceptions thrown during request
         }
+        // End Prometheus metrics
 
         // ✅ Route middleware (only applied to specific routes when declared)
         $middleware->alias([
