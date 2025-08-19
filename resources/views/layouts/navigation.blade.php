@@ -94,6 +94,11 @@
                             <i class="fas fa-cloud-sun" style="font-size:12px"></i>
                             {{ __('Shop') }}
                         </x-dropdown-link>
+
+                         <x-dropdown-link href="/metrics">
+                            <i class="fas fa-cloud-sun" style="font-size:12px"></i>
+                            {{ __('Prometheus metrics') }}
+                        </x-dropdown-link>
                         
 
 

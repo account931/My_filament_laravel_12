@@ -142,7 +142,11 @@ If table session is missing
 <code> ./vendor/bin/sail shell </code>  == <code>./vendor/bin/sail bash </code>  #go to container
 <code> ./vendor/bin/sail down </code>
 
-<code> docker exec -it my_filament_laravel_12-laravel.test-1 /bin/bash  </code>  #go to container manually
+<code> docker exec -it my_filament_laravel_12-laravel.test-1 /bin/bash  </code>  #go to Laravel container manually
+
+<code> docker exec -it my_filament_laravel_12-mysql-1 bash </code>  #go to SQL container manually
+
+
 
 
 
@@ -620,6 +624,24 @@ environment:
 
 
 2. Table 'laravel_filament.sessions' doesn't exist => it happens after removing docker volumes, run migrations
+
+3. On any page 'Error file_put_contents(.../storage/framework/views/*.php): Failed to open stream: No such file or directory'
+
+Run outside Docker  
+<code>
+ mkdir -p storage/framework/views
+ sudo chown -R $USER:www-data storage
+ sudo chmod -R 775 storage
+</code>
+
+4. If job 'job_1_my-pest-tests' is failing in Github action with error 'Can't connect to Redis server'. </br>
+These Pests tests are running outside Docker and started failing after addind Prometheus and Redis      </br>
+in bootstrap/app.php => disable all Prometheus middlewares that that hit Redis (disable for testing only)
+<code>
+ // Prometheus metrics
+  if (!app()->environment('testing')) { //this is the fix
+    $middleware->append(\App\Http\Middleware\Prometheus_metrcis\CountVisits::class);// Prometheus metrics, how many times a page is visited
+</code>
 
 
 
