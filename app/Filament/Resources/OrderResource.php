@@ -31,6 +31,12 @@ class OrderResource extends Resource
 
     protected static ?int $navigationSort = 1;  // order to appear in panels
 
+    // Adding a count badge to a navigation item
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
+
     public static function form(Form $form): Form
     {
         return $form

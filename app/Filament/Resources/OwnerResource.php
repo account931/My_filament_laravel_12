@@ -59,7 +59,7 @@ class OwnerResource extends Resource
         return auth()->user()?->hasAnyRole(['admin', 'user']);
     }
 
-    // Adding a badge to a navigation item
+    // Adding a count badge to a navigation item
     public static function getNavigationBadge(): ?string
     {
         return static::getModel()::count();

@@ -25,6 +25,12 @@ class UserResource extends Resource
 
     protected static ?string $navigationGroup = 'User section';  // Grouping navigation items
 
+    // Adding a count badge to a navigation item
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
+
     public static function form(Form $form): Form
     {
         return $form

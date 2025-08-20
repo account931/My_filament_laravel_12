@@ -45,7 +45,12 @@ class ViewUser extends ViewRecord
                 ->label('Edit')
                 ->icon('heroicon-o-pencil')
                 ->url(fn () => UserResource::getUrl('edit', ['record' => $this->record])),
-            // end action
+            // end action 2
+
+            // action 3
+            \App\Filament\Resources\UserResource\Actions\GenerateSanctumToken::make(), // my header action 3 moved to separate folder
+            // end action 3
+
         ];
     }
 
