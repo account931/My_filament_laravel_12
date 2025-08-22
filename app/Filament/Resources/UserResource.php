@@ -113,7 +113,9 @@ class UserResource extends Resource
                         ->implode(' ')
                     )
                     ->html(),
-
+                
+                //Infolists\Components\TextEntry::make('sanctum')->label('Sanctum'),
+                
             ]);
     }
 
