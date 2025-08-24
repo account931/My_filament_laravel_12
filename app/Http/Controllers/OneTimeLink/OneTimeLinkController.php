@@ -77,7 +77,9 @@ class OneTimeLinkController extends Controller
             OneTimeLink::create(['token' => $token]);
             // $link = url('/docs/api/'.$token);     //generates /docs/api/$token
             // $link = url('/docs/api?token='.$token); // generates /docs/api?token=$token
-            $simpleLink = url('/docs/api#/operations/'.Str::after($request->input('category'), 'api.').'?token='.$token); // generates /docs/api?token=$token. If route has api.'api.' removes it, if 'api/' stays
+
+            // fix: '?token='.$token' must be before '#' or middleware $request->query('token') wont catch it
+            $simpleLink = url('/docs/api'.'?token='.$token.'#/operations/'.Str::after($request->input('category'), 'api.')); // generates /docs/api?token=$token. If route has api.'api.' removes it, if 'api/' stays
             // generate signed route\
 
         }
