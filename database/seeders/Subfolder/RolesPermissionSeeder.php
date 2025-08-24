@@ -56,22 +56,26 @@ class RolesPermissionSeeder extends Seeder
         $updated = DB::table('permissions')->where('name', 'view owner admin quantity')->update(['guard_name' => 'api']);
         // end create Api permission 'view owner admin quantity'
 
+        // https://scramble.dedoc.co/
+        // Scramble docs permission, used in middleware '/Middleware/CheckOneTimeToken'. Does not usual policy
+        $permissionViewScrambleDocs = Permission::create(['name' => 'view scramble docs']);
+
         $permissionNotForAdmin = Permission::create(['name' => 'not admin permission']); // some permission for test
         // End Create Permissions --------------------------------------------------------------------------------------------
 
-        // Create admin role and give him permissions and assign role to some user/users  --------------------------------------
+        // Create admin role, give this role same/all permissions and assign role to some user/users  --------------------------------------
         $role = Role::create(['name' => 'admin']);
 
         // $role->givePermissionTo($permission);
         $role = Role::findByName('admin');
         $role->syncPermissions([
-            // owners
+            // owners permission
             $permissionViewOwner,
             $permissionViewOwners,
             $permissionEditOwner,
             $permissionDeleteOwner,
 
-            // venues
+            // venues permission
             $permissionViewVenue,
             $permissionViewVenues,
             $permissionEditVenue,
@@ -82,6 +86,10 @@ class RolesPermissionSeeder extends Seeder
 
             $permissionViewRole,
             $permissionViewOwnerQauantityAdmin,
+
+            // Scramble docs permission
+            $permissionViewScrambleDocs,
+
         ]);  // multiple permission to role
 
         // End Create admin role and give him permissions  -----------------------------------------------------------------

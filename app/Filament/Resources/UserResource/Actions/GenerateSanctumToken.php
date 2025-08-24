@@ -85,13 +85,11 @@ class GenerateSanctumToken
 
                     Notification::make()
                          // ->title($plainToken)
-                        ->body('Copy your token, you will never see it again  <sub><b> '. $plainToken .'</b></sub>')       // explode() is used as $token comes as "id|token", but saved to db as "token" only,  check here: https://www.codepunker.com/tools/string-converter
+                        ->body('Copy your token, you will never see it again  <sub><b> '.$plainToken.'</b></sub>')       // explode() is used as $token comes as "id|token", but saved to db as "token" only,  check here: https://www.codepunker.com/tools/string-converter
                         // <sub> is a fix to see all token symbols, othrewise text does not fit the screen
                         ->persistent()              // prevent auto-closing the notification
                         ->icon('heroicon-o-document-text')
-                        ->success()->send(); 
-
-                   
+                        ->success()->send();
 
                     // Optionally, you can save this token expiry in a database
                     // $user->tokens()->create(['name' => $tokenName, 'expires_at' => $expiryDate]);

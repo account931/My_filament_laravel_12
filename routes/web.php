@@ -1,8 +1,9 @@
 <?php
 
 use App\Http\Controllers\Api;
-use App\Http\Controllers\OwnerController\OwnerController;
-use App\Http\Controllers\ProfileController;   // Api cotrollers
+use App\Http\Controllers\OneTimeLink\OneTimeLinkController;
+use App\Http\Controllers\OwnerController\OwnerController;   // Api cotrollers
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PrometheusMetrics\PrometheusMetricsController;
 use App\Http\Controllers\SendNotification\NotificationController;
 use App\Http\Controllers\Shop\ShopController;
@@ -116,6 +117,10 @@ Route::middleware('auth')->group(function () {
     Route::get('shop/payment/failed', [ShopController::class, 'shopPaymentFailed'])->name('shop.payment.failed');    // failed route for var 2 Stripe Checkout
 
     // END Shop e-commerce  ----------------------------
+
+    // One time link to Scramble
+    Route::get('onetim-link/scramble', [OneTimeLinkController::class, 'index'])->name('onetime.link');  // form
+    Route::post('onetim-link/scramble/generate', [OneTimeLinkController::class, 'generateLink'])->name('onetime.generateLink');  // form
 
 });
 // End Auth (logged) users only------------------------------------------------------------------------------------------
