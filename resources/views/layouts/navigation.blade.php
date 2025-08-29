@@ -95,11 +95,22 @@
                             {{ __('Shop') }}
                         </x-dropdown-link>
 
-                         <x-dropdown-link href="/metrics">
+                        <x-dropdown-link href="/metrics">
                             <i class="fas fa-cloud-sun" style="font-size:12px"></i>
                             {{ __('Prometheus metrics') }}
                         </x-dropdown-link>
+
+                        <x-dropdown-link href="/docs/api">
+                            <i class="fas fa-cloud-sun" style="font-size:12px"></i>
+                            {{ __('Scrambled docs') }}
+                        </x-dropdown-link>
+
+                        <x-dropdown-link :href="route('onetime.link')">
+                            <i class="fas fa-cloud-sun" style="font-size:12px"></i>
+                            {{ __('One-time signed link to Scramble') }}
+                        </x-dropdown-link>
                         
+
 
 
                         <!-- Authentication -->

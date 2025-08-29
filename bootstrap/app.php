@@ -30,6 +30,10 @@ return Application::configure(basePath: dirname(__DIR__))
             'prometheus.auth' => \App\Http\Middleware\PrometheusAuth::class,
         ]);
 
+        $middleware->alias([
+            'auth.one_time_token' => \App\Http\Middleware\CheckOneTimeToken::class,
+        ]);
+
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
