@@ -7,6 +7,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PrometheusMetrics\PrometheusMetricsController;
 use App\Http\Controllers\SendNotification\NotificationController;
 use App\Http\Controllers\Shop\ShopController;
+use App\Http\Controllers\Socialite\SocialiteController;
+use App\Http\Controllers\Socialite\SocialiteGoogleAuthController;
 use App\Http\Controllers\Stripe\StripeController;
 use App\Http\Controllers\TestController\TestController;
 use App\Http\Controllers\VenuesStoreLocator\VenuesLocatorController;
@@ -15,6 +17,7 @@ use App\Http\Controllers\VuePagesWithRouter\VuePagesWithRouterController;
 // Prometheus_and_Redis
 // use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Route;
+use Laravel\Socialite\Facades\Socialite;
 
 // open routes--------------------------------
 Route::get('/', function () {
@@ -122,6 +125,13 @@ Route::middleware('auth')->group(function () {
     Route::get('onetim-link/scramble', [OneTimeLinkController::class, 'index'])->name('onetime.link');  // form
     Route::post('onetim-link/scramble/generate', [OneTimeLinkController::class, 'generateLink'])->name('onetime.generateLink');  // form
 
+    // Socialite
+    Route::get('socialite/index', [SocialiteController::class, 'index'])->name('socialite.start');  // form with login button
+    // Socialite oAuth part
+    Route::get('/auth/google', [SocialiteGoogleAuthController::class, 'googleLogin']); // When User visits /auth/google → get redirected to Google login, where he puts login/password and give permission for app which was prev configured at https://console.cloud.google.com. You must have GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET in .env
+    Route::get('/auth/google/callback', [SocialiteGoogleAuthController::class, 'googleLoginCallback']); // After successfull login, Google redirects to /auth/google/callback as set in .env GOOGLE_REDIRECT_URI
+    Route::get('/auth/google/logout', [SocialiteGoogleAuthController::class, 'socialiteLogout']);
+    // End Socialite
 });
 // End Auth (logged) users only------------------------------------------------------------------------------------------
 
