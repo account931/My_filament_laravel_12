@@ -6,7 +6,8 @@
 > Laravel: 12.18, PHP: 8.4.8 , Filament: 3, mysql: 8.0.42, db: '', </br></br>
 Contains 80% of Laravel_2024_migration transffered from Laravel 6 to 12 + Filament + Stripe + E-commerce, etc</br>
 What is new: Filament 3, Sail, Sanctum, CI/CD, Laravel Audit, PHPStan static analysis tool 2.1.17, Pint, Tailwind CSS out of the box, Vue 3, Pinia insead of Vuex store, dotswan/filament-map-picker, Laravel Cashier with Stripe, Sentry, Prometheus_and_Grafana, 
-Scramble – Laravel OpenAPI (Swagger)
+Scramble – Laravel OpenAPI (Swagger), one-time expirable signed routes(signed means that URL includes a signature hash),
+auto SQL db back-up via sheduled job + Socialite to get oAuth token
 
 
 
@@ -24,7 +25,7 @@ git restore .  git clean -fd
 
 
 
-</br> main page  =>  http://localhost:8000/     (u screwed ports with phpmyadmin)
+</br> main page  =>  http://localhost:8000/     (custom url as u screwed ports with phpmyadmin, set up in APP_URL in .env)
 </br> phpMyAdmin => http://localhost:8080/   (login=sail, pass=password)
 
 
@@ -49,6 +50,10 @@ git restore .  git clean -fd
 - [16. Sentry with Laravel](#16-sentry-with-laravel)
 - [17. Prometheus and Grafana](#17-prometheus-and-grafana)
 - [18. Scramble and one-time-links](#18-scramble-and-one-time-links)
+- [19. Jobs](#19-jobs)
+- [19.2 Scheduled jobs](#19.2-scheduled-jobs)
+- [20. SQL DataBase auto back-up](#20-sql-dataBase-auto-back-up)
+
 
 
 - [111.V.A](#111-va)
@@ -604,6 +609,122 @@ After installation, two routes are added to your application: </br>
 <p>One-time link (can also use Signed routes) </p>
 Uses table 'one_time_links' tpo store token </br>
 One-time link uses middleware '/Middleware/CheckOneTimeToken' registered in /config/scramble.php. It is active for guest users only, logged user gets access always (if Spatie permitts). Spatie check is used in middleware. Dont have standart policy.
+
+
+
+
+
+
+
+
+
+<p> ----------------------------------------------------------------------------------------- </p>
+## 19. Jobs
+
+1. DB for jobs should exist:
+<code> php artisan queue:table   php artisan migrate </code>
+
+Optional:
+<code>php artisan queue:failed-table    php artisan migrate </code>
+
+2. Create Job >> then use in code or create console command to trigger in /routes/console.php
+<code>
+Artisan::command('run_test_job', function () {
+    $user = User::find(1);
+    TestJob::dispatch($user);
+});
+</code>
+
+3. Trigger job with console command
+<code>
+php artisan run_test_job  //trigger console command that has job
+php artisan queue:work   //only processes queued jobs — it does not trigger scheduled tasks, like ->everyMinute();  //->daily()
+                         //starts a worker that listens for new jobs on the queue and executes them in real-time.
+</code>
+
+
+
+
+
+
+<p> ----------------------------------------------------------------------------------------- </p>
+## 19.2 Scheduled jobs
+In Laravel 12 there is no Console\Kernel, so you may define all of your scheduled tasks in routes/console.php || AppServiceProvider (if you need more control, dependencies, or app logic during boot)
+
+<code>
+php artisan schedule:run //step 1 trigger scheduled tasks
+php artisan queue:work   //step 2 processes queued jobs.  //starts a worker that listens for new jobs on the queue and executes them in real-time.
+</code>
+
+
+
+<p> ----------------------------------------------------------------------------------------- </p>
+## 20.1 Socialite
+
+<code> composer require laravel/socialite </code>  Google Drive integration
+generate at  Google Cloud Console  and add to .env
+#Google credentials to generate Google access token , for example via Socialite
+GOOGLE_CLIENT_ID=your-client-id.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=your-client-secret
+GOOGLE_REDIRECT_URI=http://localhost:8000/auth/google/callback
+
+
+Socialite Oauth
+Socialite is package for easy Oauth  authentication in Google, Facebook, etc. 
+
+When you login via Socialite you get 'access_token' (which lives for 1 hour and used for access) + 'refresh_token' (which is long live and used to issue new access_token). So, 'access_token' and 'refresh_token' is unique for every user, while client_id, secret_id is common. 
+
+# When you implement  the functionality when logged user saves some  files to his personal Google Drive: first user logged to Socialite,  gets 'access_token' and 'refresh_token' on login and we save them to db (table 'users' or separate).
+Then use user's 'refresh_token' to generate 'access_token' if prev 'access_token' is expired. 
+
+# When u use job to back-up DB and save it to Google Drive, you have to manually generate 'refresh_token' and save it to .env. Then in job generate 'access_token' using 'refresh_token'  to connect to Google Drive. Or use Service account and then no access_token is needed.
+
+
+
+
+
+
+<p> ----------------------------------------------------------------------------------------- </p>
+## 20 SQL DataBase auto back-up
+
+Uses library  <code> composer require google/apiclient:^2.0 </code>  to  programatically generate  OAuth 2.0 access token
+
+go to Google Cloud Console generate and add to .env
+<code>
+GOOGLE_CLIENT_ID=your-client-id.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=your-client-secret
+GOOGLE_REDIRECT_URI=http://localhost:8000/google/callback
+</code>
+
+
+🔁 ONE-TIME SETUP — Google Cloud Console + OAuth Playground
+✅ 1. Go to Google Cloud Console https://console.cloud.google.com >> Create a new project >> Click the project selector at the top → "New Project" >> Name it e.g. Laravel DB Backup >>Click Create
+
+✅ 2. Enable Google Drive API >> In the project, go to: >> APIs & Services → Library >> Search for "Google Drive API" >>  Click it → Click Enable
+
+✅ 3. Configure the OAuth Consent Screen
+
+Go to APIs & Services → OAuth consent screen >> Choose "External" user type (for testing) >> Click Create >> Fill the fields: App name, email, etc. 
+
+✅ 4. Create OAuth Credentials
+
+Go to APIs & Services → Credentials >> Click Create Credentials → OAuth client ID >> Choose "Desktop App" >> Name it e.g. Laravel Desktop Client >> Click Create >> Now you'll get: Client ID, Client Secret
+
+✅ 5. Use OAuth Playground to Get Access Token
+
+Link: https://developers.google.com/oauthplayground
+
+Click gear icon ⚙️ (top-right) >> Check "Use your own OAuth credentials" >> Paste your Client ID and Client Secret
+Step 1: Select & authorize scopes >> Paste the following scope and click Authorize APIs:
+https://www.googleapis.com/auth/drive.file
+
+Login with your Google account and grant permissions >> Step 2: Exchange authorization code for tokens >> Click Exchange authorization code for tokens >>Now you'll get: Access token (valid for 1 hour)
+
+
+✅ 6. Add Tokens to .env
+Paste the access token into your .env:
+
+
 
 
 

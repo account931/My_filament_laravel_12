@@ -85,12 +85,12 @@
                             {{ __('Send-notification') }}
                         </x-dropdown-link>
 
-                        <x-dropdown-link :href="route('stripe.main')">
+                        <x-dropdown-link :href="route('stripe.main')" :class="request()->routeIs('stripe.main') ? 'bg-gray-300 text-gray-900 font-semibold' : ''">
                             <i class="fas fa-cloud-sun" style="font-size:12px"></i>
                             {{ __('Stripe 2 var payments') }}
                         </x-dropdown-link>
 
-                        <x-dropdown-link :href="route('shop.main')">
+                        <x-dropdown-link :href="route('shop.main')" :class="request()->routeIs('shop.main') ? 'bg-gray-300 text-gray-900 font-semibold' : ''">
                             <i class="fas fa-cloud-sun" style="font-size:12px"></i>
                             {{ __('Shop') }}
                         </x-dropdown-link>
@@ -105,11 +105,15 @@
                             {{ __('Scrambled docs') }}
                         </x-dropdown-link>
 
-                        <x-dropdown-link :href="route('onetime.link')">
+                        <x-dropdown-link :href="route('onetime.link')" :class="request()->routeIs('onetime.link') ? 'bg-gray-300 text-gray-900 font-semibold' : ''">
                             <i class="fas fa-cloud-sun" style="font-size:12px"></i>
                             {{ __('One-time signed link to Scramble') }}
                         </x-dropdown-link>
                         
+                        <x-dropdown-link :href="route('socialite.start')"  :class="request()->routeIs('socialite.start') ? 'bg-gray-300 text-gray-900 font-semibold' : ''">
+                            <i class="fas fa-cloud-sun" style="font-size:12px"></i>
+                            {{ __('Socialite Google login') }}
+                        </x-dropdown-link>
 
 
 
