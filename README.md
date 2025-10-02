@@ -52,7 +52,9 @@ git restore .  git clean -fd
 - [18. Scramble and one-time-links](#18-scramble-and-one-time-links)
 - [19. Jobs](#19-jobs)
 - [19.2 Scheduled jobs](#19.2-scheduled-jobs)
-- [20. SQL DataBase auto back-up](#20-sql-dataBase-auto-back-up)
+
+- [20. Socialite Oauth](#20-socialite-oauth)
+- [21. SQL DataBase auto back-up job](#21-sql-dataBase-auto-back-up-job)
 
 
 
@@ -649,8 +651,9 @@ php artisan queue:work   //only processes queued jobs — it does not trigger sc
 
 <p> ----------------------------------------------------------------------------------------- </p>
 ## 19.2 Scheduled jobs
-In Laravel 12 there is no Console\Kernel, so you may define all of your scheduled tasks in routes/console.php || AppServiceProvider (if you need more control, dependencies, or app logic during boot)
+In Laravel 12 there is no Console\Kernel, so you may define all of your scheduled tasks in routes/console.php || AppServiceProvider (if you need more control, dependencies, or app logic during boot) </br>
 
+How run Scheduled jobs, run inside container </br>
 <code>
 php artisan schedule:run //step 1 trigger scheduled tasks
 php artisan queue:work   //step 2 processes queued jobs.  //starts a worker that listens for new jobs on the queue and executes them in real-time.
@@ -659,25 +662,26 @@ php artisan queue:work   //step 2 processes queued jobs.  //starts a worker that
 
 
 <p> ----------------------------------------------------------------------------------------- </p>
-## 20.1 Socialite
+## 20. Socialite Oauth
 
-<code> composer require laravel/socialite </code>  Google Drive integration
-generate at  Google Cloud Console  and add to .env
+<code> composer require laravel/socialite </code>  Google Drive integration </br>
+generate a Google app at  Google Cloud Console, get this values and add to .env </br>
+
 #Google credentials to generate Google access token , for example via Socialite
 GOOGLE_CLIENT_ID=your-client-id.apps.googleusercontent.com
 GOOGLE_CLIENT_SECRET=your-client-secret
 GOOGLE_REDIRECT_URI=http://localhost:8000/auth/google/callback
 
 
-Socialite Oauth
-Socialite is package for easy Oauth  authentication in Google, Facebook, etc. 
+</br>Socialite Oauth</br>
+Socialite is package for easy Oauth  authentication in Google, Facebook, etc. </br>
 
-When you login via Socialite you get 'access_token' (which lives for 1 hour and used for access) + 'refresh_token' (which is long live and used to issue new access_token). So, 'access_token' and 'refresh_token' is unique for every user, while client_id, secret_id is common. 
+When you login via Socialite you get 'access_token' (which lives for 1 hour and used for access) + 'refresh_token' (which is long live and used to issue new access_token). So, 'access_token' and 'refresh_token' is unique for every user, while client_id, secret_id is common. </br>
 
-# When you implement  the functionality when logged user saves some  files to his personal Google Drive: first user logged to Socialite,  gets 'access_token' and 'refresh_token' on login and we save them to db (table 'users' or separate).
-Then use user's 'refresh_token' to generate 'access_token' if prev 'access_token' is expired. 
+# When you implement the functionality when logged user saves some files to his personal Google Drive: first user loggs to Socialite,  gets 'access_token' and 'refresh_token' on login and we save them to db (table 'users' or separate). </br>
+Then use user's 'refresh_token' to generate 'access_token' if prev 'access_token' is expired. </br>
 
-# When u use job to back-up DB and save it to Google Drive, you have to manually generate 'refresh_token' and save it to .env. Then in job generate 'access_token' using 'refresh_token'  to connect to Google Drive. Or use Service account and then no access_token is needed.
+# When u use job to back-up DB and save it to Google Drive, you have to manually generate 'refresh_token' and save it to .env. Then in job generate 'access_token' using 'refresh_token'  to connect to Google Drive. Or use Service account and then no access_token is needed. </br>
 
 
 
@@ -685,9 +689,29 @@ Then use user's 'refresh_token' to generate 'access_token' if prev 'access_token
 
 
 <p> ----------------------------------------------------------------------------------------- </p>
-## 20 SQL DataBase auto back-up
+## 21. SQL DataBase auto back-up job
 
-Uses library  <code> composer require google/apiclient:^2.0 </code>  to  programatically generate  OAuth 2.0 access token
+Job to create SQL DB dump and send it to to Google Drive. </br>
+Saves SQL dump locally to /var/www/html/storage/app/backup-2025-09-**-**, on Google Drive saves to folder 'Laravel_Sql_backup' </br>
+See how to start  19.2 Scheduled jobs 
+
+Uses library  <code> composer require google/apiclient:^2.0 </code>  to  programatically generate  OAuth 2.0 access token </br>
+
+
+Job to create Sql db dump and save it to Google Drive. </br>
+We have Job itself /Jobs/BackupDatabaseToGoogleDrive.php and console command 'run_db_backup_to_google_drive' in /routes/console.php for quick testing. They are of the same functionality. </br>
+Flow: to upload sql dump to GDrive, you have to register Google app in G console,  it should be either Service account or Web app type but with refresh_token. We implement the latter, variant 2 </br>
+
+Job uploads file on behalf of admin, so the user is hard-coded (User::find(1);) </br>
+Since we need to have refresh_token in order to generate access_token, the admin (user number 1), must login via Socialite at least once to get refresh_token. When u do Socialite login his refresh_token, access_token are saved in DB, table 'users' using encrypt. In function getAccessToken() if old access_token is expired, we generate a new one using refresh_token (pull it from DB 'users') </br>
+
+As an alternative, you can save it in .env as 'GOOGLE_REFRESH_TOKEN' and then just go to phpmyadmin  and copy paste refresh_token to .env.
+ Since we save it in DB encrypted you have to decrypt it, lets say via console command 'decrypt_google_refresh_token' </br>
+
+Access_token is generated when u send curl with cliend_id client_secret, refresh_token to Google endpoint and it lives for 1 hour only. </br>
+
+
+</br> Some info below cant truncated???</br>
 
 go to Google Cloud Console generate and add to .env
 <code>

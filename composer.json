@@ -12,6 +12,8 @@
         "dotswan/filament-map-picker": "^1.8",
         "endclothing/prometheus_client_php": "^0.6.0",
         "filament/filament": "^3.3",
+        "google/apiclient": "^2.0",
+        "guzzlehttp/guzzle": "^7.9",
         "laravel/cashier": "^15.7",
         "laravel/framework": "^12.0",
         "laravel/sanctum": "^4.0",
