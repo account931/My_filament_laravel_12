@@ -80,9 +80,9 @@
                             {{ __('Vue Geo Locator') }}
                         </x-dropdown-link>
 
-                        <x-dropdown-link :href="route('send-notification')">
+                        <x-dropdown-link :href="route('send-notification')" :class="request()->routeIs('send-notification') ? 'bg-gray-300 text-gray-900 font-semibold' : ''">
                             <i class="fas fa-cloud-sun" style="font-size:12px"></i>
-                            {{ __('Send-notification') }}
+                            {{ __('Send-notification and mail') }}
                         </x-dropdown-link>
 
                         <x-dropdown-link :href="route('stripe.main')" :class="request()->routeIs('stripe.main') ? 'bg-gray-300 text-gray-900 font-semibold' : ''">

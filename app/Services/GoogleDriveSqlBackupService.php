@@ -1,68 +1,23 @@
 <?php
 
-// Job to create SQL DB dump and send it to to Google Drive. There is a console command which do all the same  /routes/console.php => 'run_db_backup_to_google_drive'
+// service to to dump SQL and save to Google Drive. Does the same what App/Jobs/BackupDatabaseToGoogleDrive. Console command is more convenient at testing
 // Saves SQL dump locally to /var/www/html/storage/app/backup-2025-09-**-**, on Google Drive saves to folder 'Laravel_Sql_backup'
 
-namespace App\Jobs;
+namespace App\Services;
 
 use App\Models\User;
-use App\Services\GoogleDriveSqlBackupService;
 use Carbon\Carbon;
 use Google\Client as GoogleClient;
 use Google\Service\Drive as GoogleDrive;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
-class BackupDatabaseToGoogleDrive implements ShouldQueue
+class GoogleDriveSqlBackupService
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    public function __construct() {}
 
-    public function handle(): void
-    {
-        $service = new GoogleDriveSqlBackupService; // Service with core logic
-
-        Log::info('Database backup starting......');
-
-        $filename = 'backup-'.now()->format('Y-m-d_H-i-s').'.sql';
-        $localPath = storage_path("app/$filename");  //
-
-        // 1. Dump the database, creates SQL dump file at /storage/app/....
-        $service->createDatabaseDump($localPath);
-        // dd('job hits here');
-
-        // 2. Upload to Google Drive
-        $service->uploadToGoogleDrive($localPath, $filename); // dd('job hits here');
-        Log::info('Database backup was uploaded to Google Drive');
-
-        // 3. (Optional) Delete local copy
-        // $service->unlink($localPath);
-    }
-
-    // Version before Service
-    /*
-    public function handle(): void
-    {
-        $filename = 'backup-'.now()->format('Y-m-d_H-i-s').'.sql';
-        $localPath = storage_path("app/$filename");
-
-        // 1. Dump the database
-        $this->createDatabaseDump($localPath);
-        // dd('job hits here');
-
-        // 2. Upload to Google Drive
-        $this->uploadToGoogleDrive($localPath, $filename); // dd('job hits here');
-
-        // 3. (Optional) Delete local copy
-        unlink($localPath);
-    }
-
-    // saves SQL dump to /var/www/html/storage/app/backup-2025-09-**-**
-    protected function createDatabaseDump(string $path): void
+    public function createDatabaseDump(string $path): void
     {
         $db = [
             'host' => env('DB_HOST', '127.0.0.1'),
@@ -72,7 +27,7 @@ class BackupDatabaseToGoogleDrive implements ShouldQueue
         ];
 
         $command = sprintf(
-            'mysqldump --no-tablespaces --user=%s --password=%s --host=%s %s > %s',  // --no-tablespaces  is the fix 'Access denied; you need (at least one of) the PROCESS privilege(s) for this operation' when trying to dump tablespaces
+            'mysqldump --no-tablespaces --user=%s --password=%s --host=%s %s > %s',
             escapeshellarg($db['username']),
             escapeshellarg($db['password']),
             escapeshellarg($db['host']),
@@ -86,14 +41,17 @@ class BackupDatabaseToGoogleDrive implements ShouldQueue
             Log::error('Database dump failed', ['output' => $output]);
             throw new \Exception('mysqldump failed');
         }
+
         Log::info('SQL Backup was created');
 
     }
 
-    protected function uploadToGoogleDrive(string $filePath, string $fileName): void
+    public function uploadToGoogleDrive(string $filePath, string $fileName): void
     {
-        $accessToken = $this->getAccessToken(); // You'll need to implement this
+        $accessToken = $this->getAccessToken();    // $this->getAccessToken(); // You'll need to implement this
+
         $folderId = $this->createFolderIfNotExists('Laravel_Sql_backup');  // env('GOOGLE_DRIVE_FOLDER')
+        // dd($folderId);
 
         $fileData = file_get_contents($filePath);
 
@@ -107,7 +65,6 @@ class BackupDatabaseToGoogleDrive implements ShouldQueue
             json_encode([
                 'name' => $fileName,
                 'parents' => [$folderId], // [env('GOOGLE_DRIVE_FOLDER')]   //['your_folder_id_here'],  // 👈 Add this line to specify folder in google drive. Must be array, but why
-
             ]),
             "--$delimiter",
             'Content-Type: application/octet-stream',
@@ -131,7 +88,7 @@ class BackupDatabaseToGoogleDrive implements ShouldQueue
 
         $response = curl_exec($ch);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);  // fix to catch error from G Drive
-        $error = curl_error($ch);
+        $error = curl_error($ch);  // it catches only if there’s a cURL-level problem
 
         curl_close($ch);
 
@@ -141,20 +98,21 @@ class BackupDatabaseToGoogleDrive implements ShouldQueue
             throw new \Exception("Upload failed: $error");
         }
 
-        // fix to catch error from Google Drive, add to job
+        // fix to catch error from Google Drive
         if ($httpCode >= 400) {
+            // dd('job fails hits here');
             $responseData = json_decode($response, true);
             $message = $responseData['error']['message'] ?? 'Unknown error';
             Log::error('Google Drive upload failed (API)', ['http_code' => $httpCode, 'response' => $responseData]);
-            throw new \Exception("Google API error ($httpCode): $message"); // error 'Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential.'
+            throw new \Exception("My Google API error ($httpCode): $message");
         }
 
-        Log::info('Backup uploaded to Google Drive via Cron Job', ['response' => $response]);
+        Log::info('Backup uploaded to Google Drive', ['response' => $response]);
     }
 
     // TODO: Replace with real token logic
     // generate Google 'access_token'  using Google 'refresh_token' saved in DB table 'users' in  'google_refresh_token'
-    protected function getAccessToken(): string
+    public function getAccessToken(): string
     {
         // Hardcode token temporarily or load from file
         // return 'YOUR_OAUTH_ACCESS_TOKEN';
@@ -257,5 +215,4 @@ class BackupDatabaseToGoogleDrive implements ShouldQueue
 
         return new GoogleDrive($client);
     }
-        */
 }

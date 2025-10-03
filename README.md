@@ -664,10 +664,10 @@ php artisan queue:work   //step 2 processes queued jobs.  //starts a worker that
 <p> ----------------------------------------------------------------------------------------- </p>
 ## 20. Socialite Oauth
 
-<code> composer require laravel/socialite </code>  Google Drive integration </br>
-generate a Google app at  Google Cloud Console, get this values and add to .env </br>
+<code> composer require laravel/socialite </code>  Google Drive integration package </br>
+generate a Google Oauth Client app at Google Cloud Console, get this values and add to .env </br>
 
-#Google credentials to generate Google access token , for example via Socialite
+#Google credentials to generate Google access token, for example via Socialite
 GOOGLE_CLIENT_ID=your-client-id.apps.googleusercontent.com
 GOOGLE_CLIENT_SECRET=your-client-secret
 GOOGLE_REDIRECT_URI=http://localhost:8000/auth/google/callback
@@ -681,7 +681,8 @@ When you login via Socialite you get 'access_token' (which lives for 1 hour and 
 # When you implement the functionality when logged user saves some files to his personal Google Drive: first user loggs to Socialite,  gets 'access_token' and 'refresh_token' on login and we save them to db (table 'users' or separate). </br>
 Then use user's 'refresh_token' to generate 'access_token' if prev 'access_token' is expired. </br>
 
-# When u use job to back-up DB and save it to Google Drive, you have to manually generate 'refresh_token' and save it to .env. Then in job generate 'access_token' using 'refresh_token'  to connect to Google Drive. Or use Service account and then no access_token is needed. </br>
+# When u use job to back-up DB and save it to Google Drive, you have to manually generate 'refresh_token' and save it to .env. UPDATE: NOT ANY MORE, we get from table 'users', column 'GOOGLE_REFRESH_TOKEN'. We save this value to DB when user login via Socialite + encrypt it.
+ Then in job generate 'access_token' using 'refresh_token' to connect to Google Drive. Or use Service account and then no access_token is needed. </br>
 
 
 
@@ -692,8 +693,14 @@ Then use user's 'refresh_token' to generate 'access_token' if prev 'access_token
 ## 21. SQL DataBase auto back-up job
 
 Job to create SQL DB dump and send it to to Google Drive. </br>
-Saves SQL dump locally to /var/www/html/storage/app/backup-2025-09-**-**, on Google Drive saves to folder 'Laravel_Sql_backup' </br>
-See how to start  19.2 Scheduled jobs 
+Saves SQL dump locally to /var/www/html/storage/app/backup-2025-09-**-**, on Google Drive saves to folder 'Laravel_Sql_backup' </br></br>
+
+See how to start Scheduled jobs: 
+<code>
+php artisan schedule:run //step 1 trigger scheduled tasks
+php artisan queue:work   //step 2 processes queued jobs.  //starts a worker that listens for new jobs on the queue and executes them in real-time.
+</code>
+
 
 Uses library  <code> composer require google/apiclient:^2.0 </code>  to  programatically generate  OAuth 2.0 access token </br>
 
