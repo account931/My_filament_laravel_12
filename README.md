@@ -692,6 +692,8 @@ Then use user's 'refresh_token' to generate 'access_token' if prev 'access_token
 <p> ----------------------------------------------------------------------------------------- </p>
 ## 21. SQL DataBase auto back-up job
 
+./vendor/bin/pest tests/Feature/App/Service/GoogleDriveSqlBackupServiceTest.php
+
 Job to create SQL DB dump and send it to to Google Drive. </br>
 Saves SQL dump locally to /var/www/html/storage/app/backup-2025-09-**-**, on Google Drive saves to folder 'Laravel_Sql_backup' </br></br>
 
@@ -702,7 +704,7 @@ php artisan queue:work   //step 2 processes queued jobs.  //starts a worker that
 </code>
 
 
-Uses library  <code> composer require google/apiclient:^2.0 </code>  to  programatically generate  OAuth 2.0 access token </br>
+Uses library  <code> composer require google/apiclient:^2.0 </code>  The Google Client PHP SDK to programatically generate OAuth 2.0 access token </br>
 
 
 Job to create Sql db dump and save it to Google Drive. </br>

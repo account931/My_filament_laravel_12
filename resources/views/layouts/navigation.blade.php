@@ -115,6 +115,15 @@
                             {{ __('Socialite Google login') }}
                         </x-dropdown-link>
 
+                        <x-dropdown-link href="/run-sql-dump-save-gdrive">
+                            {{ __('Back-up SQL DB to GDrive') }}
+                        </x-dropdown-link>
+
+                        <x-dropdown-link :href="route('my.google.drive.start')"  :class="request()->routeIs('my.google.drive.start') ? 'bg-gray-300 text-gray-900 font-semibold' : ''">
+                            <i class="fas fa-cloud-sun" style="font-size:12px"></i>
+                            {{ __('My Google Drive') }}
+                        </x-dropdown-link>
+
 
 
                         <!-- Authentication -->

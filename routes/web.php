@@ -1,8 +1,9 @@
 <?php
 
 use App\Http\Controllers\Api;
-use App\Http\Controllers\OneTimeLink\OneTimeLinkController;
-use App\Http\Controllers\OwnerController\OwnerController;   // Api cotrollers
+use App\Http\Controllers\MyGoogleDrive\MyGoogleDriveController;
+use App\Http\Controllers\OneTimeLink\OneTimeLinkController;   // Api cotrollers
+use App\Http\Controllers\OwnerController\OwnerController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PrometheusMetrics\PrometheusMetricsController;
 use App\Http\Controllers\SendNotification\NotificationController;
@@ -13,9 +14,10 @@ use App\Http\Controllers\Stripe\StripeController;
 use App\Http\Controllers\TestController\TestController;
 use App\Http\Controllers\VenuesStoreLocator\VenuesLocatorController;
 use App\Http\Controllers\VuePages\VuePagesController;
-use App\Http\Controllers\VuePagesWithRouter\VuePagesWithRouterController;
 // Prometheus_and_Redis
 // use Illuminate\Support\Facades\Redis;
+use App\Http\Controllers\VuePagesWithRouter\VuePagesWithRouterController;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -132,6 +134,18 @@ Route::middleware('auth')->group(function () {
     Route::get('/auth/google/callback', [SocialiteGoogleAuthController::class, 'googleLoginCallback']); // After successfull login, Google redirects to /auth/google/callback as set in .env GOOGLE_REDIRECT_URI
     Route::get('/auth/google/logout', [SocialiteGoogleAuthController::class, 'socialiteLogout']);
     // End Socialite
+
+    // Run command to create SQL DUMP and save to Google Drive. Also added in cron Job to run every x minutes, App/Jobs/BackupDatabaseToGoogleDrive.
+    Route::get('/run-sql-dump-save-gdrive', function () {
+        Artisan::call('run_db_backup_to_google_drive');
+
+        return '<pre>Back up is executed';
+    });
+
+    // Google Drive account, users can upload files to their account
+    Route::get('my-google-drive/index', [MyGoogleDriveController::class, 'index'])->name('my.google.drive.start');  // form with Socilaite login button and form to upload file to GDrive
+    Route::post('my-google-drive/proccess-upload', [MyGoogleDriveController::class, 'uploadGDrive'])->name('my.google.drive.process.upload');  // form with Socilaite login button and form to upload file to GDrive
+
 });
 // End Auth (logged) users only------------------------------------------------------------------------------------------
 

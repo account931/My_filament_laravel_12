@@ -36,7 +36,7 @@ class BackupDatabaseToGoogleDrive implements ShouldQueue
         // dd('job hits here');
 
         // 2. Upload to Google Drive
-        $service->uploadToGoogleDrive($localPath, $filename); // dd('job hits here');
+        $service->uploadToGoogleDrive($localPath, $filename, User::find(1)); // dd('job hits here');
         Log::info('Database backup was uploaded to Google Drive');
 
         // 3. (Optional) Delete local copy

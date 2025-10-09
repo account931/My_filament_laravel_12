@@ -18,6 +18,7 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->text('google_access_token')->nullable();
             $table->text('google_refresh_token')->nullable();
+            $table->string('google_user_email')->nullable();  // VARCHAR(255)
             $table->timestamp('google_expires_at')->nullable();
         });
     }

@@ -13,6 +13,21 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
+/**
+ *  USAGE EXAMPLE:
+ *  $service = new GoogleDriveSqlBackupService; // Service with core logic
+ *  Log::info('Database backup starting......');
+ *
+ *  $filename = 'backup-'.now()->format('Y-m-d_H-i-s').'.sql';
+ *  $localPath = storage_path("app/$filename");  //
+ *
+ *  // 1. Dump the database, creates SQL dump file at /storage/app/....
+ *  $service->createDatabaseDump($localPath);
+ *
+ *  // 2. Upload to Google Drive
+ *  $service->uploadToGoogleDrive($localPath, $filename, User::find(1)); // dd('job hits here');
+ *  Log::info('Database backup was uploaded to Google Drive');
+ */
 class GoogleDriveSqlBackupService
 {
     public function __construct() {}
@@ -46,11 +61,20 @@ class GoogleDriveSqlBackupService
 
     }
 
-    public function uploadToGoogleDrive(string $filePath, string $fileName): void
+    /**
+     * Upload a file to Google Drive using multipart upload.
+     *
+     * @param  string  $filePath  The local file path of the file to upload.
+     * @param  string  $fileName  The desired name of the file in Google Drive.
+     * @param  User  $userModel  The user model instance to retrieve access tokens and context. $userModel  The user model instance to retrieve access tokens and context.
+     *
+     * @throws \Exception If the cURL request fails or Google Drive API returns an error.
+     */
+    public function uploadToGoogleDrive(string $filePath, string $fileName, $userModel): void
     {
-        $accessToken = $this->getAccessToken();    // $this->getAccessToken(); // You'll need to implement this
+        $accessToken = $this->getAccessToken($userModel);    // $this->getAccessToken(); // You'll need to implement this
 
-        $folderId = $this->createFolderIfNotExists('Laravel_Sql_backup');  // env('GOOGLE_DRIVE_FOLDER')
+        $folderId = $this->createFolderIfNotExists('Laravel_Sql_backup', null, $userModel);  // env('GOOGLE_DRIVE_FOLDER')
         // dd($folderId);
 
         $fileData = file_get_contents($filePath);
@@ -110,16 +134,20 @@ class GoogleDriveSqlBackupService
         Log::info('Backup uploaded to Google Drive', ['response' => $response]);
     }
 
-    // TODO: Replace with real token logic
-    // generate Google 'access_token'  using Google 'refresh_token' saved in DB table 'users' in  'google_refresh_token'
-    public function getAccessToken(): string
+    /**
+     *  TODO: Replace with real token logic
+     * generate Google 'access_token'  using Google 'refresh_token' saved in DB table 'users' in  'google_refresh_token'
+     *
+     * @param  User  $userModel
+     */
+    public function getAccessToken($userModel): string
     {
         // Hardcode token temporarily or load from file
         // return 'YOUR_OAUTH_ACCESS_TOKEN';
         // return env('GOOGLE_ACCESS_TOKEN');
 
         // gets Admin user, as job loads files to G Drive on behalf of Admin
-        $user = User::find(1);
+        $user = $userModel; // User::find($userID);
 
         // check if access_token is not expired to avoid unnecessary API calls
         if (Carbon::now()->lessThan($user->google_expires_at)) {
@@ -173,9 +201,9 @@ class GoogleDriveSqlBackupService
         return null; // not found
     }
 
-    public function createFolderIfNotExists($folderName, $parentFolderId = null)
+    public function createFolderIfNotExists($folderName, $parentFolderId, $userModel)
     {
-        $service = $this->getDriveService();
+        $service = $this->getDriveService($userModel);
 
         $folderId = $this->getFolderIdByName($service, $folderName, $parentFolderId);
 
@@ -199,17 +227,17 @@ class GoogleDriveSqlBackupService
         return $folder->id;
     }
 
-    public function getDriveService(): GoogleDrive
+    public function getDriveService($userModel): GoogleDrive
     {
         $client = new GoogleClient;
 
-        $accessToken = $this->getAccessToken();
+        $accessToken = $this->getAccessToken($userModel);
 
         $client->setAccessToken($accessToken);
 
         // Optional: you can verify if token is expired or invalid
         // if ($client->isAccessTokenExpired()) {  //not working correctly as it does check by $created + $expires_in < time() and we did not saved $created, only expires_in
-        if (now()->gte(User::find(1)->google_expires_at)) { // my fix // gets Admin user, as job loads file on behalf of Admin
+        if (now()->gte($userModel->google_expires_at)) { // my fix // gets Admin user, as job loads file on behalf of Admin
             throw new \Exception('Google access token has expired.');
         }
 

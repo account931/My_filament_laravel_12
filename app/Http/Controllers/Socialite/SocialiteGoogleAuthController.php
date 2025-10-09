@@ -81,6 +81,7 @@ class SocialiteGoogleAuthController extends Controller
         // save google_access_token, google_refresh_token, etc to db table 'users'. Encrypt values, use Laravel's built-in encryption with app key
         $user->google_access_token = Crypt::encryptString($googleUser->token);  // Encrypt values
         $user->google_refresh_token = Crypt::encryptString($googleUser->refreshToken); // only provided first time or with prompt=consent
+        $user->google_user_email = $googleUser->email;  // g email
         $user->google_expires_at = Carbon::now('UTC')->addSeconds($googleUser->expiresIn); // fix for correct time //now()->addSeconds($googleUser->expiresIn);
         $user->save();
         // end save to db
