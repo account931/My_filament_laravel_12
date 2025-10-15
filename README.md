@@ -55,6 +55,7 @@ git restore .  git clean -fd
 
 - [20. Socialite Oauth](#20-socialite-oauth)
 - [21. SQL DataBase auto back-up job](#21-sql-dataBase-auto-back-up-job)
+- [22. Save Images to Google Cloud Storage in Laravel](#22)
 
 
 
@@ -692,7 +693,7 @@ Then use user's 'refresh_token' to generate 'access_token' if prev 'access_token
 <p> ----------------------------------------------------------------------------------------- </p>
 ## 21. SQL DataBase auto back-up job
 
-./vendor/bin/pest tests/Feature/App/Service/GoogleDriveSqlBackupServiceTest.php
+Test not finished =>  ./vendor/bin/pest tests/Feature/App/Service/GoogleDriveSqlBackupServiceTest.php
 
 Job to create SQL DB dump and send it to to Google Drive. </br>
 Saves SQL dump locally to /var/www/html/storage/app/backup-2025-09-**-**, on Google Drive saves to folder 'Laravel_Sql_backup' </br></br>
@@ -760,6 +761,47 @@ Paste the access token into your .env:
 
 
 
+
+
+
+
+
+
+<p> ----------------------------------------------------------------------------------------- </p>
+## 22. Save Images to Google Cloud Storage in Laravel
+
+Image bucket goes here  =>  https://console.cloud.google.com/storage/browser  </br>
+
+1.Laravel uses Flysystem v3, so you need to install the GCS filesystem driver https://github.com/spatie/laravel-google-cloud-storage:  
+<code>composer require spatie/laravel-google-cloud-storage</code>
+
+It depends on league/flysystem-google-cloud-storage so it will install it itself
+
+2. Go to Google Cloud Console => Create a new project (e.g. 'L-Images-Google-Cloud-Storage'). => Enable Cloud Storage API. => Create a Service Account with permission: Storage Admin.  => Create and download the JSON key.   </br>
+
+Place the JSON key in a secure location, e.g.: storage/app/gcs/service-account.json  </br>
+
+3. Configure Filesystem in config/filesystems.php
+     'gcs' => [
+            'driver' => 'gcs',
+            'project_id' => env('GCS_PROJECT_ID', 'your-project-id'),
+            'key_file_path' => env('GOOGLE_CLOUD_KEY_FILE')  ? storage_path(env('GOOGLE_CLOUD_KEY_FILE'))  : null,
+            'bucket' => env('GCS_BUCKET', 'your-bucket-name'),
+            'path_prefix' => env('GCS_PATH_PREFIX', null), // optional
+            'visibility' => 'public', // or 'private'
+            // 'visibility_handler' is MEGA FIX, was not uploading images to Google Cloud Storage without giving any error
+            'visibility_handler' =>  \League\Flysystem\GoogleCloudStorage\UniformBucketLevelAccessVisibility::class //
+
+        ],
+
+4. Set Environment Variables in .env
+FILESYSTEM_DISK=gcs
+GCS_PROJECT_ID=pr-------------
+GCS_BUCKET=my-laravel-gcs-bucket
+GOOGLE_CLOUD_KEY_FILE=app/gcs/service-account.json
+
+5. Save => $path = Storage::disk('gcs')->putFile('images', $request->file('image')); //images id folder in bucket
+Display  => <img src="{{ Storage::disk('gcs')->url($relativePath) }}" style="width:20%;">
 
 
 
@@ -843,6 +885,10 @@ in bootstrap/app.php => disable all Prometheus middlewares that that hit Redis (
     $middleware->append(\App\Http\Middleware\Prometheus_metrcis\CountVisits::class);// Prometheus metrics, how many times a page is visited
 </code>
 
+5. When this not loading files to Google Cloud Storage <code> $path = Storage::disk('gcs')->putFile('images', $request->file('image')); </code>
+add to config/filesystem.php to 
+'gcs' => [
+'visibility_handler' => \League\Flysystem\GoogleCloudStorage\UniformBucketLevelAccessVisibility::class //to enable uniform bucket level access
 
 
 
@@ -865,6 +911,8 @@ in bootstrap/app.php => disable all Prometheus middlewares that that hit Redis (
 [Screenshot](public/img/screenshots/flmt-12-grafana.png)   </br>
 [Screenshot](public/img/screenshots/flmt-13-scramble.png)  </br>
 [Screenshot](public/img/screenshots/flmt-14-signed.png)    </br>
+[Screenshot](public/img/screenshots/flmt-15-gdrive.png)    </br>
+[Screenshot](public/img/screenshots/flmt-16-google-cloud-storage.png)    </br>
 
 
 

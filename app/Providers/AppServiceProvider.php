@@ -3,7 +3,8 @@
 namespace App\Providers;
 
 use Filament\Tables\Columns\TextColumn;
-use Illuminate\Support\Facades\App; // use to create custom method for TextInput
+// use to create custom method for TextInput
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
