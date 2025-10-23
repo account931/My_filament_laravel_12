@@ -52,9 +52,9 @@ git restore .  git clean -fd
 - [18. Scramble and one-time-links](#18-scramble-and-one-time-links)
 - [19. Jobs](#19-jobs)
 - [19.2 Scheduled jobs](#19.2-scheduled-jobs)
-
 - [20. Socialite Oauth](#20-socialite-oauth)
 - [21. SQL DataBase auto back-up job](#21-sql-dataBase-auto-back-up-job)
+- [22. Save Images to Google Cloud Storage](#22-save-images-to-google-cloud-storage-bucket-in-laravel)
 
 
 
@@ -388,7 +388,8 @@ computed: {
 
 
 <p> ----------------------------------------------------------------------------------------- </p>
-# 12. Pint
+
+## 12. Pint
  Config =>  pint.json
 
 <code> ./vendor/bin/pint --test </code>   shows what would be fixed, without changing files.
@@ -403,6 +404,11 @@ computed: {
 
 
 <p> ----------------------------------------------------------------------------------------- </p>
+
+
+
+
+
 ## 13. Laravel update 6 to 12
 <p>Changes</p>
 <ul>
@@ -450,6 +456,9 @@ Owner::factory()->count(12) ->create();
 
 
 <p> ----------------------------------------------------------------------------------------- </p>
+
+
+
 ## 14. Laravel cashier with Stripe
 Cashier provides an expressive, fluent interface to Stripe's subscription billing services.
 Laravel Cashier is mainly designed for subscriptions and recurring billing, but you can absolutely use it for one-time payments with Stripe too
@@ -481,6 +490,9 @@ Stripe::setApiKey(config('services.stripe.secret'));  use in config.services  's
 
 
 <p> ----------------------------------------------------------------------------------------- </p>
+
+
+
 ## 15. Laravel Expose
 NOT LOADING
 https://expose.dev   </br>
@@ -496,6 +508,9 @@ https://expose.dev   </br>
 
 
 <p> ----------------------------------------------------------------------------------------- </p>
+
+
+
 ## 16. Sentry with Laravel
 https://sentry.io
 1.<code> composer require sentry/sentry-laravel </code> 
@@ -515,6 +530,9 @@ SENTRY_LARAVEL_DSN=https://yourPublicKey@o0.ingest.sentry.io/yourProjectId
 
 
 <p> ----------------------------------------------------------------------------------------- </p>
+
+
+
 ## 17. Prometheus and Grafana and Redis
 1. Create a folder with Prometheus and Grafana on Docker 
 2. Intsall <code>  composer require endclothing/prometheus_client_php </code>, use this  - it is well-maintained fork of the original Jimdo package.
@@ -600,6 +618,10 @@ Command to enter Filament sql container: <code> docker exec -it my_filament_lara
 
 
 <p> ----------------------------------------------------------------------------------------- </p>
+
+
+
+
 ## 18. Scramble and one-time-links
 Scramble – Laravel OpenAPI (Swagger)  https://scramble.dedoc.co/  </br>
 
@@ -621,6 +643,10 @@ One-time link uses middleware '/Middleware/CheckOneTimeToken' registered in /con
 
 
 <p> ----------------------------------------------------------------------------------------- </p>
+
+
+
+
 ## 19. Jobs
 
 1. DB for jobs should exist:
@@ -662,6 +688,12 @@ php artisan queue:work   //step 2 processes queued jobs.  //starts a worker that
 
 
 <p> ----------------------------------------------------------------------------------------- </p>
+
+
+
+
+
+
 ## 20. Socialite Oauth
 
 <code> composer require laravel/socialite </code>  Google Drive integration package </br>
@@ -678,10 +710,12 @@ Socialite is package for easy Oauth  authentication in Google, Facebook, etc. 
 
 When you login via Socialite you get 'access_token' (which lives for 1 hour and used for access) + 'refresh_token' (which is long live and used to issue new access_token). So, 'access_token' and 'refresh_token' is unique for every user, while client_id, secret_id is common. </br>
 
-# When you implement the functionality when logged user saves some files to his personal Google Drive: first user loggs to Socialite,  gets 'access_token' and 'refresh_token' on login and we save them to db (table 'users' or separate). </br>
+# Note
+When you implement the functionality when logged user saves some files to his personal Google Drive: first user loggs to Socialite,  gets 'access_token' and 'refresh_token' on login and we save them to db (table 'users' or separate). </br>
 Then use user's 'refresh_token' to generate 'access_token' if prev 'access_token' is expired. </br>
 
-# When u use job to back-up DB and save it to Google Drive, you have to manually generate 'refresh_token' and save it to .env. UPDATE: NOT ANY MORE, we get from table 'users', column 'GOOGLE_REFRESH_TOKEN'. We save this value to DB when user login via Socialite + encrypt it.
+# Note
+ When u use job to back-up DB and save it to Google Drive, you have to manually generate 'refresh_token' and save it to .env. UPDATE: NOT ANY MORE, we get from table 'users', column 'GOOGLE_REFRESH_TOKEN'. We save this value to DB when user login via Socialite + encrypt it.
  Then in job generate 'access_token' using 'refresh_token' to connect to Google Drive. Or use Service account and then no access_token is needed. </br>
 
 
@@ -690,9 +724,13 @@ Then use user's 'refresh_token' to generate 'access_token' if prev 'access_token
 
 
 <p> ----------------------------------------------------------------------------------------- </p>
+
+
+
+
 ## 21. SQL DataBase auto back-up job
 
-./vendor/bin/pest tests/Feature/App/Service/GoogleDriveSqlBackupServiceTest.php
+Test not finished =>  ./vendor/bin/pest tests/Feature/App/Service/GoogleDriveSqlBackupServiceTest.php
 
 Job to create SQL DB dump and send it to to Google Drive. </br>
 Saves SQL dump locally to /var/www/html/storage/app/backup-2025-09-**-**, on Google Drive saves to folder 'Laravel_Sql_backup' </br></br>
@@ -765,7 +803,56 @@ Paste the access token into your .env:
 
 
 
+
 <p> ----------------------------------------------------------------------------------------- </p>
+
+
+
+## 22. Save Images to Google Cloud Storage bucket in Laravel
+
+GCS Image bucket goes here  =>  https://console.cloud.google.com/storage/browser, find by >> go to console >> select project 'L-Images-Google-Cloud-Storage' >> Cloud Storage >> Buckets </br>
+As it uses Google bucket with billing, it works as long trial period is valid (till 5 January 2026)</br>
+Image is saved to local DB table 'user_images_gcloud' columns user_id and path + saved to GCS bucket 'my-laravel-gcs-bucket'</br>
+
+1.Laravel uses Flysystem v3, so you need to install the GCS filesystem driver https://github.com/spatie/laravel-google-cloud-storage:  
+<code>composer require spatie/laravel-google-cloud-storage</code>
+
+It depends on league/flysystem-google-cloud-storage so it will install it itself
+
+2. Go to Google Cloud Console => Create a new project (e.g. 'L-Images-Google-Cloud-Storage'). => Enable Cloud Storage API. => Create a Service Account with permission: Storage Admin.  => Create and download the JSON key.   </br>
+
+Place the JSON key in a secure location, e.g.: storage/app/gcs/service-account.json  </br>
+
+3. Configure Filesystem in config/filesystems.php
+     'gcs' => [
+            'driver' => 'gcs',
+            'project_id' => env('GCS_PROJECT_ID', 'your-project-id'),
+            'key_file_path' => env('GOOGLE_CLOUD_KEY_FILE')  ? storage_path(env('GOOGLE_CLOUD_KEY_FILE'))  : null,
+            'bucket' => env('GCS_BUCKET', 'your-bucket-name'),
+            'path_prefix' => env('GCS_PATH_PREFIX', null), // optional
+            'visibility' => 'public', // or 'private'
+            // 'visibility_handler' is MEGA FIX, was not uploading images to Google Cloud Storage without giving any error
+            'visibility_handler' =>  \League\Flysystem\GoogleCloudStorage\UniformBucketLevelAccessVisibility::class //
+
+        ],
+
+4. Set Environment Variables in .env
+FILESYSTEM_DISK=gcs
+GCS_PROJECT_ID=pr-------------
+GCS_BUCKET=my-laravel-gcs-bucket
+GOOGLE_CLOUD_KEY_FILE=app/gcs/service-account.json
+
+5. Save => $path = Storage::disk('gcs')->putFile('images', $request->file('image')); //images is folder name in bucket
+Display  => <img src="{{ Storage::disk('gcs')->url($relativePath) }}" style="width:20%;">
+
+
+
+
+
+<p> ----------------------------------------------------------------------------------------- </p>
+
+
+
 ## 111. V.A
 
 <p> Filament</p> 
@@ -843,6 +930,10 @@ in bootstrap/app.php => disable all Prometheus middlewares that that hit Redis (
     $middleware->append(\App\Http\Middleware\Prometheus_metrcis\CountVisits::class);// Prometheus metrics, how many times a page is visited
 </code>
 
+5. When this not loading files to Google Cloud Storage <code> $path = Storage::disk('gcs')->putFile('images', $request->file('image')); </code>
+add to config/filesystem.php to 
+'gcs' => [
+'visibility_handler' => \League\Flysystem\GoogleCloudStorage\UniformBucketLevelAccessVisibility::class //to enable uniform bucket level access
 
 
 
@@ -862,9 +953,11 @@ in bootstrap/app.php => disable all Prometheus middlewares that that hit Redis (
 ![Screenshot](public/img/screenshots/flmt-8.png)  </br>
 ![Screenshot](public/img/screenshots/flmt-9.png)           </br>
 ![Screenshot](public/img/screenshots/flmt-10.png)          </br>
-[Screenshot](public/img/screenshots/flmt-12-grafana.png)   </br>
-[Screenshot](public/img/screenshots/flmt-13-scramble.png)  </br>
-[Screenshot](public/img/screenshots/flmt-14-signed.png)    </br>
+![Screenshot](public/img/screenshots/flmt-12-grafana.png)   </br>
+![Screenshot](public/img/screenshots/flmt-13-scramble.png)  </br>
+![Screenshot](public/img/screenshots/flmt-14-signed.png)    </br>
+![Screenshot](public/img/screenshots/flmt-15-gdrive.png)    </br>
+![Screenshot](public/img/screenshots/flmt-16-google-cloud-storage.png)    </br>
 
 
 

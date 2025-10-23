@@ -60,6 +60,23 @@ return [
             'report' => false,
         ],
 
+        // Google cloud storage
+        'gcs' => [
+            'driver' => 'gcs',
+            'project_id' => env('GCS_PROJECT_ID', 'your-project-id'),
+            // 'key_file_path' => storage_path(env('GOOGLE_CLOUD_KEY_FILE')),  //storage_path('app/gcs/service-account.json'), // path to key file     storage_path(env('GCS_KEY_FILE')), //
+            // 'key_file_path' => env('GOOGLE_CLOUD_KEY_FILE', null), // optional: /path/to/service-account.json
+            'key_file_path' => env('GOOGLE_CLOUD_KEY_FILE') ? storage_path(env('GOOGLE_CLOUD_KEY_FILE')) : null,
+            'bucket' => env('GCS_BUCKET', 'your-bucket-name'), // my-laravel-gcs-bucket
+            'path_prefix' => env('GCS_PATH_PREFIX', null), // optional
+            // 'storage_api_uri' => env('GCS_STORAGE_API_URI', null), // optional
+            'visibility' => 'public', // or 'private'
+            // 'visibility_handler' is MEGA FIX, was not uploading images to Google Cloud Storage without giving any error
+            'visibility_handler' => \League\Flysystem\GoogleCloudStorage\UniformBucketLevelAccessVisibility::class, // was null  //to enable uniform bucket level access
+
+        ],
+        // End Google cloud storage
+
     ],
 
     /*

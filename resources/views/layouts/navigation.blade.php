@@ -124,6 +124,13 @@
                             {{ __('My Google Drive') }}
                         </x-dropdown-link>
 
+                        <x-dropdown-link :href="route('my.google-cloud-storage.images')"  :class="request()->routeIs('my.google-cloud-storage.images') ? 'bg-gray-300 text-gray-900 font-semibold' : ''">
+                            <i class="fas fa-cloud-sun" style="font-size:12px"></i>
+                            {{ __('Google Cloud Storage Images') }}
+                        </x-dropdown-link>
+
+                        
+
 
 
                         <!-- Authentication -->

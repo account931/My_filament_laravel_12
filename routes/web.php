@@ -1,8 +1,9 @@
 <?php
 
 use App\Http\Controllers\Api;
-use App\Http\Controllers\MyGoogleDrive\MyGoogleDriveController;
-use App\Http\Controllers\OneTimeLink\OneTimeLinkController;   // Api cotrollers
+use App\Http\Controllers\MyGoogleCloudStorageImages\MyGoogleCloudStorageImagesController;
+use App\Http\Controllers\MyGoogleDrive\MyGoogleDriveController;   // Api cotrollers
+use App\Http\Controllers\OneTimeLink\OneTimeLinkController;
 use App\Http\Controllers\OwnerController\OwnerController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PrometheusMetrics\PrometheusMetricsController;
@@ -13,9 +14,9 @@ use App\Http\Controllers\Socialite\SocialiteGoogleAuthController;
 use App\Http\Controllers\Stripe\StripeController;
 use App\Http\Controllers\TestController\TestController;
 use App\Http\Controllers\VenuesStoreLocator\VenuesLocatorController;
-use App\Http\Controllers\VuePages\VuePagesController;
 // Prometheus_and_Redis
 // use Illuminate\Support\Facades\Redis;
+use App\Http\Controllers\VuePages\VuePagesController;
 use App\Http\Controllers\VuePagesWithRouter\VuePagesWithRouterController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
@@ -142,10 +143,14 @@ Route::middleware('auth')->group(function () {
         return '<pre>Back up is executed';
     });
 
-    // Google Drive account, users can upload files to their account
+    // Google Drive account, users can upload any selected in form files to their account
     Route::get('my-google-drive/index', [MyGoogleDriveController::class, 'index'])->name('my.google.drive.start');  // form with Socilaite login button and form to upload file to GDrive
     Route::post('my-google-drive/proccess-upload', [MyGoogleDriveController::class, 'uploadGDrive'])->name('my.google.drive.process.upload');  // form with Socilaite login button and form to upload file to GDrive
 
+    // Save/upload images to Google Cloud storage bucket, does not require Socialite login
+    Route::get('my-google-storage-images/index', [MyGoogleCloudStorageImagesController::class, 'index'])->name('my.google-cloud-storage.images');  // form to select image
+    Route::post('my-google-storage-images/upload', [MyGoogleCloudStorageImagesController::class, 'uploadGoogleCloudStorageImage'])->name('my-google-cloud-storage.image.upload');  // form to upload file to DB and to Google Cloud Storage bucket + display user images via  Relations\HasMany (user()->google_storage_images)
+    Route::delete('my-google-storage-images/delete/{id}', [MyGoogleCloudStorageImagesController::class, 'deleteGoogleCloudStorageImage'])->name('my-google-cloud-storage.image.delete');  // delete image from DB and GCS
 });
 // End Auth (logged) users only------------------------------------------------------------------------------------------
 
