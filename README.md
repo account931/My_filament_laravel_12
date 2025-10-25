@@ -809,7 +809,8 @@ Paste the access token into your .env:
 
 
 ## 22. Save Images to Google Cloud Storage bucket in Laravel
-
+ ./vendor/bin/pest tests/Feature/App/Http/Controllers/MyGoogleCloudStorageImages/MyGoogleCloudStorageImagesControllerTest.php
+ 
 GCS Image bucket goes here  =>  https://console.cloud.google.com/storage/browser, find by >> go to console >> select project 'L-Images-Google-Cloud-Storage' >> Cloud Storage >> Buckets </br>
 As it uses Google bucket with billing, it works as long trial period is valid (till 5 January 2026)</br>
 Image is saved to local DB table 'user_images_gcloud' columns user_id and path + saved to GCS bucket 'my-laravel-gcs-bucket'</br>
