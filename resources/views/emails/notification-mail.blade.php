@@ -12,5 +12,5 @@ View Invoice
 @endcomponent
 
 Thanks,<br>
-{{ config('app.MAIL_FROM_NAME') }}
+{{ config('mail.from.name') }}
 @endcomponent

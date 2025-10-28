@@ -7,15 +7,16 @@ use App\Http\Controllers\OneTimeLink\OneTimeLinkController;
 use App\Http\Controllers\OwnerController\OwnerController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PrometheusMetrics\PrometheusMetricsController;
+use App\Http\Controllers\SendEmail\SendEmailController;
 use App\Http\Controllers\SendNotification\NotificationController;
 use App\Http\Controllers\Shop\ShopController;
 use App\Http\Controllers\Socialite\SocialiteController;
 use App\Http\Controllers\Socialite\SocialiteGoogleAuthController;
 use App\Http\Controllers\Stripe\StripeController;
 use App\Http\Controllers\TestController\TestController;
-use App\Http\Controllers\VenuesStoreLocator\VenuesLocatorController;
 // Prometheus_and_Redis
 // use Illuminate\Support\Facades\Redis;
+use App\Http\Controllers\VenuesStoreLocator\VenuesLocatorController;
 use App\Http\Controllers\VuePages\VuePagesController;
 use App\Http\Controllers\VuePagesWithRouter\VuePagesWithRouterController;
 use Illuminate\Support\Facades\Artisan;
@@ -74,7 +75,7 @@ Route::middleware('auth')->group(function () {
     // Venues store locator in Vue (show venues location response from open /api/owners)
     Route::get('/venue-locator', [VenuesLocatorController::class, 'index'])->name('venue-locator');
 
-    // Send Notification
+    // Send DB Notification + it sends emails as well
     Route::get('/send-notification', [NotificationController::class, 'index'])->name('send-notification');
     Route::post('/send-notif', [NotificationController::class, 'handleNotificationAndSend'])->name('send-notif');
 
@@ -151,6 +152,11 @@ Route::middleware('auth')->group(function () {
     Route::get('my-google-storage-images/index', [MyGoogleCloudStorageImagesController::class, 'index'])->name('my.google-cloud-storage.images');  // form to select image
     Route::post('my-google-storage-images/upload', [MyGoogleCloudStorageImagesController::class, 'uploadGoogleCloudStorageImage'])->name('my-google-cloud-storage.image.upload');  // form to upload file to DB and to Google Cloud Storage bucket + display user images via  Relations\HasMany (user()->google_storage_images)
     Route::delete('my-google-storage-images/delete/{id}', [MyGoogleCloudStorageImagesController::class, 'deleteGoogleCloudStorageImage'])->name('my-google-cloud-storage.image.delete');  // delete image from DB and GCS
+
+    // Send pure email (unlike Notification which send db notifcations and email to p[redifinied users only)
+    Route::get('send-email/index', [SendEmailController::class, 'index'])->name('send.email.index');  // form to send emails
+    Route::post('/send-email/send', [SendEmailController::class, 'handleSendEmail'])->name('send.email.send');
+
 });
 // End Auth (logged) users only------------------------------------------------------------------------------------------
 

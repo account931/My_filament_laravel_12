@@ -1,6 +1,6 @@
 <?php
 
-// used in Notification, when send both db notifocation and email
+// used to send pure email
 
 namespace App\Mail;
 
@@ -8,7 +8,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class WelcomeEmail extends Mailable
+class CustomEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -37,8 +37,8 @@ class WelcomeEmail extends Mailable
     {
         // $mailText = 'This is Mail facade';
 
-        return $this->subject('Via Mail Facade!')
-            ->markdown('emails.mail-facade');
+        return $this->subject('Email sent Via Mail Facade!')
+            ->markdown('emails.regular-mail');
 
         // $this->view('emails.mail-facade')->with(compact('user', 'mailText'));
     }

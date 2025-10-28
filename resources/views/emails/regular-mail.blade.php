@@ -1,11 +1,11 @@
 @component('mail::message')
-# Hello {{ $user->name }}
+# Hello {{ $user }}
 
 Message: <span style="color:red">{{ $text }} </span>
 
 
 @component('mail::button', ['url' => url('/')])
-View Invoice
+View Something
 @endcomponent
 
 Thanks,<br>
