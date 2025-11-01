@@ -1,6 +1,6 @@
 <?php
 
-// It uploads files you select to your Google Drive. Before that you should login via  Socialite
+// It uploads files you select to your personal Google Drive. Before that you should login via Socialite
 
 namespace App\Http\Controllers\MyGoogleDrive;
 

@@ -1,8 +1,9 @@
 <?php
 
 use App\Http\Controllers\Api;
-use App\Http\Controllers\MyGoogleCloudStorageImages\MyGoogleCloudStorageImagesController;
-use App\Http\Controllers\MyGoogleDrive\MyGoogleDriveController;   // Api cotrollers
+use App\Http\Controllers\BigQuery\BigQueryController;
+use App\Http\Controllers\MyGoogleCloudStorageImages\MyGoogleCloudStorageImagesController;   // Api cotrollers
+use App\Http\Controllers\MyGoogleDrive\MyGoogleDriveController;
 use App\Http\Controllers\OneTimeLink\OneTimeLinkController;
 use App\Http\Controllers\OwnerController\OwnerController;
 use App\Http\Controllers\ProfileController;
@@ -13,9 +14,9 @@ use App\Http\Controllers\Shop\ShopController;
 use App\Http\Controllers\Socialite\SocialiteController;
 use App\Http\Controllers\Socialite\SocialiteGoogleAuthController;
 use App\Http\Controllers\Stripe\StripeController;
-use App\Http\Controllers\TestController\TestController;
 // Prometheus_and_Redis
 // use Illuminate\Support\Facades\Redis;
+use App\Http\Controllers\TestController\TestController;
 use App\Http\Controllers\VenuesStoreLocator\VenuesLocatorController;
 use App\Http\Controllers\VuePages\VuePagesController;
 use App\Http\Controllers\VuePagesWithRouter\VuePagesWithRouterController;
@@ -153,10 +154,14 @@ Route::middleware('auth')->group(function () {
     Route::post('my-google-storage-images/upload', [MyGoogleCloudStorageImagesController::class, 'uploadGoogleCloudStorageImage'])->name('my-google-cloud-storage.image.upload');  // form to upload file to DB and to Google Cloud Storage bucket + display user images via  Relations\HasMany (user()->google_storage_images)
     Route::delete('my-google-storage-images/delete/{id}', [MyGoogleCloudStorageImagesController::class, 'deleteGoogleCloudStorageImage'])->name('my-google-cloud-storage.image.delete');  // delete image from DB and GCS
 
-    // Send pure email (unlike Notification which send db notifcations and email to p[redifinied users only)
+    // Send pure email (unlike Notification which send db notifcations and email to predifinied users only)
     Route::get('send-email/index', [SendEmailController::class, 'index'])->name('send.email.index');  // form to send emails
     Route::post('/send-email/send', [SendEmailController::class, 'handleSendEmail'])->name('send.email.send');
 
+    // Google bigQuery example, uses Shop e-commerce db table to get and display products to track analytics
+    Route::get('bigQuery/index', [BigQueryController::class, 'index'])->name('bigQuery.index');  // index
+    Route::get('bigQuery/list/{product}', [BigQueryController::class, 'show'])->name('bigQuery.list.product'); // View one, Implicit Route Model Binding, here we log BigQuery
+    Route::get('bigQuery/bigquery/data', [BigQueryController::class, 'showBigQueryData'])->name('bigQuery.data');  // index
 });
 // End Auth (logged) users only------------------------------------------------------------------------------------------
 

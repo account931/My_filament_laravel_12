@@ -4,10 +4,10 @@
 
 
 > Laravel: 12.18, PHP: 8.4.8 , Filament: 3, mysql: 8.0.42, db: '', </br></br>
-Contains 80% of Laravel_2024_migration transffered from Laravel 6 to 12 + Filament + Stripe + E-commerce, etc</br>
+Contains 80% of Laravel_2024_migration transffered from Laravel 6 to 12 + Filament + Stripe + E-commerce shop, etc</br>
 What is new: Filament 3, Sail, Sanctum, CI/CD, Laravel Audit, PHPStan static analysis tool 2.1.17, Pint, Tailwind CSS out of the box, Vue 3, Pinia insead of Vuex store, dotswan/filament-map-picker, Laravel Cashier with Stripe, Sentry, Prometheus_and_Grafana, 
-Scramble – Laravel OpenAPI (Swagger), one-time expirable signed routes(signed means that URL includes a signature hash),
-auto SQL db back-up via sheduled job + Socialite to get oAuth token
+Scramble – Laravel OpenAPI (Swagger), one-time expirable signed routes(signed means that URL includes a signature hash), send emails,
+auto SQL db back-up via sheduled job + save it at G Drive (saves to pre-defined G Drive at dim***1@gmail.com), Socialite to get oAuth access token (login via Google), images at Google Cloud Storage bucket, upload files to personal Google Drive, Google BigQuery (saving analytics)
 
 
 
@@ -55,7 +55,7 @@ git restore .  git clean -fd
 - [20. Socialite Oauth](#20-socialite-oauth)
 - [21. SQL DataBase auto back-up job](#21-sql-dataBase-auto-back-up-job)
 - [22. Save Images to Google Cloud Storage](#22-save-images-to-google-cloud-storage-bucket-in-laravel)
-
+- [23. Google BigQuery](#23-google-bigquery)
 
 
 - [111.V.A](#111-va)
@@ -534,24 +534,38 @@ SENTRY_LARAVEL_DSN=https://yourPublicKey@o0.ingest.sentry.io/yourProjectId
 
 
 ## 17. Prometheus and Grafana and Redis
-1. Create a folder with Prometheus and Grafana on Docker 
-2. Intsall <code>  composer require endclothing/prometheus_client_php </code>, use this  - it is well-maintained fork of the original Jimdo package.
-    <code> composer require jimdo/prometheus_client_php </code> it is abandoned
 
+Brief Overview: <br>
 
-3. By default prometheus_client_php automatically outputs miniaml info at /metrics.
-You have to add middlewares and register to bootrsap/app.php. E.g CountExceptions, CountHttpStatusCodes, CountVisits, etc
-The kernel.php were removed in Laravel 11. You should now configure middleware via the application builder instance in your bootstrap/app.php file.
+Laravel App (with prometheus_client_php):
+→ Collects metrics (e.g. request count, response time, errors) and Exposes them via an HTTP endpoint (usually /metrics) in Prometheus format.<br>
+
+Prometheus Server:
+→ Periodically scrapes (GET) the Laravel /metrics endpoint and Stores the numeric time-series data in its database. <br>
+
+Grafana Dashboard:
+→ Connects to Prometheus as a data source + queries metrics (e.g. my_app_request_count, http_requests_total) using PromQL + visualizes the data with charts, panels, alerts, etc. <br><br>
+
+How to: <br>
+1. Create a folder with Prometheus and Grafana on Docker (in this case we create a separate folder outside of 'My_Filament_Laravel_12' project )
+2. Intsall <code>  composer require endclothing/prometheus_client_php </code>, use this  - it is well-maintained fork of the original Jimdo package. <br>
+<code> composer require jimdo/prometheus_client_php </code> it is abandoned <br>
+
+3. By default prometheus_client_php automatically outputs minimal info at /metrics, e.g Process/PHP Runtime Metrics.
+To add your metrics you have to add middlewares and register them to bootrsap/app.php. E.g CountExceptions, CountHttpStatusCodes, CountVisits, etc. All your added metrics will be auto displayed at /metrics<br>
+The kernel.php was removed in Laravel 11. So you should now configure middleware via the application builder instance in your bootstrap/app.php file.<br>
 
 
 If u want to store metrics to sql, create migration, but we we will use Redis, so add to .env 
+<code>
     REDIS_HOST=redis
     REDIS_PASSWORD=null
     REDIS_PORT=6379
     REDIS_CLIENT=phpredis
     REDIS_PASSWORD=null
+</code>
 
-4. Metrics are available at http://localhost:8000/metrics, set up Prometheus to use this endpoint, prometheus.yml =>
+4. Metrics are available at http://localhost:8000/metrics, set up Prometheus to use this endpoint, in prometheus.yml =>
     - targets: ['my_filament_laravel_12-laravel.test-1:80']  # dont foregt to create common network first before , see Readme
 
 5. In Grafana use Prometheus as datasource
@@ -732,7 +746,7 @@ Then use user's 'refresh_token' to generate 'access_token' if prev 'access_token
 
 Test not finished =>  ./vendor/bin/pest tests/Feature/App/Service/GoogleDriveSqlBackupServiceTest.php
 
-Job to create SQL DB dump and send it to to Google Drive. </br>
+Job to create SQL DB dump and send it to to Google Drive at dim***1@gmail.com  </br>
 Saves SQL dump locally to /var/www/html/storage/app/backup-2025-09-**-**, on Google Drive saves to folder 'Laravel_Sql_backup' </br></br>
 
 See how to start Scheduled jobs: 
@@ -843,8 +857,41 @@ GCS_PROJECT_ID=pr-------------
 GCS_BUCKET=my-laravel-gcs-bucket
 GOOGLE_CLOUD_KEY_FILE=app/gcs/service-account.json
 
-5. Save => $path = Storage::disk('gcs')->putFile('images', $request->file('image')); //images is folder name in bucket
-Display  => <img src="{{ Storage::disk('gcs')->url($relativePath) }}" style="width:20%;">
+5. Save => $path = Storage::disk('gcs')->putFile('images', $request->file('image')); //images is folder name in bucket  </br>
+Display  => <img src="{{ Storage::disk('gcs')->url($relativePath) }}" style="width:20%;">      </br>
+
+
+
+
+
+<p> ----------------------------------------------------------------------------------------- </p>
+
+
+
+
+
+
+
+## 23. Google BigQuery
+
+BigQuery is typically used for Reporting, analytics, metrics. MySQL is for application logic, users, sessions </br>
+In this example, when user visits one product view, we send to BigQuery this data 
+<code>{"product_id": 123,  "user_id": 55,   "viewed_at": "2025-10-29 14:32:00", "ip_address": "2025.10.29.14", "user_agent": "chrome"} </code>
+
+1. Install BigQuery Client <code>composer require google/cloud-bigquery</code>
+2. In Google Cloud Console → IAM & Admin → Service Accounts -> create new, e.g 'Laravel BigQuery', generate and download json keys, for example to to /storage/app/bigQuery_keys/ and add to .env
+
+<code>
+# Google BIgQuery
+BIGQUERY_PROJECT_ID=laravel-bi**********
+BIGQUERY_DATASET=analytics_dataset
+BIGQUERY_TABLE=product_views
+BIGQUERY_KEY_FILE=storage/app/bigQuery_keys/laravel-big******.json
+</code>
+
+3. Create table  in https://console.cloud.google.com/bigquery?project=laravel-bigquery  </br>
+4. Create BigQueryService, where you insert data </br>
+5. Use in Controller =>   (new BigQueryService())->logProductView($product->id, auth()->id());
 
 
 
