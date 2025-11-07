@@ -1,3 +1,4 @@
+<!-- Show list of products with button to view one, if u go there BigQuery is recorded -->
 <x-app-layout>
     {{-- Header Slot --}}
     <x-slot name="header">
@@ -18,9 +19,9 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        uses Shop e-commerce db table to get and display products to track analytics
+                        uses Shop e-commerce db table to get and display products to track analytics (when u click on a single product, BigQuery is collected)
                         <a href="{{route('bigQuery.data')}}" class="btn btn-primary btn-sm w-100"> <i class='far fa-eye' style='font-size:16px'></i> 
-                            View BigData data
+                            View BigData data stats
                         </a>  
                     </div>
 
@@ -114,7 +115,7 @@
 
                                                             <!--- View single product -- Implicit Route Model Binding ------->
                                                             <a href="{{route('bigQuery.list.product',   ['product' => $product])}}" class="btn btn-primary btn-sm w-100"> <i class='far fa-eye' style='font-size:16px'></i> 
-                                                            View it (by model binding)...
+                                                            View it&collect BG (by model binding)...
                                                             </a>  
 
                                                             <br><br>

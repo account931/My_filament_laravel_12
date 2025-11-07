@@ -51,6 +51,8 @@ class BigQueryService
         }
     }
 
+    // Tab 1: getting Last 5 viewed products
+    // get last viewed products, i,e last 5 or 10 by default
     public function getProductViewsBigQuery($limit = 10)
     {
         $query = sprintf(
@@ -66,6 +68,49 @@ class BigQueryService
 
         $data = [];
         foreach ($results as $row) {
+            $data[] = (array) $row;
+        }
+
+        return $data;
+    }
+
+    /**
+     * //Tab 2: Getting 2 top most viewed
+     * Retrieves the top N most frequently viewed products from the BigQuery log.
+     *
+     * @param  int  $limit  The number of top products to retrieve (default is 2).
+     * @return array An array of results, each containing 'product_id' and 'total_views'.
+     */
+    public function getTopViewedProducts($limit = 2)
+    {
+        // SQL to count product views, group by product, order by count, and limit the result.
+        $query = sprintf(
+            'SELECT product_id, COUNT(product_id) AS total_views FROM `%s.%s.%s` GROUP BY product_id ORDER BY total_views DESC LIMIT %d',
+            env('BIGQUERY_PROJECT_ID'), // Your Google Cloud Project ID
+            env('BIGQUERY_DATASET'),    // The BigQuery Dataset Name
+            env('BIGQUERY_TABLE'),      // The BigQuery Table Name (e.g., 'product_views_log')
+            $limit
+        );
+
+        // 1. Execute the query using your BigQuery client instance
+        // Assuming $this->bigQuery is correctly set up to handle the query execution
+        try {
+            // Note: The bigQuery->query() and runQuery() syntax is based on your example,
+            // but might vary slightly depending on the exact Google Cloud PHP library version used.
+            $queryJob = $this->bigQuery->query($query);
+            $results = $this->bigQuery->runQuery($queryJob);
+        } catch (\Exception $e) {
+            // Handle exceptions (e.g., table not found, authentication error)
+            error_log('BigQuery Query failed: '.$e->getMessage());
+
+            return [];
+        }
+
+        // 2. Process the results into a standard PHP array
+        $data = [];
+        foreach ($results as $row) {
+            // Explicitly cast to array if the result object supports it,
+            // or access properties directly if it's an object (e.g., $row->product_id)
             $data[] = (array) $row;
         }
 

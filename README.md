@@ -168,6 +168,8 @@ If table session is missing
 
 Available at http://localhost:8000/admin/, could not open /admin because of wrong settings in App\Providers\Filament\Admin1PanelProvider.php
 
+Login: dim*@gmail.com (pass****)
+
 <p> Install Filament </p> 
 <code> composer require livewire/livewire:^3.0</code>
 
@@ -984,7 +986,7 @@ add to config/filesystem.php to
 'visibility_handler' => \League\Flysystem\GoogleCloudStorage\UniformBucketLevelAccessVisibility::class //to enable uniform bucket level access
 
 
-
+6. Filament stopped openning, just blank screen => just corrupted App\Http\Middleware\Prometheus_metrcis\TrackRequestDuration;
 
 
 
@@ -1006,6 +1008,11 @@ add to config/filesystem.php to
 ![Screenshot](public/img/screenshots/flmt-14-signed.png)    </br>
 ![Screenshot](public/img/screenshots/flmt-15-gdrive.png)    </br>
 ![Screenshot](public/img/screenshots/flmt-16-google-cloud-storage.png)    </br>
+
+![Screenshot](public/img/screenshots/flmt-17-g-big-query1.png)    </br>
+![Screenshot](public/img/screenshots/flmt-17-g-big-query2.png)    </br>
+![Screenshot](public/img/screenshots/flmt-17-g-big-query3.png)    </br>
+![Screenshot](public/img/screenshots/flmt-17-g-big-query4.png)    </br>
 
 
 

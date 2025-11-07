@@ -1,6 +1,6 @@
 {{-- @extends('layouts.app') --}}   {{-- Laravel 12 fix--}}
 {{-- @section('content') --}}
- 
+<!-- Show 1 product and BigQuery is being recorded in Controller method--> 
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -37,16 +37,16 @@
                                 </div>
                     @endif   
 
-					<div class="alert alert-sucess">
+					<div class="alert alert-success">
 					    <p>
                             <i class="fas fa-user-circle"></i> Hello, <strong>{{Auth::user()->name}}</strong> <br>
 						</p>
 						
 						<p>One product goes here.....</p><br>
 						 
-			            <p><i class='fas fa-cat'   style='font-size:16px'></i> Name:    {!! $product->name  !!}  </p>
-						<p><i class='fas fa-horse' style='font-size:16px'></i> Description: {{ $product->description}}  </p>
-						<p><i class='fas fa-tree' style='font-size:16px'></i>  Is active: {!! ($product->is_active) ? '<i class="far fa-check-circle" style="color:green"></i>' : '<i class="far fa-bell-slash" style="color:red"></i>' !!}  </p>	 
+			            <p><i class='fas fa-cloud' style='font-size:16px'></i> Name:    {!! $product->name  !!}  </p>
+						<p><i class='fas fa-dove'  style='font-size:16px'></i> Description: {{ $product->description}}  </p>
+						<p><i class='fas fa-cog'   style='font-size:16px'></i>  Is active: {!! ($product->is_active) ? '<i class="far fa-check-circle" style="color:green"></i>' : '<i class="far fa-bell-slash" style="color:red"></i>' !!}  </p>	 
 						
 						{{-- Venues hasMany  --}}
                             <p> <i class='fas fa-charging-station' style='font-size:16px'></i> Venues (hasMany)(N/A: does not have venues): 

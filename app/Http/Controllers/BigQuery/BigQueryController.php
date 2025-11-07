@@ -6,9 +6,10 @@ namespace App\Http\Controllers\BigQuery;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Models\User;
 use App\Services\BigQuery\BigQueryService;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 // usual email
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 
@@ -76,15 +77,16 @@ class BigQueryController extends Controller
      */
     public function showBigQueryData(BigQueryService $bigQueryService)
     {
+        // Tab 1: getting Last 5 viewed products-----------------------------
         // getting data from BigQuery, it returns data, like product_id, user_id, so if want product_id details from DB, do next steps
-        $views = $bigQueryService->getProductViewsBigQuery(20);
+        $views = $bigQueryService->getProductViewsBigQuery(5);
         // $views = collect($bigQueryService->getProductViewsBigQuery(20));
 
         // Collect product IDs
         $views = collect($views);
         $productIds = $views->pluck('product_id')->unique();
 
-        // Fetch products from your database
+        // Fetch products from your database to get names
         $products = Product::whereIn('id', $productIds)->get()->keyBy('id');
 
         // Merge product details into BigQuery views
@@ -94,6 +96,51 @@ class BigQueryController extends Controller
             return $view;
         });
 
-        return view('big-query.show-big-query-data', compact('views'));
+        // Collect users IDs
+        $userIds = $views->pluck('user_id')->unique();
+
+        // Fetch user names from your database to get users ames
+        $users = User::whereIn('id', $userIds)->get()->keyBy('id');
+
+        // Merge user details into BigQuery views
+        $viewsLastFive = $views->map(function ($view) use ($users) {
+            $view['user'] = $users[$view['user_id']] ?? null;
+
+            return $view;
+        });
+        // End Tab 1: getting Last 5 viewed products
+
+        // Tab 2: Getting 2 top most viewed--------------------------------------------------
+        $topTwoViewed = $bigQueryService->getTopViewedProducts(2);
+
+        // Collect product IDs
+        $topTwoViewed = collect($topTwoViewed);
+        $productIdsTab2 = $topTwoViewed->pluck('product_id')->unique();
+
+        // Fetch products from your database to get names
+        $productsTab2 = Product::whereIn('id', $productIdsTab2)->get()->keyBy('id');
+
+        // Merge product details into BigQuery views
+        $topTwoViewed = $topTwoViewed->map(function ($view) use ($productsTab2) {
+            $view['product'] = $productsTab2[$view['product_id']] ?? null;
+
+            return $view;
+        });
+        // End Tab 2: Getting 2 top most viewed
+
+        // Tab 3: Chart JS
+        $views = $views;   // use view from tab 1
+        // Group by product
+        $viewsPerProduct = $views->groupBy('product.name')->map->count();
+
+        $labels = $viewsPerProduct->keys();  // Product names
+        $values = $viewsPerProduct->values(); // View counts
+        // End ab 3: Chart JS
+
+        return view('big-query.show-big-query-data', compact(
+            'viewsLastFive', // tab 1
+            'topTwoViewed',  // tab 2
+            'views', 'labels', 'values'  // tab 3
+        ));
     }
 }

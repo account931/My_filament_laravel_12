@@ -9,6 +9,8 @@
 
 namespace App\Http\Middleware\Prometheus_metrcis;
 
+// namespace App\Http\Middleware\PrometheusMetrics; //change to PSR 4
+
 use Closure;
 use Prometheus\CollectorRegistry;
 use Prometheus\Storage\Redis as PrometheusRedis;
@@ -40,7 +42,9 @@ class TrackRequestDuration
             $histogram = $registry->getHistogram('app', 'http_request_duration_seconds');
         }
 
-        $histogram->observe($duration, [$request->method(), $request->path(), $response->status()]);
+        $status = method_exists($response, 'getStatusCode') ? $response->getStatusCode() : 200; // Fix: as Filament started crashing
+
+        $histogram->observe($duration, [$request->method(), $request->path(), $status /* $response->status() */]);
 
         return $response;
     }

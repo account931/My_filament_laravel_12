@@ -1,25 +1,26 @@
-{{-- @extends('layouts.app') --}}   {{-- Laravel 12 fix --}}
-{{-- @section('content') --}}
-
+{{-- Laravel 12 fix: using component layout instead of @extends/@section --}}
+ <!-- Show data from Google BigQuery, 4 tabs-->
+  
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Product track') }}
+            {{ __('Product Track') }}
         </h2>
     </x-slot>
 
-    <div class="container">
+    <div class="container mt-4">
         <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">Recent Product Views BigData 
-                         <button class="btn btn-info btn-sm w-100"> <a href="{{ route('bigQuery.index') }}">
-                            <i class='fas fa-sign-in-alt'></i> Go back to List
-                        </a> </button>
+            <div class="col-md-10">
+                <div class="card shadow-sm">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span>Products Views from BigData</span>
+
+                        <a href="{{ route('bigQuery.index') }}" class="btn btn-info btn-sm">
+                            <i class="fas fa-sign-in-alt"></i> Go Back to List
+                        </a>
                     </div>
 
                     <div class="card-body">
-
                         {{-- Session status --}}
                         @if (session('status'))
                             <div class="alert alert-success" role="alert">
@@ -28,17 +29,17 @@
                         @endif
 
                         {{-- Flash message: success --}}
-                        @if(session()->has('flashSuccess'))
-                            <div class="row alert alert-success">
-                                <i class='fas fa-charging-station' style='font-size:21px'></i> &nbsp;
-                                {{ session()->get('flashSuccess') }}
+                        @if (session()->has('flashSuccess'))
+                            <div class="alert alert-success d-flex align-items-center">
+                                <i class="fas fa-charging-station mr-2" style="font-size:21px"></i>
+                                {{ session('flashSuccess') }}
                             </div>
                         @endif
 
                         {{-- Flash message: failure --}}
-                        @if(session()->has('flashFailure'))
-                            <div class="row alert alert-danger">
-                                {{ session()->get('flashFailure') }}
+                        @if (session()->has('flashFailure'))
+                            <div class="alert alert-danger">
+                                {{ session('flashFailure') }}
                             </div>
                         @endif
 
@@ -47,49 +48,92 @@
                                 <i class="fas fa-user-circle"></i>
                                 Hello, <strong>{{ Auth::user()->name }}</strong>
                             </p>
-
-                            {{-- BigData display --}}
-                            <table class="table table-bordered mt-3">
-                                <thead>
-                                    <tr>
-                                        <th>Product ID</th>
-                                        <th>Product name</th>
-                                        <th>User ID</th>
-                                        <th>Viewed At</th>
-                                        <th>IP Address</th>
-                                        <th>User Agent</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($views as $view)
-                                        <tr>
-                                            <td>{{ $view['product_id'] }}</td>
-                                            <td>{{ $view['product']['name'] ?? 'Unknown Product' }}</td>
-                                            <td>{{ $view['user_id'] }}</td>
-                                            <td>
-                                                {{ $view['viewed_at'] instanceof \DateTimeInterface 
-                                                    ? $view['viewed_at']->format('Y-m-d H:i:s') 
-                                                    : $view['viewed_at'] }}
-                                            </td>
-                                            <td>{{ $view['ip_address'] }}</td>
-                                            <td>{{ Str::limit($view['user_agent'], 40) }}</td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                            {{-- End BigData display --}}
-
-                            <br>
-                            <a href="{{ route('bigQuery.index') }}">
-                                <i class='fas fa-sign-in-alt'></i> Go back to List
-                            </a>
                         </div>
 
+                        <!--------  Bootstrap Nav Tabs ------->
+                        {{-- Bootstrap Nav Tabs --}}
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+
+                            <!-- Tab 1 -->
+                            <li class="nav-item">
+                                <a class="nav-link active" id="last-five-tab" data-toggle="tab" href="#lastFive" role="tab" aria-controls="lastFive" aria-selected="true">
+                                    Last 5 Viewed Products
+                                </a>
+                            </li>
+
+                            <!-- Tab 2 -->
+                            <li class="nav-item">
+                                <a class="nav-link" id="top-viewed-tab" data-toggle="tab" href="#topViewed" role="tab" aria-controls="topViewed" aria-selected="false">
+                                    Top Viewed Products
+                                </a>
+                            </li>
+
+                           <!-- Tab 3 -->
+                            <li class="nav-item">
+                               <a class="nav-link" id="js-chart-tab" data-toggle="tab" href="#chart" role="tab" aria-controls="vue" aria-selected="false">
+                                    Chart JS
+                                </a>
+                            </li>
+
+                            <!-- Tab 4 -->
+                            <li class="nav-item">
+                               <a class="nav-link" id="vue-tab" data-toggle="tab" href="#vue" role="tab" aria-controls="vue" aria-selected="false">
+                                    Views via Vue
+                                </a>
+                            </li>
+
+                        </ul>
+
+                        {{-- Tab Content 1 --}}
+                        <div class="tab-content" id="myTabContent">
+
+                            <!--- Tab Content 1 ---->
+                            {{-- Tab 1 --}} 
+                            <div class="tab-pane fade show active" id="lastFive" role="tabpanel" aria-labelledby="last-five-tab">
+                                <p class="mt-3">Last 5 viewed products</p>
+                                @include('big-query.tabs-subfolder.tab1')
+                            </div>
+
+                            <!--- Tab Content 2 ---->
+                            {{-- Tab Content 2 --}} 
+                            <div class="tab-pane fade" id="topViewed" role="tabpanel" aria-labelledby="top-viewed-tab">
+                                <p class="mt-3">Top 2 viewed products</p>
+                                @include('big-query.tabs-subfolder.tab2')
+                            </div>
+
+                            <!--- Tab Content 3 ---->
+                            {{-- Tab Content 3 --}}  
+                            <div class="tab-pane fade" id="chart" role="tabpanel" aria-labelledby="js-chart-tab">
+                                <p class="mt-3">Chart JS Views per Product</p>
+                                @include('big-query.tabs-subfolder.tab3') 
+                            </div>
+
+                            <!--- Tab Content 4---->
+                            {{-- Tab Content 4 --}}  <!--- Tab Content 4---->
+                            <div class="tab-pane fade" id="vue" role="tabpanel" aria-labelledby="vue-tab">
+                                <p class="mt-3">Views via Vue</p>
+                            </div>
+
+                        </div>
+
+                        <hr>
+
+                        <a href="{{ route('bigQuery.index') }}">
+                             <br>
+                            <i class="fas fa-sign-in-alt"></i> Go Back to List
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</x-app-layout>
 
-{{-- @endsection --}}   {{-- Laravel 12 fix --}}
+    @push('scripts')
+        {{-- Bootstrap JS and dependencies --}}
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!--  Chart js -->
+    @endpush
+</x-app-layout>
