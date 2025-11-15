@@ -7,8 +7,8 @@
 Contains 80% of Laravel_2024_migration transffered from Laravel 6 to 12 + Filament + Stripe + E-commerce shop, etc</br>
 What is new: Filament 3, Sail, Sanctum, CI/CD, Laravel Audit, PHPStan static analysis tool 2.1.17, Pint, Tailwind CSS out of the box, Vue 3, Pinia insead of Vuex store, dotswan/filament-map-picker, Laravel Cashier with Stripe, Sentry, Prometheus_and_Grafana, 
 Scramble – Laravel OpenAPI (Swagger), one-time expirable signed routes(signed means that URL includes a signature hash), send emails,
-auto SQL db back-up via sheduled job + save it at G Drive (saves to pre-defined G Drive at dim***1@gmail.com), Socialite to get oAuth access token (login via Google), images at Google Cloud Storage bucket, upload files to personal Google Drive, Google BigQuery (saving analytics)
-
+auto SQL db back-up via sheduled job + save it at G Drive (saves to pre-defined G Drive at dim***1@gmail.com), Socialite to get oAuth access token (login via Google), images at Google Cloud Storage bucket, upload files to personal Google Drive, Google BigQuery (saving analytics),
+git cola
 
 
 <p> Represents data from 3 main tables (owners (HasMany), venues (BelongsToMany), equipments) in 4 ways: REST API, Filament, Vue JS, regular Laravel Controller + Blade </p>
@@ -330,6 +330,18 @@ When send Post, for example, to /api/owner/create,  in Postman go to Body-> Raw 
 <p> ----------------------------------------------------------------------------------------- </p>
 
 ## 9. Sanctum
+
+Laravel Sanctum provides API authentication using lightweight tokens. It supports two methods: <br>
+
+1. API Token Authentication (Personal Access Tokens). Used for Mobile apps, Third-party API integrations, SPA. <br>
+How it works: Users are issued personal access tokens. Each token may have abilities/permissions. Tokens are stored in the personal_access_tokens table.  <br>
+
+2. SPA Authentication (Session-Based / Cookie Authentication). Used for SPA - Single Page Applications (Vue, React, Next.js, etc.) <br>
+How it works: Uses Laravel’s built-in session authentication. Authenticated via cookies, not tokens. Sanctum protects routes using sessions. <br>
+
+
+# Here we view API Token Authentication (Personal Access Tokens). Used in Vue with Router (Owners). Session-Based / Cookie Authentication) is implemented in BigQuery Vue
+
 <code> 
   //generate token 
   $user = User::find(1)->first();

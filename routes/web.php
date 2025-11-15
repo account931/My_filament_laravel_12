@@ -1,8 +1,9 @@
 <?php
 
 use App\Http\Controllers\Api;
-use App\Http\Controllers\BigQuery\BigQueryController;
-use App\Http\Controllers\MyGoogleCloudStorageImages\MyGoogleCloudStorageImagesController;   // Api cotrollers
+use App\Http\Controllers\Auth_Api\SanctumCSRFbasedSessionAuthentication\CSRFbasedSessionAuthController;
+use App\Http\Controllers\BigQuery\BigQueryController;   // Api cotrollers
+use App\Http\Controllers\MyGoogleCloudStorageImages\MyGoogleCloudStorageImagesController;
 use App\Http\Controllers\MyGoogleDrive\MyGoogleDriveController;
 use App\Http\Controllers\OneTimeLink\OneTimeLinkController;
 use App\Http\Controllers\OwnerController\OwnerController;
@@ -13,14 +14,16 @@ use App\Http\Controllers\SendNotification\NotificationController;
 use App\Http\Controllers\Shop\ShopController;
 use App\Http\Controllers\Socialite\SocialiteController;
 use App\Http\Controllers\Socialite\SocialiteGoogleAuthController;
-use App\Http\Controllers\Stripe\StripeController;
 // Prometheus_and_Redis
 // use Illuminate\Support\Facades\Redis;
+use App\Http\Controllers\Stripe\StripeController;
 use App\Http\Controllers\TestController\TestController;
 use App\Http\Controllers\VenuesStoreLocator\VenuesLocatorController;
 use App\Http\Controllers\VuePages\VuePagesController;
 use App\Http\Controllers\VuePagesWithRouter\VuePagesWithRouterController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -35,6 +38,16 @@ Route::get('/dashboard', function () {
 
 Route::get('test-flm', [TestController::class, 'testFilament'])->name('test-filament');
 Route::get('test-flm-owner', [TestController::class, 'testFilamentOwner'])->name('test.filament.owner');
+
+// Api Login via CSRF via Sanctum, suitable in SPA, if not only SPA but mobile and other requests, use acces_token login routes/api.php => /login
+// Sanctum via CSRF-based session authentication, (not API tokens). Sanctum issues cookies, not bearer tokens. ou must first get a CSRF cookie, then perform your logi
+Route::post('/loginApiCSRFSessionAuth', [CSRFbasedSessionAuthController::class, 'loginCSRF'])->name('login.api.session.scrf');
+
+//
+//
+//
+//
+//
 
 // Auth (logged) users only------------------------------------------------------------------------------------------
 

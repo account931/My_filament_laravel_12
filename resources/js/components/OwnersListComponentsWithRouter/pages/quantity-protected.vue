@@ -1,5 +1,5 @@
 
-<!-- A test page to make api request to protected route /api/owners/quantity. Request shoud contain Passport token-->
+<!-- A test page to make api request to protected route /api/owners/quantity. Request shoud contain Passport/Sanctum token, token is recieved/saved on login.vue which triggers => store/index.js function -->
 <template>
 	<div class="services">
 	    
@@ -90,7 +90,7 @@ import youAreNotLogged  from '../subcomponents/you_are_not_logged.vue';
                 method: 'get', 
                 url: '/api/owners/quantity',
                 headers: {
-                    'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.store.passport_api_tokenY
+                    'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.store.passport_api_tokenY // token is recieved/saved on login.vue which triggers => store/index.js function
                 },
             })
             .then(dataResponse => {

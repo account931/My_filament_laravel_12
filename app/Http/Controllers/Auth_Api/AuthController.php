@@ -1,6 +1,6 @@
 <?php
 
-// Auth controller for REST (via token, not session)
+// Auth controller for REST API (via access_token, not session). Used in Sanctum
 
 namespace App\Http\Controllers\Auth_Api;
 

@@ -11,6 +11,7 @@ import ExampleComponent    from './components/ExampleComponent.vue'; //vue examp
 import OwnersListComponent from './components/OwnersListComponents/GetOwnersListComponent.vue';
 import RouterMenu from './components/OwnersListComponentsWithRouter/VueRouterMenu.vue';
 import VenuesLocatorComponent from './components/VenuesStoreLocatorComponent/VenuesLocatorComponent.vue';
+import BigQueryVue from './components/BigQuery/BigQueryStatsComponent.vue';
 
 window.Alpine = Alpine; //used in dashboard menu drop down
 Alpine.start();  //used in dashboard menu drop down
@@ -42,8 +43,16 @@ app3.mount('#simpleVue');  //div id
 
 //Vue App 4 with router and store
 const appWithRouter = createApp({});  
-appWithRouter.component('vue-router-menu-with-links-component', RouterMenu);  //Vue with router
+appWithRouter.component('vue-router-menu-with-links-component', RouterMenu);  //Vue component with router
 appWithRouter.use(ElementPlus);  //Element Plus instead of Element UI
 appWithRouter.use(pinia);        //Piania store instead of Vuex
 appWithRouter.use(router);
 appWithRouter.mount('#vueRouter');  //div id
+
+//Vue App 5, BigQuery display stats Vue component
+const appBigQuery = createApp({});  
+appBigQuery.component('vue-big-query-component', BigQueryVue);  //Vue component
+appBigQuery.use(ElementPlus);  //Element Plus instead of Element UI
+//appBigQuery.use(pinia);        //Piania store instead of Vuex
+//appBigQuery.use(router);
+appBigQuery.mount('#vueBigQuery');  //div id

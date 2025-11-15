@@ -1,3 +1,4 @@
+<!-- display BigQuery using Chart.js-->
 <div>
 <h3>Views per Product</h3>
     <canvas id="viewsChart" width="600" height="300"></canvas>

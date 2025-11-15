@@ -20,7 +20,7 @@
                 <div class="card">
                     <div class="card-header">
                         uses Shop e-commerce db table to get and display products to track analytics (when u click on a single product, BigQuery is collected)
-                        <a href="{{route('bigQuery.data')}}" class="btn btn-primary btn-sm w-100"> <i class='far fa-eye' style='font-size:16px'></i> 
+                        <a href="{{route('bigQuery.data')}}" class="btn btn-success btn-sm w-100 pt-3 pb-3"> <i class='far fa-eye' style='font-size:16px'></i> 
                             View BigData data stats
                         </a>  
                     </div>

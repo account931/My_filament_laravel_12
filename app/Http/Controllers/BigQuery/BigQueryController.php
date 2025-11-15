@@ -111,16 +111,16 @@ class BigQueryController extends Controller
         // End Tab 1: getting Last 5 viewed products
 
         // Tab 2: Getting 2 top most viewed--------------------------------------------------
-        $topTwoViewed = $bigQueryService->getTopViewedProducts(2);
+        $topTwoViewed = $bigQueryService->getTopViewedProducts(2);  // BigQuery returns product_id, total_views only
 
-        // Collect product IDs
+        // Collect product IDs, since we want to add product name to array
         $topTwoViewed = collect($topTwoViewed);
         $productIdsTab2 = $topTwoViewed->pluck('product_id')->unique();
 
         // Fetch products from your database to get names
         $productsTab2 = Product::whereIn('id', $productIdsTab2)->get()->keyBy('id');
 
-        // Merge product details into BigQuery views
+        // Merge product details into BigQuery views, adding product name
         $topTwoViewed = $topTwoViewed->map(function ($view) use ($productsTab2) {
             $view['product'] = $productsTab2[$view['product_id']] ?? null;
 
@@ -128,19 +128,19 @@ class BigQueryController extends Controller
         });
         // End Tab 2: Getting 2 top most viewed
 
-        // Tab 3: Chart JS
-        $views = $views;   // use view from tab 1
-        // Group by product
-        $viewsPerProduct = $views->groupBy('product.name')->map->count();
-
-        $labels = $viewsPerProduct->keys();  // Product names
-        $values = $viewsPerProduct->values(); // View counts
+        // Tab 3: Chart JS, views count for 2 top viewd
+        // uses Tab 2 results
+        // $labels = $topTwoViewed->pluck('product.name'); // $topTwoViewedTab5->keys();  // Product names
+        $labels = collect($topTwoViewed)->map(fn ($item) => 'ID: '.$item['product']['id'].' - '.$item['product']['name']); // create lable, like ID -Product name
+        $values = $topTwoViewed->pluck('total_views');  // $topTwoViewedTab5->values(); // Product View counts
         // End ab 3: Chart JS
 
+        // Tab 4: Vue Chart JS, makes api call itself to App\Http\Controllers\Api\BigQueryApi\BigQueryApiController
+
         return view('big-query.show-big-query-data', compact(
-            'viewsLastFive', // tab 1
-            'topTwoViewed',  // tab 2
-            'views', 'labels', 'values'  // tab 3
+            'viewsLastFive',    // tab 1
+            'topTwoViewed',     // tab 2
+            'labels', 'values'  // tab 3
         ));
     }
 }

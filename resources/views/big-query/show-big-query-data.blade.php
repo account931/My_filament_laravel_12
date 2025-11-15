@@ -94,24 +94,27 @@
                                 @include('big-query.tabs-subfolder.tab1')
                             </div>
 
-                            <!--- Tab Content 2 ---->
+                            <!--- Tab Content 2, BigData display 2 most viewed products ---->
                             {{-- Tab Content 2 --}} 
                             <div class="tab-pane fade" id="topViewed" role="tabpanel" aria-labelledby="top-viewed-tab">
                                 <p class="mt-3">Top 2 viewed products</p>
                                 @include('big-query.tabs-subfolder.tab2')
                             </div>
 
-                            <!--- Tab Content 3 ---->
+                            <!--- Tab Content 3, BigData display 2 most viewed products via chart.js ---->
                             {{-- Tab Content 3 --}}  
                             <div class="tab-pane fade" id="chart" role="tabpanel" aria-labelledby="js-chart-tab">
-                                <p class="mt-3">Chart JS Views per Product</p>
+                                <p class="mt-3">Chart JS Views per Product, 2 most viewed products </p>
                                 @include('big-query.tabs-subfolder.tab3') 
                             </div>
 
-                            <!--- Tab Content 4---->
+                            <!--- Tab Content 4, BigData display 2 most viewed products via Vue---->
                             {{-- Tab Content 4 --}}  <!--- Tab Content 4---->
                             <div class="tab-pane fade" id="vue" role="tabpanel" aria-labelledby="vue-tab">
-                                <p class="mt-3">Views via Vue</p>
+                                <p class="mt-3">Product Views via Vue, 2 most viewed products, for this Tab 4 Vue, the route is protected by Sanctum,<br> Sanctum uses SPA Authentication (Session-Based / Cookie Authentication), not token</p>
+                                <div id="vueBigQuery" >
+                                   <vue-big-query-component></vue-big-query-component> <!--- Vue --->
+                                </div>
                             </div>
 
                         </div>

@@ -3,7 +3,8 @@
 use App\Http\Controllers\Api;
 use App\Http\Controllers\Auth_Api\AuthController;
 use Illuminate\Http\Request;   // Api cotrollers
-use Illuminate\Support\Facades\Route; // Api login/register, e.x for Vue
+use Illuminate\Support\Facades\Auth; // Api login/register, e.x for Vue
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,4 +57,12 @@ Route::post('/login', [AuthController::class, 'login'])->name('api/login');
 // Route::post('/register', [AuthController::class, 'register'])->name('api/register');
 // Route::post('/login',    [AuthController::class, 'login'])   ->name('api/login');
 
-// ----------------------------- Passport Protected routes (requires token)-------------------------------
+// We use 'web' in routes/api.php as we useSanctum via CSRF-based session authentication, (not API tokens). Sanctum issues cookies, not bearer tokens. ou must first get a CSRF cookie, then perform your login
+Route::middleware(['web', 'auth'])->group(function () {
+    // BigQuery api endpoint, used in Vue, get 2 top viewd products and views click count, protected by Sanctum, Sanctum via CSRF token, not access_token as in others Vue here
+    Route::get('/bigquery/2topviewed', [Api\BigQueryApi\BigQueryApiController::class, 'twoTopViwed'])->name('api.bigquery.2topviewed');
+});
+
+Route::middleware(['web', 'auth'])->get('/user', function (Request $request) {  // Route::middleware('auth:sanctum')
+    return $request->user();
+});
