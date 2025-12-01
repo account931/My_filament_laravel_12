@@ -39,9 +39,13 @@ Route::get('/dashboard', function () {
 Route::get('test-flm', [TestController::class, 'testFilament'])->name('test-filament');
 Route::get('test-flm-owner', [TestController::class, 'testFilamentOwner'])->name('test.filament.owner');
 
+// UPDATE: NOT USED ANY MORE, switched vue login to API Token Authentication!! Used in Vue, displaying BQ data => Route::get('bigQuery/list/{product}', [BigQueryController::class, 'show'])->name('bigQuery.list.product');
 // Api Login via CSRF via Sanctum, suitable in SPA, if not only SPA but mobile and other requests, use acces_token login routes/api.php => /login
 // Sanctum via CSRF-based session authentication, (not API tokens). Sanctum issues cookies, not bearer tokens. ou must first get a CSRF cookie, then perform your logi
-Route::post('/loginApiCSRFSessionAuth', [CSRFbasedSessionAuthController::class, 'loginCSRF'])->name('login.api.session.scrf');
+// Route::post('/loginApiCSRFSessionAuth', [CSRFbasedSessionAuthController::class, 'loginCSRF'])->name('login.api.session.scrf');
+
+// For SPA SAnctum
+// Route::middleware(['auth'])->get('/user', function(Request $request) {return $request->user();});
 
 //
 //

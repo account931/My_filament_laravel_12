@@ -153,7 +153,7 @@ export default {
             formData.append('password',  this.password);
             
             $.ajax({
-		        url: 'api/login', 
+		        url: 'api/login',//API Token Authentication
                 type: 'POST', //POST is to create a new user
                 cache : false,
                 dataType    : 'json',

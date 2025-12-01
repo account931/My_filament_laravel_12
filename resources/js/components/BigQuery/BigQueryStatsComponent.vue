@@ -5,8 +5,11 @@
         <div class="col-sm-12 col-xs-12">
 
             <!-- Debugging logged user -->
-            Logged: {{ userLogged && userLogged.name ? userLogged.name : 'no user name so far' }}
+            Logged as : {{ this.userLogged && this.userLogged.data.user.name ? this.userLogged.data.user.name : 'no user name so far' }}
           
+            <div v-if="this.error" class="error">
+                Error here {{ error }}
+            </div>
 
             <!-- Checking if user is logged. Route to BigQuery is Sanctum protected -->
             <div class="col-12 m-2 text-center">
@@ -14,7 +17,11 @@
                 <!-- User is logged, show API query button -->
                 <div v-if="userLogged" class="col-12 m-2 text-center">
                     <p class="col-12 m-2 text-center bg-info">Logged in as: {{ userLogged.name }} </p>
+
+                    <!-- Log out button -->
                     <p class="text-center"> <button class="btn btn-danger" @click="logOutCSRF"> LogOut </button></p>
+
+                    <!-- Button to make api call-->
                     <div class="col-12 m-2 text-center bg-info">
                         <button class="btn btn-info" @click="makeApiRequestToProtectedRoute">
                             MakeApiRequest to Sanctum protected route to get BigQuery stats 🔒
@@ -47,12 +54,10 @@
                         </div>
 
 
-                        <div v-if="error" class="error">
-                            {{ error }}
-                        </div>
+                     
 
                         <button class="btn btn-success" type="submit" :disabled="loading">
-                            {{ loading ? "Logging in..." : "Login (SPA Auth (Session-Based/Cookie Authentication))" }}
+                            {{ loading ? "Logging in..." : "Login (API Token Authentication (Personal Access Tokens))" }}
                         </button>
 
                     </form>
@@ -115,7 +120,7 @@ export default {
         return {
             title: 'Big Query stats',
             bigQueryFetchedData: [],
-            userLogged: null,
+            userLogged: null,  //logged user data goes here
             error: '',
             email: '',
             password: '',
@@ -150,7 +155,7 @@ export default {
         // Fetch BigQuery data
         async makeApiRequestToProtectedRoute() {  
             this.showLoader = true;
-            axios.defaults.withCredentials = true;
+            //axios.defaults.withCredentials = true;
 
             try {
                 // Step 1: Get CSRF cookie
@@ -165,8 +170,15 @@ export default {
                 }, { withCredentials: true });
                 */
 
-                // Step 3: Call protected BigQuery API
-                const dataResponse = await axios.get('/api/bigquery/2topviewed', { withCredentials: true });
+                // Step 3: Call protected BigQuery API, Protected by Sanctum, API Token Authentication (Personal Access Tokens).
+                 alert( 'access token '  + this.userLogged.data.access_token);
+                const dataResponse = await axios.get('/api/bigquery/2topviewed', { 
+                    withCredentials: true,
+                    headers: {
+                       'Content-Type': 'application/json',
+                       'Authorization': 'Bearer ' + this.userLogged.data.access_token
+                    }
+                });
 
                 if (dataResponse.data) {
                     this.bigQueryFetchedData = dataResponse.data;
@@ -185,6 +197,7 @@ export default {
             }
         },
 
+        //updating states
         prepareChartData() {
             this.chartData = {
                 labels: this.bigQueryFetchedData.map(p => `ProductVue ${p.product_id}`),
@@ -198,36 +211,50 @@ export default {
             };
         },
 
-        //Login, SPA Authentication (Session-Based / Cookie Authentication
+        //Login, API Token Authentication, NOT SPA Authentication (Session-Based / Cookie Authentication)
         async loginSanctumCSRF() {
-            axios.defaults.withCredentials = true;
-            axios.defaults.baseURL = 'http://localhost:8000'  // your backend URL
+
+            console.log(window.location.origin);  //check frontend port, it is  http://localhost:8000'
+
+            //axios.defaults.withCredentials = true;
+            //axios.defaults.baseURL = 'http://localhost:8000'  // comment since your backend and frontend on the same port 8000
 
             this.error = '';
             this.showLoader = true;
 
             try {
                 // Get CSRF cookie
-                await axios.get('/sanctum/csrf-cookie');
+                //await axios.get('/sanctum/csrf-cookie'); //SPA Authentication (Session-Based / Cookie Authentication) attempt
 
                 // Login
-                await axios.post('/loginApiCSRFSessionAuth', {
+                const login = await axios.post('/api/login', {                    //API Token Authentication
+                //const login = await axios.post('/loginApiCSRFSessionAuth', {  //SPA Authentication (Session-Based / Cookie Authentication)
                     email: this.email,
                     password: this.password
                 });
+                this.userLogged = login;  //API Token Authentication   //this.passport_api_tokenY = userLogged.access_token;
+                alert('Login success: ' + JSON.stringify(login));
 
-                // Get logged user
-                const res = await axios.get('/api/user');
-                this.userLogged = res.data;
+                // Get logged user, //SPA Authentication (Session-Based / Cookie Authentication) attempt
+                //const res = await axios.get('/api/user', { withCredentials: true });
+                //alert('User data: ' + JSON.stringify(res.data));
+                //this.userLogged = res.data;
+                
 
             } catch (e) {
+                alert('Error: ' + JSON.stringify(e.response.data));
+                
                 if (e.response?.status === 422) {
                     this.error = "Invalid email or password.";
-                } else {
+                } else if  (e.response?.status === 401) {
+                    this.error = "Error 401.";
+                }
+                else {
                     this.error = "Login failed.";
                 }
             } finally {
                 this.showLoader = false;
+                //alert('Error finally: ' );
             }
         },
 

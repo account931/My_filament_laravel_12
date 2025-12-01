@@ -36,8 +36,16 @@ return [
     */
 
     'guards' => [
+
+        // For session login + SPA
         'web' => [
             'driver' => 'session',
+            'provider' => 'users',
+        ],
+
+        // For API routes using Sanctum (API Token Authentication (Personal Access Tokens).)
+        'api' => [
+            'driver' => 'sanctum',   // <- important
             'provider' => 'users',
         ],
     ],

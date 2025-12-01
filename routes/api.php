@@ -31,6 +31,9 @@ Route::middleware('auth:sanctum')->group(function () {
     // protected by Sanctum + Spatie RBAC (user must have permission 'view owner admin quantity')
     Route::get('/owners/quantity/admin', [Api\OwnerController::class, 'quantityAdmin'])->name('api.owners.quantity.admin');
 
+    // BigQuery api endpoint, used in Vue, get 2 top viewd products and views click count, protected by Sanctum, Sanctum via access_token, NOT CSRF token
+    Route::get('/bigquery/2topviewed', [Api\BigQueryApi\BigQueryApiController::class, 'twoTopViwed'])->name('api.bigquery.2topviewed');
+
 });
 
 // Route::get('/user', function (Request $request) {return $request->user();})->middleware('auth:sanctum');
@@ -46,7 +49,7 @@ Route::delete('/owner/delete/{owner}', [Api\OwnerController::class, 'destroy'])-
 
 // ----------------------------- End Open routes (do not require Passport/Sanctum ( does not require token in request) --------------------------------------
 
-// User Api Registration/Login
+// User Api Registration/Login, API Token Authentication
 Route::post('/register', [AuthController::class, 'register'])->name('api/register');
 Route::post('/login', [AuthController::class, 'login'])->name('api/login');
 
@@ -56,13 +59,3 @@ Route::post('/login', [AuthController::class, 'login'])->name('api/login');
 // User Api Registration/Login
 // Route::post('/register', [AuthController::class, 'register'])->name('api/register');
 // Route::post('/login',    [AuthController::class, 'login'])   ->name('api/login');
-
-// We use 'web' in routes/api.php as we useSanctum via CSRF-based session authentication, (not API tokens). Sanctum issues cookies, not bearer tokens. ou must first get a CSRF cookie, then perform your login
-Route::middleware(['web', 'auth'])->group(function () {
-    // BigQuery api endpoint, used in Vue, get 2 top viewd products and views click count, protected by Sanctum, Sanctum via CSRF token, not access_token as in others Vue here
-    Route::get('/bigquery/2topviewed', [Api\BigQueryApi\BigQueryApiController::class, 'twoTopViwed'])->name('api.bigquery.2topviewed');
-});
-
-Route::middleware(['web', 'auth'])->get('/user', function (Request $request) {  // Route::middleware('auth:sanctum')
-    return $request->user();
-});

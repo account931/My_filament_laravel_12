@@ -28,6 +28,7 @@ class BigQueryService
         $this->table = $this->dataset->table(env('BIGQUERY_TABLE'));
     }
 
+    // Save stats to BigQuery
     public function logProductView($productId, $userId = null)
     {
         try {

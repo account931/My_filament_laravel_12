@@ -7,8 +7,7 @@
 Contains 80% of Laravel_2024_migration transffered from Laravel 6 to 12 + Filament + Stripe + E-commerce shop, etc</br>
 What is new: Filament 3, Sail, Sanctum, CI/CD, Laravel Audit, PHPStan static analysis tool 2.1.17, Pint, Tailwind CSS out of the box, Vue 3, Pinia insead of Vuex store, dotswan/filament-map-picker, Laravel Cashier with Stripe, Sentry, Prometheus_and_Grafana, 
 Scramble – Laravel OpenAPI (Swagger), one-time expirable signed routes(signed means that URL includes a signature hash), send emails,
-auto SQL db back-up via sheduled job + save it at G Drive (saves to pre-defined G Drive at dim***1@gmail.com), Socialite to get oAuth access token (login via Google), images at Google Cloud Storage bucket, upload files to personal Google Drive, Google BigQuery (saving analytics),
-git cola
+auto SQL db back-up via sheduled job + save it at G Drive (saves to pre-defined G Drive at dim***1@gmail.com), Socialite to get oAuth access token (login via Google), images at Google Cloud Storage bucket, upload files to personal Google Drive, Google BigQuery (saving analytics), displaying BQ data in Blade, Vue, git cola, Sanctum type 2 (SPA Authentication (Session-Based / Cookie Authentication))
 
 
 <p> Represents data from 3 main tables (owners (HasMany), venues (BelongsToMany), equipments) in 4 ways: REST API, Filament, Vue JS, regular Laravel Controller + Blade </p>
@@ -334,13 +333,13 @@ When send Post, for example, to /api/owner/create,  in Postman go to Body-> Raw 
 Laravel Sanctum provides API authentication using lightweight tokens. It supports two methods: <br>
 
 1. API Token Authentication (Personal Access Tokens). Used for Mobile apps, Third-party API integrations, SPA. <br>
-How it works: Users are issued personal access tokens. Each token may have abilities/permissions. Tokens are stored in the personal_access_tokens table.  <br>
+How it works: Users are issued personal access tokens. Each token may have abilities/permissions. Tokens are stored in the personal_access_tokens table. Works on routes under middleware('auth:sanctum'). The request must contain access_token <br>
 
-2. SPA Authentication (Session-Based / Cookie Authentication). Used for SPA - Single Page Applications (Vue, React, Next.js, etc.) <br>
+2. SPA Authentication (Session-Based / Cookie Authentication), SPA session (CSRF-based) authentication. Used for SPA - Single Page Applications (Vue, React, Next.js, etc.). Route::middleware must be (['web', 'auth']) as when using Sanctum SPA mode, users authenticate through Laravel sessions<br>
 How it works: Uses Laravel’s built-in session authentication. Authenticated via cookies, not tokens. Sanctum protects routes using sessions. <br>
 
 
-# Here we view API Token Authentication (Personal Access Tokens). Used in Vue with Router (Owners). Session-Based / Cookie Authentication) is implemented in BigQuery Vue
+# Here we view API Token Authentication (Personal Access Tokens). Used in Vue with Router (Owners) and BigQuery Vue
 
 <code> 
   //generate token 
@@ -889,7 +888,8 @@ Display  => <img src="{{ Storage::disk('gcs')->url($relativePath) }}" style="wid
 ## 23. Google BigQuery
 
 BigQuery is typically used for Reporting, analytics, metrics. MySQL is for application logic, users, sessions </br>
-In this example, when user visits one product view, we send to BigQuery this data 
+In this example, when user visits one product view, we send to BigQuery this data => 
+       Route::get('bigQuery/list/{product}', [BigQueryController::class, 'show'])->name('bigQuery.list.product');
 <code>{"product_id": 123,  "user_id": 55,   "viewed_at": "2025-10-29 14:32:00", "ip_address": "2025.10.29.14", "user_agent": "chrome"} </code>
 
 1. Install BigQuery Client <code>composer require google/cloud-bigquery</code>
@@ -908,6 +908,10 @@ BIGQUERY_KEY_FILE=storage/app/bigQuery_keys/laravel-big******.json
 5. Use in Controller =>   (new BigQueryService())->logProductView($product->id, auth()->id());
 
 
+
+<p>How display BigQuery data</p>
+1. Create Service, i.e app/Service/BigQueryService.php with methods to get different data, i.e last 10 viewed products, top 2 viewed products
+2. Use BigQueryService to fetch data and display it in Blade, chart.js, Vue, Filamnet widget
 
 
 

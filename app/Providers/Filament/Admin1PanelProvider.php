@@ -3,6 +3,8 @@
 namespace App\Providers\Filament;
 
 use Althinect\FilamentSpatieRolesPermissions\FilamentSpatieRolesPermissionsPlugin;
+use App\Filament\Widgets\BigQueryWidget\BigQueryLineAjaxChartWidget;
+use App\Filament\Widgets\BigQueryWidget\BigQueryLineChartWidget;
 use App\Filament\Widgets\MyCustomWidget;
 use App\Filament\Widgets\MyCustomWidget2;
 use Filament\Http\Middleware\Authenticate;
@@ -51,12 +53,14 @@ class Admin1PanelProvider extends PanelProvider
                 Pages\Dashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets') // automatic widget discovery, even if comment MyCustomWidget
+            // add widgets here
             ->widgets([
                 Widgets\AccountWidget::class,
                 Widgets\FilamentInfoWidget::class,
                 MyCustomWidget::class,  // my custom widget without view
                 MyCustomWidget2::class,  // my custom widget with view
-
+                BigQueryLineChartWidget::class,  // my custom widget for BigQuery stats via direct fetch, two top viewed products
+                BigQueryLineAjaxChartWidget::class,  // my custom widget for BigQuery stats via ajax, two top viewed products
             ])
             ->middleware([
                 EncryptCookies::class,

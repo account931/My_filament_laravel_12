@@ -78,7 +78,7 @@
                             <!-- Tab 4 -->
                             <li class="nav-item">
                                <a class="nav-link" id="vue-tab" data-toggle="tab" href="#vue" role="tab" aria-controls="vue" aria-selected="false">
-                                    Views via Vue
+                                    Views via Vue + Sanctum
                                 </a>
                             </li>
 
@@ -111,7 +111,7 @@
                             <!--- Tab Content 4, BigData display 2 most viewed products via Vue---->
                             {{-- Tab Content 4 --}}  <!--- Tab Content 4---->
                             <div class="tab-pane fade" id="vue" role="tabpanel" aria-labelledby="vue-tab">
-                                <p class="mt-3">Product Views via Vue, 2 most viewed products, for this Tab 4 Vue, the route is protected by Sanctum,<br> Sanctum uses SPA Authentication (Session-Based / Cookie Authentication), not token</p>
+                                <p class="mt-3">Product Views via Vue, 2 most viewed products, for this Tab 4 Vue, the route is protected by Sanctum,<br> Sanctum uses API Token Authentication, NOT SPA Authentication (Session-Based / Cookie Authentication), not token</p>
                                 <div id="vueBigQuery" >
                                    <vue-big-query-component></vue-big-query-component> <!--- Vue --->
                                 </div>
