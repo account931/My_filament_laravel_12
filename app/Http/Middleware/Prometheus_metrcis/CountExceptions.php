@@ -1,6 +1,6 @@
 <?php
 
-// for Prometheus metrcis, tracks exceptions thrown during requests
+// for Prometheus metrcis, tracks exceptions thrown during requests, registered in bootstrap/app.php
 // should output at /meterics => app_exceptions_total{exception="Illuminate\\Database\\QueryException"} 3
 //                              app_exceptions_total{exception="Symfony\\Component\\HttpKernel\\Exception\\NotFoundHttpException"} 7
 

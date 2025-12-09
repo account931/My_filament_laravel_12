@@ -1,6 +1,6 @@
 <?php
 
-// for Prometheus metrcis, middleware to count how many times a page is visited, registered in bootstrap.app
+// for Prometheus metrcis, middleware to count how many times a page is visited, registered in bootstrap/app.php
 // should output at /meterics => app_visits_total{method="GET",path="dashboard"} 1
 
 // Middleware runs on every request

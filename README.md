@@ -1005,6 +1005,13 @@ add to config/filesystem.php to
 6. Filament stopped openning, just blank screen => just corrupted App\Http\Middleware\Prometheus_metrcis\TrackRequestDuration;
 
 
+7. 'The stream or file "/var/www/html/storage/logs/laravel.log" could not be opened in append mode: Failed to open stream:' => go inside container =>
+    <code>
+     chown -R www-data:www-data storage bootstrap/cache
+     chmod -R 775 storage bootstrap/cache
+    </code>
+
+
 
 <p> ----------------------------------------------------------------------------------------- </p>
 

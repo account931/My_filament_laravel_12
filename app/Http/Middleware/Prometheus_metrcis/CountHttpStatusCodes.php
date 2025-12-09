@@ -1,6 +1,6 @@
 <?php
 
-// for Prometheus metrcis, middleware counts 200/400/500 responses, registered in bootstrap.app
+// for Prometheus metrcis, middleware counts 200/400/500 responses, registered in bootstrap/app.php
 // should output at /metrics => app_http_responses_total{status_code="200"}
 
 // Middleware runs on every request

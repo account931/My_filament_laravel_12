@@ -1,6 +1,6 @@
 <?php
 
-// for Prometheus metrcis, middleware to count and time your database queries , registered in bootstrap.app
+// for Prometheus metrcis, middleware to count and time your database queries, registered in bootstrap/app.php
 // should output at /meterics => app_db_queries_total 37
 //                            app_db_query_duration_seconds_bucket{le="0.005"} 10
 
