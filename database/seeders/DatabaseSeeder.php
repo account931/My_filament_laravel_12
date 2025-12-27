@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Database\Seeders\Subfolder\BookingRoomSeeder;
 use Database\Seeders\Subfolder\OwnerSeeder;
 use Database\Seeders\Subfolder\ProductSeeder;
 use Database\Seeders\Subfolder\RolesPermissionSeeder;
@@ -39,6 +40,8 @@ class DatabaseSeeder extends Seeder
             // NOT USED //VenueSeeder::class,  //fill DB table {venues} with data
 
             ProductSeeder::class, // products for shop
+
+            BookingRoomSeeder::class,  // rooms for booking
         ]);
 
         $this->command->info('Seedering action was successful!');

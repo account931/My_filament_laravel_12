@@ -139,6 +139,12 @@
                             {{ __('Google BigQuery') }}
                         </x-dropdown-link>
 
+                        <!-- Booking Vue -->
+                        <x-dropdown-link :href="route('booking.index')"  :class="request()->routeIs('booking.index') ? 'bg-gray-300 text-gray-900 font-semibold' : ''">
+                            <i class="fas fa-cloud-sun" style="font-size:12px"></i>
+                            {{ __('Booking Vue') }}
+                        </x-dropdown-link>
+
                         
 
 

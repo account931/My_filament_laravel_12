@@ -7,7 +7,7 @@
 Contains 80% of Laravel_2024_migration transffered from Laravel 6 to 12 + Filament + Stripe + E-commerce shop, etc</br>
 What is new: Filament 3, Sail, Sanctum, CI/CD, Laravel Audit, PHPStan static analysis tool 2.1.17, Pint, Tailwind CSS out of the box, Vue 3, Pinia insead of Vuex store, dotswan/filament-map-picker, Laravel Cashier with Stripe, Sentry, Prometheus_and_Grafana, 
 Scramble – Laravel OpenAPI (Swagger), one-time expirable signed routes(signed means that URL includes a signature hash), send emails,
-auto SQL db back-up via sheduled job + save it at G Drive (saves to pre-defined G Drive at dim***1@gmail.com), Socialite to get oAuth access token (login via Google), images at Google Cloud Storage bucket, upload files to personal Google Drive, Google BigQuery (saving analytics), displaying BQ data in Blade, Vue, git cola, Sanctum type 2 (SPA Authentication (Session-Based / Cookie Authentication))
+auto SQL db back-up via sheduled job + save it at G Drive (saves to pre-defined G Drive at dim***1@gmail.com), Socialite to get oAuth access token (login via Google), images at Google Cloud Storage bucket, upload files to personal Google Drive, Google BigQuery (saving analytics), displaying BQ data in Blade, Vue (Options API), git cola, Sanctum type 2 (SPA Authentication (Session-Based / Cookie Authentication)),Booking on Vue
 
 
 <p> Represents data from 3 main tables (owners (HasMany), venues (BelongsToMany), equipments) in 4 ways: REST API, Filament, Vue JS, regular Laravel Controller + Blade </p>
@@ -55,6 +55,7 @@ git restore .  git clean -fd
 - [21. SQL DataBase auto back-up job](#21-sql-dataBase-auto-back-up-job)
 - [22. Save Images to Google Cloud Storage](#22-save-images-to-google-cloud-storage-bucket-in-laravel)
 - [23. Google BigQuery](#23-google-bigquery)
+- [24. Booking on Vue](#24-booking-on-vue)
 
 
 - [111.V.A](#111-va)
@@ -371,6 +372,7 @@ Add baseline to config in phpstan.neon
 <p> ----------------------------------------------------------------------------------------- </p>
 
 ## 11. Vue
+(Options API)
 Vue is not installed by default, so 
 1. <code> npm install vue@3 @vitejs/plugin-vue </code> 
 2. in  vite.config.js  -> add vue 
@@ -916,8 +918,22 @@ BIGQUERY_KEY_FILE=storage/app/bigQuery_keys/laravel-big******.json
 
 
 <p> ----------------------------------------------------------------------------------------- </p>
+## 24. Booking on Vue
+
+Booking on Vue (Option Api), uses own router and re-usable components for diffrent Rooms, currently works for 2 rooms, if you want more: 
+-increate seeder quantity in database/seeders/subfolder/BookingRoomSeeder.php or create new rooms manually
+- add links in js/components/Booking/BookingComponentVue, e.g 
+ <code>
+  <li class="nav-item">
+    <router-link class="nav-link" to="/booking/3"> Room 3</router-link> 
+  </li>
+  </code>
 
 
+
+
+
+<p> ----------------------------------------------------------------------------------------- </p>
 
 ## 111. V.A
 
@@ -1036,6 +1052,9 @@ add to config/filesystem.php to
 ![Screenshot](public/img/screenshots/flmt-17-g-big-query2.png)    </br>
 ![Screenshot](public/img/screenshots/flmt-17-g-big-query3.png)    </br>
 ![Screenshot](public/img/screenshots/flmt-17-g-big-query4.png)    </br>
+![Screenshot](public/img/screenshots/flmt-18-booking.png)    </br>
+
+
 
 
 

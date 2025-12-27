@@ -49,7 +49,7 @@ class AuditResource extends Resource
         // $tableColumns[] = TextColumn::make('user.name')
         $userNameColumn = TextColumn::make('user.name')
             ->label('User who did')
-            ->url(fn ($record) => route('filament.1.resources.users.view', $record->user_id))  // filament.1.resources.users.view
+            ->url(fn ($record) => route('filament.1.resources.users.view', $record->id))  // filament.1.resources.users.view
             ->openUrlInNewTab()->color('primary')
             ->extraAttributes(['class' => '!text-red-600 underline cursor-pointer'])
             ->sortable();

@@ -4,14 +4,18 @@ import Alpine from 'alpinejs';
 import { createApp } from 'vue';  //vue
 import { createPinia } from 'pinia';     //Piania store instead of Vuex
 import router from './router/index.js';
+import routerBooking from './router/router_for_booking.js';
 //import $ from 'jquery';  //jquery  //import where it is used, e.g login.vue
 import ElementPlus from 'element-plus'; //Element Plus instead of Element UI
 import 'element-plus/dist/index.css';   //Element Plus instead of Element UI
+import VCalendar from 'v-calendar';   //v calendar
+import 'v-calendar/style.css';  //v calendar
 import ExampleComponent    from './components/ExampleComponent.vue'; //vue example
 import OwnersListComponent from './components/OwnersListComponents/GetOwnersListComponent.vue';
 import RouterMenu from './components/OwnersListComponentsWithRouter/VueRouterMenu.vue';
 import VenuesLocatorComponent from './components/VenuesStoreLocatorComponent/VenuesLocatorComponent.vue';
 import BigQueryVue from './components/BigQuery/BigQueryStatsComponent.vue';
+import Booking from './components/Booking/BookingComponent.vue';
 
 window.Alpine = Alpine; //used in dashboard menu drop down
 Alpine.start();  //used in dashboard menu drop down
@@ -56,3 +60,12 @@ appBigQuery.use(ElementPlus);  //Element Plus instead of Element UI
 //appBigQuery.use(pinia);        //Piania store instead of Vuex
 //appBigQuery.use(router);
 appBigQuery.mount('#vueBigQuery');  //div id
+
+//Vue App 5, Booking Vue component
+const appBooking = createApp({});  
+appBooking.component('booking-vue-component', Booking);  //Vue component
+appBooking.use(ElementPlus);  //Element Plus instead of Element UI
+appBooking.use(VCalendar);  //use V-calendar package
+//appBooking.use(pinia);        //Piania store instead of Vuex
+appBooking.use(routerBooking);
+appBooking.mount('#bookingVueSection');  //div id

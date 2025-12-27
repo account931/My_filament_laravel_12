@@ -37,6 +37,8 @@ class UserResource extends Resource
             ->schema([
                 //
                 Forms\Components\TextInput::make('description')->label('description')->required()->maxLength(255),
+                Forms\Components\TextInput::make('name')->label('name')->required()->maxLength(255),
+                Forms\Components\TextInput::make('email')->label('email')->required()->maxLength(255),
 
                 // add Spatie role permission
                 Forms\Components\Select::make('roles')->multiple()->relationship('roles', 'name'),

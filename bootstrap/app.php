@@ -32,7 +32,8 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $middleware->alias([
-            'auth.one_time_token' => \App\Http\Middleware\CheckOneTimeToken::class,
+            'auth.one_time_token' => \App\Http\Middleware\CheckOneTimeSignedToken::class,
+            'force.json' => \App\Http\Middleware\ForceJsonResponse::class,   // force return json
         ]);
 
     })

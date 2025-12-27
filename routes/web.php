@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api;
 use App\Http\Controllers\Auth_Api\SanctumCSRFbasedSessionAuthentication\CSRFbasedSessionAuthController;
 use App\Http\Controllers\BigQuery\BigQueryController;   // Api cotrollers
+use App\Http\Controllers\Booking\BookingController;
 use App\Http\Controllers\MyGoogleCloudStorageImages\MyGoogleCloudStorageImagesController;
 use App\Http\Controllers\MyGoogleDrive\MyGoogleDriveController;
 use App\Http\Controllers\OneTimeLink\OneTimeLinkController;
@@ -13,9 +14,9 @@ use App\Http\Controllers\SendEmail\SendEmailController;
 use App\Http\Controllers\SendNotification\NotificationController;
 use App\Http\Controllers\Shop\ShopController;
 use App\Http\Controllers\Socialite\SocialiteController;
-use App\Http\Controllers\Socialite\SocialiteGoogleAuthController;
 // Prometheus_and_Redis
 // use Illuminate\Support\Facades\Redis;
+use App\Http\Controllers\Socialite\SocialiteGoogleAuthController;
 use App\Http\Controllers\Stripe\StripeController;
 use App\Http\Controllers\TestController\TestController;
 use App\Http\Controllers\VenuesStoreLocator\VenuesLocatorController;
@@ -179,6 +180,10 @@ Route::middleware('auth')->group(function () {
     Route::get('bigQuery/index', [BigQueryController::class, 'index'])->name('bigQuery.index');  // index
     Route::get('bigQuery/list/{product}', [BigQueryController::class, 'show'])->name('bigQuery.list.product'); // View one, Implicit Route Model Binding, here we log BigQuery
     Route::get('bigQuery/bigquery/data', [BigQueryController::class, 'showBigQueryData'])->name('bigQuery.data');  // index
+
+    // BookingController
+    Route::get('booking/index', [BookingController::class, 'index'])->name('booking.index');  // index with Vue, display calendar for bookinf
+
 });
 // End Auth (logged) users only------------------------------------------------------------------------------------------
 

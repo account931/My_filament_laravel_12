@@ -10,6 +10,7 @@ import detailsInfo  from '../components/OwnersListComponentsWithRouter/pages/det
 import quantity_pr  from '../components/OwnersListComponentsWithRouter/pages/quantity-protected.vue';
 import register     from '../components/OwnersListComponentsWithRouter/pages/LoginRegister/subcomponents/register.vue';
 import loginPage    from '../components/OwnersListComponentsWithRouter/pages/LoginRegister/auth-start-page.vue';
+import BookingVue   from '../components/Booking/subcomponents/BookingCalendarSubComponent.vue';
 
 
 const routes = [
@@ -69,6 +70,17 @@ const routes = [
     name: 'quantity-protected',
     component: quantity_pr,
   },
+
+  //went to separate router => router_for_booking.js
+  /*
+  //Booking Vue
+    {
+    path: '/booking/:id',
+    name: 'booking-vue',
+    component: BookingVue,
+    props: true,
+  },
+  */
 
 ];
 

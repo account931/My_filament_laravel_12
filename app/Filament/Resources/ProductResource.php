@@ -4,11 +4,12 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ProductResource\Pages;
 use App\Models\Product;
+use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Infolists;
 use Filament\Infolists\Infolist;
-use Filament\Resources\Resource;
-use Filament\Tables; //
+use Filament\Resources\Resource; //
+use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
@@ -28,6 +29,9 @@ class ProductResource extends Resource
         return $form
             ->schema([
                 //
+                Forms\Components\TextInput::make('name')->label('Name')->required()->maxLength(255),
+                Forms\Components\TextInput::make('description')->label('description')->required()->maxLength(255),
+
             ]);
     }
 

@@ -1,9 +1,10 @@
 <?php
 
 use App\Http\Controllers\Api;
-use App\Http\Controllers\Auth_Api\AuthController;
-use Illuminate\Http\Request;   // Api cotrollers
-use Illuminate\Support\Facades\Auth; // Api login/register, e.x for Vue
+use App\Http\Controllers\Api\BookingApi\RoomCalendarController;
+use App\Http\Controllers\Auth_Api\AuthController;   // Api cotrollers
+use Illuminate\Http\Request; // Api login/register, e.x for Vue
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -40,22 +41,29 @@ Route::middleware('auth:sanctum')->group(function () {
 // ---------------- End Sanctum Protected routes (requires token) -------------------------
 
 // ----------------------------- Open routes (do not require Passport/Sanctum ( does not require token in request) --------------------------------------
-// ------ OwnerController API --------
-Route::get('/owners', [Api\OwnerController::class, 'index'])->name('api.owners.index');
-Route::get('/owner/{owner}', [Api\OwnerController::class, 'show'])->name('api.owner'); // Implicit Route Model Binding
-Route::post('/owner/create', [Api\OwnerController::class, 'store'])->name('api.owner.create');  // should be potected
-Route::put('/owner/update/{owner}', [Api\OwnerController::class, 'update'])->name('api.owner.update');   // should be potected too
-Route::delete('/owner/delete/{owner}', [Api\OwnerController::class, 'destroy'])->name('api.owner.destroy');   // should be potected too
+Route::middleware('force.json')->group(function () {
+    // ------ OwnerController API --------
+    Route::get('/owners', [Api\OwnerController::class, 'index'])->name('api.owners.index');
+    Route::get('/owner/{owner}', [Api\OwnerController::class, 'show'])->name('api.owner'); // Implicit Route Model Binding
+    Route::post('/owner/create', [Api\OwnerController::class, 'store'])->name('api.owner.create');  // should be potected
+    Route::put('/owner/update/{owner}', [Api\OwnerController::class, 'update'])->name('api.owner.update');   // should be potected too
+    Route::delete('/owner/delete/{owner}', [Api\OwnerController::class, 'destroy'])->name('api.owner.destroy');   // should be potected too
 
-// ----------------------------- End Open routes (do not require Passport/Sanctum ( does not require token in request) --------------------------------------
+    // Booking Api, for Vue
+    Route::get('/rooms/{room}/calendar', [RoomCalendarController::class, 'index']); // get free and booked slots
+    Route::post('/rooms/{room}/bookings', [RoomCalendarController::class, 'store']);
 
-// User Api Registration/Login, API Token Authentication
-Route::post('/register', [AuthController::class, 'register'])->name('api/register');
-Route::post('/login', [AuthController::class, 'login'])->name('api/login');
+    // ----------------------------- End Open routes (do not require Passport/Sanctum ( does not require token in request) --------------------------------------
 
-// ----------------------------- Open routes (do not require Passport( does not require token in request) --------------------------------------
+    // User Api Registration/Login, API Token Authentication
+    Route::post('/register', [AuthController::class, 'register'])->name('api/register');
+    Route::post('/login', [AuthController::class, 'login'])->name('api/login');
 
-// ->name('api/owner/update');  //should be potected too
-// User Api Registration/Login
-// Route::post('/register', [AuthController::class, 'register'])->name('api/register');
-// Route::post('/login',    [AuthController::class, 'login'])   ->name('api/login');
+    // ----------------------------- Open routes (do not require Passport( does not require token in request) --------------------------------------
+
+    // ->name('api/owner/update');  //should be potected too
+    // User Api Registration/Login
+    // Route::post('/register', [AuthController::class, 'register'])->name('api/register');
+    // Route::post('/login',    [AuthController::class, 'login'])   ->name('api/login');
+
+});
