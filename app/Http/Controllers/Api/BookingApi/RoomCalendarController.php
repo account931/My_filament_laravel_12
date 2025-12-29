@@ -195,4 +195,38 @@ class RoomCalendarController extends Controller
             'booking' => $booking,
         ], 201);
     }
+
+    public function destroy(Request $request, BookingBooking $booking)
+    {
+        // 1️⃣ Validate password
+        $request->validate([
+            'password' => ['required', 'string'],
+        ]);
+
+        /*
+        // 2️⃣ Verify password against logged-in user
+        if (! Hash::check($request->password, $request->user()->password)) {
+            return response()->json([
+                'message' => 'Invalid password',
+            ], 403);
+        }
+        */
+
+        // 2️⃣ Check password against booking's password_to_delete
+        if ($request->password !== $booking->password_to_delete) {
+            return response()->json([
+                'message' => 'Invalid password',
+            ], 403);
+        }
+
+        // 3️⃣ Authorization (optional but recommended)
+        // $this->authorize('delete', $booking);
+
+        // 4️⃣ Delete booking
+        $booking->delete();  // soft delete
+
+        return response()->json([
+            'message' => 'Booking deleted successfully',
+        ]);
+    }
 }

@@ -20,6 +20,10 @@ class BookingBooking extends Model implements Auditable  // Laravel Audit
     // //Factory trait has been introduced in Laravel v8.
     use SoftDeletes;   // Laravel Audit
 
+    private $start_time;
+
+    private $end_time;
+
     // protected $appends = ['location_json']; //ells Eloquent to automatically include a custom accessor (getLocationJsonAttribute) in the model's array and JSON representations.
 
     /**

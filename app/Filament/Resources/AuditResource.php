@@ -1,5 +1,7 @@
 <?php
 
+// Resource that that shows all changes in all auditable models, e.g created, edited, etc. Format- user who performed action, his id and model he created/changed
+
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\AuditResource\Pages;
@@ -76,6 +78,8 @@ class AuditResource extends Resource
                 // End Columns
             ])
             */
+            ->defaultSort('id', 'desc') // 'desc' or 'asc' coming first
+
             ->filters([
                 // Filters
                 SelectFilter::make('auditable_type')

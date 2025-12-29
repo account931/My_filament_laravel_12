@@ -38,7 +38,8 @@ class UserResource extends Resource
                 //
                 Forms\Components\TextInput::make('description')->label('description')->required()->maxLength(255),
                 Forms\Components\TextInput::make('name')->label('name')->required()->maxLength(255),
-                Forms\Components\TextInput::make('email')->label('email')->required()->maxLength(255),
+                Forms\Components\TextInput::make('email')->label('email')->required()->unique(ignoreRecord: true)->maxLength(255), // unique(ignoreRecord: true), check unique on create only, not edit
+                Forms\Components\TextInput::make('password')->label('password')->required(),
 
                 // add Spatie role permission
                 Forms\Components\Select::make('roles')->multiple()->relationship('roles', 'name'),
@@ -134,8 +135,8 @@ class UserResource extends Resource
     {
         return [
             'index' => Pages\ListUsers::route('/'),
+            'create' => Pages\CreateUser::route('/create'),  // fix, to fix error 'No query found for model', place it before edit
             'view' => Pages\ViewUser::route('/{record}'), // view one user
-            'create' => Pages\CreateUser::route('/create'),
             'edit' => Pages\EditUser::route('/{record}/edit'),
         ];
     }

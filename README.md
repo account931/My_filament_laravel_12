@@ -1027,6 +1027,7 @@ add to config/filesystem.php to
      chmod -R 775 storage bootstrap/cache
     </code>
 
+8. Image is not displayed/forbidden =>  php artisan storage:link
 
 
 <p> ----------------------------------------------------------------------------------------- </p>

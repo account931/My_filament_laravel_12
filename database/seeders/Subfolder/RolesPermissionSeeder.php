@@ -45,6 +45,7 @@ class RolesPermissionSeeder extends Seeder
 
         // Role permission (view my Role panel in Filament
         $permissionViewRole = Permission::create(['name' => 'view roles']);
+        $permissionViewPermission = Permission::create(['name' => 'view permissions']);
 
         // Laravel audit permission
         $permissionViewAudits = Permission::create(['name' => 'view audits']);
@@ -63,6 +64,11 @@ class RolesPermissionSeeder extends Seeder
         $permissionNotForAdmin = Permission::create(['name' => 'not admin permission']); // some permission for test
         // End Create Permissions --------------------------------------------------------------------------------------------
 
+        //
+        //
+        //
+        //
+        //
         // Create admin role, give this role same/all permissions and assign role to some user/users  --------------------------------------
         $role = Role::create(['name' => 'admin']);
 
@@ -84,7 +90,11 @@ class RolesPermissionSeeder extends Seeder
             // Laravel audit permission
             $permissionViewAudits,
 
+            // Role permission
             $permissionViewRole,
+            $permissionViewPermission,
+
+            // custom
             $permissionViewOwnerQauantityAdmin,
 
             // Scramble docs permission

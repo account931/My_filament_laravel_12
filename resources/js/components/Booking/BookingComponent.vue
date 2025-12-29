@@ -347,4 +347,19 @@ export default {
   opacity: 1; transform: translateY(0);
 }
 
+
+/* Custom style for active  link in router-link */
+.navbar .nav-link.router-link-exact-active {
+    color: #fff !important;          /* White text */
+    background-color: #007bff;       /* Bootstrap primary blue background */
+    border-radius: 4px;              /* Rounded corners */
+    font-weight: bold;               /* Bold text */
+}
+
+/* Optional: hover effect for all links */
+.navbar .nav-link:hover {
+    background-color: #e2e6ea;
+    color: #007bff;
+}
+
 </style>

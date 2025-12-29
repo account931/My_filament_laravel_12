@@ -38,7 +38,7 @@ class PermissionPolicy
      */
     public function viewAny(User $user)
     {
-        return $user->can('view roles')   // return $user->id === 1
+        return $user->can('view permissions')   // return $user->id === 1
               ? Response::allow()
               : Response::deny('Stopped by OwnerPolicy, the User does not have permission "view roles"'); // way to add custom message
     }

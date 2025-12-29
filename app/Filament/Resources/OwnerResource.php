@@ -73,9 +73,10 @@ class OwnerResource extends Resource
                 //
                 Forms\Components\TextInput::make('last_name')->label('Last Name')->required()->maxLength(255),
                 Forms\Components\TextInput::make('first_name')->label('First Name')->required()->maxLength(255)
-                    ->formatStateUsing(function ($state, $record) {  // bypassing an Eloquent accessor
-                        return $record->getRawOriginal('first_name');
-                    }),
+                // ->formatStateUsing(function ($state, $record) {  // bypassing an Eloquent accessor
+                // return $record->getRawOriginal('first_name');
+                // }),
+                ,
                 // image, 'image' as DB column must be in model protected $fillable = [
                 FileUpload::make('image')->label('Upload Image')
                     ->image() // Ensures only images can be uploaded
@@ -85,8 +86,9 @@ class OwnerResource extends Resource
                     ->maxSize(2048) // in KB (2MB max)
                     ->required(),
                 Forms\Components\TextInput::make('email')->label('Email')->required()->email()->rules(['email']), // Laravel validation rule,
-                Forms\Components\TextInput::make('phone')->label('phone')->required()->tel() // Sets input type="tel"
-                    ->rules(['required', 'regex:/^[+]380[\d]{1,4}[0-9]+$/']), // $RegExp_Phone = '/^[+]380[\d]{1,4}[0-9]+$/';
+                Forms\Components\TextInput::make('phone')->label('phone')->required()->tel()->hint('Must start with +380') // Sets input type="tel"
+                    ->rules(['required', 'regex:/^[+]380[\d]{1,4}[0-9]+$/']) // $RegExp_Phone = '/^[+]380[\d]{1,4}[0-9]+$/';
+                    ->validationMessages(['phone.regex' => 'Must start with +380']),
                 Forms\Components\Select::make('location')->label('location')->options(collect(LocationEnum::cases())
                     ->mapWithKeys(fn ($case) => [$case->value => $case->label()])->toArray())->required(),
 

@@ -51,7 +51,8 @@ Route::middleware('force.json')->group(function () {
 
     // Booking Api, for Vue
     Route::get('/rooms/{room}/calendar', [RoomCalendarController::class, 'index']); // get free and booked slots
-    Route::post('/rooms/{room}/bookings', [RoomCalendarController::class, 'store']);
+    Route::post('/rooms/{room}/bookings', [RoomCalendarController::class, 'store']); // save new booking
+    Route::delete('/booking/{booking}', [RoomCalendarController::class, 'destroy']); // delete
 
     // ----------------------------- End Open routes (do not require Passport/Sanctum ( does not require token in request) --------------------------------------
 

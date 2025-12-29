@@ -1,4 +1,4 @@
- <!-- Re-usable component for N room, fetches booking data onload and on calendar change, modal with form to add new booking, uses props from parent component -->
+ <!-- Re-usable component for one room (1, 2, etc), fetches booking data onload and on calendar change, modal with form to add new booking, uses props from parent component -->
 <template>
   <div class="container">
 
@@ -344,6 +344,8 @@ export default {
         this.end_time = '';
         this.user_name = '';
 
+        Swal.fire("Api", "Booking saved", "success"); 
+
       } catch (error) {
         this.success = false;
         if (error.response && error.response.data && error.response.data.message) {
@@ -408,28 +410,45 @@ export default {
     // **************************************************************************************
     //                                                                                     **
     deleteItem(id) {
-    // Example: confirm first
-    if (confirm('Are you sure you want to delete this booking ' +  id  +  ' ?')) {
-
-      const pass = prompt('Provide password');
-      if (!pass) {
-        Swal.fire("False", "No password", "error"); //alert('Past date selected');
-         return; // stop further processing
-      }
-
-      // Call API or remove from local array
-      axios.delete(`/api/booking/${id}`)
-        .then(response => {
-          alert('Item deleted successfully');
-          // Optional: remove from local list if you have one
-          this.items = this.items.filter(item => item.id !== id);
-        })
-        .catch(error => {
-          console.error(error);
-          alert('Failed to delete item');
-        });
+    if (!confirm(`Are you sure you want to delete this booking ${id}?`)) {
+        return;
     }
-  },
+
+    this.showLoader = true;
+
+    const pass = prompt('Provide password');
+    if (!pass) {
+        Swal.fire("Error", "No password provided", "error");
+        return;
+    }
+
+    axios.delete(`/api/booking/${id}`, {
+        data: {
+           password: pass,
+        },
+    })
+    .then(response => {
+       Swal.fire("Deleted", "Item deleted successfully", "success");
+
+      // Remove from local list
+      // ✅ Remove from bookingFetchedData.slots
+      //this.bookingFetchedData.slots = this.bookingFetchedData.slots.filter(slot => slot.id !== id); //not working
+    })
+    .catch(error => {
+      console.error(error);
+
+      Swal.fire(
+        "Failed", error.response?.data?.message || "Failed to delete item", "error"
+      );
+    })
+    .finally (() => { 
+        //this.loading = false;
+        setTimeout(() => { this.showLoader = false;}, 900); // 2000ms = 2 seconds
+        this.fetchBookingDataForSelectedDate(this.booking_date);  //update calendar bookings
+
+    })
+},
+
 
   //when user changes date in form, update data from Api
   // **************************************************************************************

@@ -31,6 +31,8 @@ class ProductResource extends Resource
                 //
                 Forms\Components\TextInput::make('name')->label('Name')->required()->maxLength(255),
                 Forms\Components\TextInput::make('description')->label('description')->required()->maxLength(255),
+                Forms\Components\TextInput::make('sku'),
+                Forms\Components\TextInput::make('price'),
 
             ]);
     }
@@ -44,6 +46,7 @@ class ProductResource extends Resource
             // Columns-----------------------------------------
             ->columns([
                 //
+                TextColumn::make('id')->sortable(),
                 TextColumn::make('name')->sortable()->label('name'),
                 TextColumn::make('description')->sortable()->getStateUsing(fn ($record) => Str::limit($record->description, 20) ?? null),
                 TextColumn::make('sku')->sortable(),
@@ -51,6 +54,8 @@ class ProductResource extends Resource
                 TextColumn::make('created_at')->dateTime()->sortable(),
             ])
             // End Columns-----------------------------------------
+
+            ->defaultSort('id', 'desc') // 'desc' or 'asc' coming first
 
             ->filters([
                 //
@@ -75,6 +80,7 @@ class ProductResource extends Resource
                 Infolists\Components\TextEntry::make('slug'),
                 Infolists\Components\TextEntry::make('description'),
                 Infolists\Components\TextEntry::make('sku'),
+                Infolists\Components\TextEntry::make('price'),
             ]);
     }
 
