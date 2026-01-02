@@ -19,7 +19,8 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        uses Shop e-commerce db table to get and display products to track analytics (when u click on a single product, BigQuery is collected)
+                        uses Shop e-commerce db table to get and display products for which we will track analytics (when u click on a single product, BigQuery is collected) <br>
+                        <span class="small text-danger">NB: BigQuery was trial option only, so it stopped working. Wish to continue you have to pay ! </span> 
                         <a href="{{route('bigQuery.data')}}" class="btn btn-success btn-sm w-100 pt-3 pb-3"> <i class='far fa-eye' style='font-size:16px'></i> 
                             View BigData data stats
                         </a>  

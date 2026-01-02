@@ -43,9 +43,17 @@ class RolesPermissionSeeder extends Seeder
         $permissionEditVenue = Permission::create(['name' => 'edit venue']);
         $permissionDeleteVenue = Permission::create(['name' => 'delete venue']);
 
-        // Role permission (view my Role panel in Filament
+        // Roles, permissions (view my Role panel in Filament
+
+        // Roles
         $permissionViewRole = Permission::create(['name' => 'view roles']);
+        $permissionCreateRole = Permission::create(['name' => 'create roles']);
+
+        // Permission
         $permissionViewPermission = Permission::create(['name' => 'view permissions']);
+        $permissionCreatePermission = Permission::create(['name' => 'create permissions']);
+        $permissionUpdatePermission = Permission::create(['name' => 'update permissions']);
+        $permissionDeletePermission = Permission::create(['name' => 'delete permissions']);
 
         // Laravel audit permission
         $permissionViewAudits = Permission::create(['name' => 'view audits']);
@@ -90,9 +98,9 @@ class RolesPermissionSeeder extends Seeder
             // Laravel audit permission
             $permissionViewAudits,
 
-            // Role permission
-            $permissionViewRole,
-            $permissionViewPermission,
+            // Roles, Permissions
+            $permissionViewRole, $permissionCreateRole,
+            $permissionViewPermission, $permissionCreatePermission, $permissionUpdatePermission, $permissionDeletePermission,
 
             // custom
             $permissionViewOwnerQauantityAdmin,

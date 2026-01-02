@@ -34,12 +34,31 @@ class PermissionPolicy
 
     /**
      * see all models
-     *restricting viewAny() in a policy will also restrict access to view, edit, and delete in Filament, unless those other abilities are explicitly allowed.
+     * IT IS NOT TRUE: restricting viewAny() in a policy will also restrict access to view, edit, and delete in Filament, unless those other abilities are explicitly allowed.
      */
     public function viewAny(User $user)
     {
         return $user->can('view permissions')   // return $user->id === 1
               ? Response::allow()
               : Response::deny('Stopped by OwnerPolicy, the User does not have permission "view roles"'); // way to add custom message
+    }
+
+    public function create(User $user)
+    {
+        // dd('policy called');  //quick test if policy is working
+        // return Response::deny();
+        return $user->can('create permissions');
+    }
+
+    public function update(User $user, $model)
+    {
+        return $user->can('update permissions');
+        // return Response::deny();
+    }
+
+    public function delete(User $user, $model)
+    {
+        return $user->can('delete permissions');
+        // return Response::deny();
     }
 }

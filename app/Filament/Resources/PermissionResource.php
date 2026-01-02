@@ -8,5 +8,9 @@ use Althinect\FilamentSpatieRolesPermissions\Resources\PermissionResource as Bas
 
 class PermissionResource extends BasePermissionResource
 {
+    // FALSE for next line: Auto Discovery works.
+    // SINCE IT IS OVERRIDEN RESOURCE YOU NEED TO manual make model/policy registration in  AuthServiceProvider.php  =>  protected $policies = [Permission::class => PermissionPolicy::class,];
+    // protected static ?string $model = \App\Models\Permission::class; //
+
     protected static ?string $slug = 'permissions';
 }

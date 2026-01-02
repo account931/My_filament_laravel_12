@@ -41,4 +41,11 @@ class RolePolicy
               ? Response::allow()
               : Response::deny('Stopped by OwnerPolicy, the User does not have permission "view roles"'); // way to add custom message
     }
+
+    public function create(User $user)
+    {
+        // dd('Role policy called');  //quick test if policy is working
+        // return Response::deny();
+        return $user->can('create roles');
+    }
 }

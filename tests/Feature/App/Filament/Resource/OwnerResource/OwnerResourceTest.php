@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Owner;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Session;
 use Livewire\Livewire;
 use Spatie\Permission\Models\Permission;
@@ -73,4 +74,31 @@ it('can use bulk confirm action', function () {
             'message' => 'Bulk confirm test',
         ])
         ->assertHasNoTableBulkActionErrors();
+});
+
+it('can create a new owner', function () {
+    // Data for the new owner
+    $ownerData = [
+        'first_name' => 'Alice',
+        'last_name' => 'Smith',
+        'email' => 'alice@example.com', // include any required fields
+        'phone' => '+38097167890',        // include any required fields
+        'image' => UploadedFile::fake()->image('owner.jpg'), // simulate image upload
+        'location' => 'EU',
+        'venues' => [1],
+
+    ];
+
+    // Test the Livewire CreateOwner page
+    Livewire::test(\App\Filament\Resources\OwnerResource\Pages\CreateOwner::class)
+        ->fillForm($ownerData) // fill the form
+        ->call('create')       // call the create action
+        ->assertHasNoFormErrors();
+
+    // Assert the owner exists in the database
+    $this->assertDatabaseHas('owners', [
+        'first_name' => 'Alice',
+        'last_name' => 'Smith',
+        'email' => 'alice@example.com',
+    ]);
 });
