@@ -6,7 +6,6 @@
 namespace App\Services;
 
 use App\Models\User;
-use Carbon\Carbon;
 use Google\Client as GoogleClient;
 use Google\Service\Drive as GoogleDrive;
 use Illuminate\Support\Facades\Crypt;
@@ -135,8 +134,8 @@ class GoogleDriveSqlBackupService
     }
 
     /**
-     *  TODO: Replace with real token logic
-     * generate Google 'access_token'  using Google 'refresh_token' saved in DB table 'users' in  'google_refresh_token'
+     * generate Google 'access_token'  using Google 'google_refresh_token' saved in DB table 'users' in 'google_refresh_token'
+     * 'google_refresh_token' is generate in other flow Controllers/Socialite/SocialiteGoogleAuthController
      *
      * @param  User  $userModel
      */
@@ -146,11 +145,13 @@ class GoogleDriveSqlBackupService
         // return 'YOUR_OAUTH_ACCESS_TOKEN';
         // return env('GOOGLE_ACCESS_TOKEN');
 
+        // GET google_refresh_token  FIRST! ------------------------
+
         // gets Admin user, as job loads files to G Drive on behalf of Admin
         $user = $userModel; // User::find($userID);
 
         // check if access_token is not expired to avoid unnecessary API calls
-        if (Carbon::now()->lessThan($user->google_expires_at)) {
+        if ($user->google_expires_at && now()->lessThan($user->google_expires_at)) {
             // Token is still valid
             return Crypt::decryptString($user->google_access_token); // decrypt value
         }

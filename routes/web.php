@@ -17,6 +17,7 @@ use App\Http\Controllers\Socialite\SocialiteController;
 // Prometheus_and_Redis
 // use Illuminate\Support\Facades\Redis;
 use App\Http\Controllers\Socialite\SocialiteGoogleAuthController;
+use App\Http\Controllers\SQL_Backup_toGDive\SqlDumptoGDriveController;
 use App\Http\Controllers\Stripe\StripeController;
 use App\Http\Controllers\TestController\TestController;
 use App\Http\Controllers\VenuesStoreLocator\VenuesLocatorController;
@@ -156,12 +157,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/auth/google/logout', [SocialiteGoogleAuthController::class, 'socialiteLogout']);
     // End Socialite
 
+    // Generate SQL DUMP and save it to Google Drive
     // Run command to create SQL DUMP and save to Google Drive. Also added in cron Job to run every x minutes, App/Jobs/BackupDatabaseToGoogleDrive.
-    Route::get('/run-sql-dump-save-gdrive', function () {
+    Route::get('/run-sql-dump-save-gdrive', [SqlDumptoGDriveController::class, 'index'])->name('sql-dump.save-to-gdive');  // index with button to start the job
+    Route::get('/run-sql-dump-save-gdrive/run', [SqlDumptoGDriveController::class, 'runJob'])->name('sql-dump.save-to-gdive.run.job');  // runs the job
+
+    /*Route::get('/run-sql-dump-save-gdrive', function () {
         Artisan::call('run_db_backup_to_google_drive');
 
         return '<pre>Back up is executed';
-    });
+    }); */
 
     // Google Drive account, users can upload any selected in form files to their account
     Route::get('my-google-drive/index', [MyGoogleDriveController::class, 'index'])->name('my.google.drive.start');  // form with Socilaite login button and form to upload file to GDrive

@@ -73,7 +73,17 @@ class SocialiteGoogleAuthController extends Controller
         $googleUser = Socialite::driver('google')->stateless()->user();
 
         // Store logged user in session
-        Session::put('google_oauthed_user', $googleUser);
+        // Session::put('google_oauthed_user', $googleUser);
+        // fix
+        $userObj = (object) [
+            'id' => $googleUser->getId(),
+            'name' => $googleUser->getName(),
+            'email' => $googleUser->getEmail(),
+            'avatar' => $googleUser->getAvatar(),
+        ];
+
+        Session::put('google_oauthed_user', $userObj);
+
         // Session::put('google_oauth_user', $googleUser->email);
 
         $user = Auth::user(); // or find/create user using $googleUser->getEmail()
@@ -87,7 +97,12 @@ class SocialiteGoogleAuthController extends Controller
         // end save to db
 
         // dd ($googleUser); //google oauth token  //Use a Google Service Account if your app only needs access to your own Google Drive (when no logged user engaged
-        return redirect()->route('socialite.start')->with('googleAccessToken', $googleUser);
+        // return redirect()->route('socialite.start')->with('googleAccessToken', $googleUser);
+        return redirect()->route('socialite.start')->with('googleAccessToken', [
+            'id' => $googleUser->getId(),
+            'name' => $googleUser->getName(),
+            'email' => $googleUser->getEmail(),
+        ]);
 
     }
 

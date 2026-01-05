@@ -115,7 +115,7 @@
                             {{ __('Socialite Google login') }}
                         </x-dropdown-link>
 
-                        <x-dropdown-link href="/run-sql-dump-save-gdrive">
+                        <x-dropdown-link :href="route('sql-dump.save-to-gdive')"  :class="request()->routeIs('sql-dump.save-to-gdive') ? 'bg-gray-300 text-gray-900 font-semibold' : ''">
                             {{ __('Back-up SQL DB to GDrive') }}
                         </x-dropdown-link>
 
