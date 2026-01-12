@@ -27,11 +27,13 @@ git restore .  git clean -fd
 </br> main page  =>  http://localhost:8000/     (custom url as u screwed ports with phpmyadmin, set up in APP_URL in .env)
 </br> phpMyAdmin => http://localhost:8080/   (login=sail, pass=password)
 
+</br> Credentials => freemail.u**.net => Paypal and other tokens + attachments (.env and json keys)
 
 
 
 ### Content
 - [1. Install Laravel 12](#1-install-laravel-12)
+- [1.2 Deploy this app from Git](#1.2-deploy-this-app-from-git)
 - [2. Docker sail](#2-docker-sail)
 - [3. Filament3](#3-filament3)
 - [4. Pest tests](#4-pest-test3)
@@ -132,9 +134,23 @@ If table session is missing
 
 
 
+<p> ----------------------------------------------------------------------------------------- </p>
 
 
+## 1.2 Deploy this app from Git
 
+<p>1. Copy from github => <code> git pull Name_HERE </code> </p>
+<p>2. Paste .env </p>
+<p>3. Here you need to run Sail up and create /vendor folder inside container, but yet u dont have /vendor folder which should contain Sail and u cant run create container with Sail and run
+<code> composer install </code>  inside container, outside container also wont work because of diffretent php versions and missing extension 
+</p>
+<p>So fix is => First time start container with <code> docker compose up -d </code> 
+then go container  <code> docker exec -it my_filament_laravel_12-laravel.test-1 bash </code>
+and run <code> composer install </code> inside container. After then you can start with <code>./vendor/bin/sail bash </code>
+</p>
+<p>4. Create /node_modules with <code> npm install </code> and create build <code> npm run build </code> </p>
+<p>5. Paste json credentials for BigQuery and other stuff, like /storage/app/bigQuery_keys/laravel-bigquery-8c7d1271c73f.json OR /gcs/service-account.json </p>
+<p>6. Follow missing steps from 1. Install Laravel 12, like generate key, create DB, migrate, seed, etc</p>
 
 
 
