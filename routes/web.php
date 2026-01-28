@@ -20,6 +20,7 @@ use App\Http\Controllers\Socialite\SocialiteGoogleAuthController;
 use App\Http\Controllers\SQL_Backup_toGDive\SqlDumptoGDriveController;
 use App\Http\Controllers\Stripe\StripeController;
 use App\Http\Controllers\TestController\TestController;
+use App\Http\Controllers\Translate\TranslateController;
 use App\Http\Controllers\VenuesStoreLocator\VenuesLocatorController;
 use App\Http\Controllers\VuePages\VuePagesController;
 use App\Http\Controllers\VuePagesWithRouter\VuePagesWithRouterController;
@@ -157,7 +158,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/auth/google/logout', [SocialiteGoogleAuthController::class, 'socialiteLogout']);
     // End Socialite
 
-    // Generate SQL DUMP and save it to Google Drive
+    // Generate SQL DUMP and save it to Google Drive, requires Socialite login
     // Run command to create SQL DUMP and save to Google Drive. Also added in cron Job to run every x minutes, App/Jobs/BackupDatabaseToGoogleDrive.
     Route::get('/run-sql-dump-save-gdrive', [SqlDumptoGDriveController::class, 'index'])->name('sql-dump.save-to-gdive');  // index with button to start the job
     Route::get('/run-sql-dump-save-gdrive/run', [SqlDumptoGDriveController::class, 'runJob'])->name('sql-dump.save-to-gdive.run.job');  // runs the job
@@ -187,7 +188,11 @@ Route::middleware('auth')->group(function () {
     Route::get('bigQuery/bigquery/data', [BigQueryController::class, 'showBigQueryData'])->name('bigQuery.data');  // index
 
     // BookingController
-    Route::get('booking/index', [BookingController::class, 'index'])->name('booking.index');  // index with Vue, display calendar for bookinf
+    Route::get('booking/index', [BookingController::class, 'index'])->name('booking.index');  // index with Vue, display calendar for booking
+
+    // TranslateController
+    Route::get('translate/index', [TranslateController::class, 'index'])->name('translate.index');  // translate, multi languages
+    Route::get('translate/lang/{lang}', [TranslateController::class, 'changeLanguage'])->name('translate.changeLanguage');
 
 });
 // End Auth (logged) users only------------------------------------------------------------------------------------------

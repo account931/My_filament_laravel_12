@@ -145,6 +145,11 @@
                             {{ __('Booking Vue') }}
                         </x-dropdown-link>
 
+                         <!-- Transalte -->
+                        <x-dropdown-link :href="route('translate.index')"  :class="request()->routeIs('translate.index') ? 'bg-gray-300 text-gray-900 font-semibold' : ''">
+                            <i class="fas fa-cloud-sun" style="font-size:12px"></i>
+                            {{ __('Translate') }}
+                        </x-dropdown-link>
                         
 
 

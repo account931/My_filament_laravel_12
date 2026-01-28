@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\SetLocale;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -15,7 +16,8 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         // Global middleware (applied to every request)
         // register middleware here
-        // Prometheus metrics
+
+        // Prometheus metrics middleware
         if (getenv('APP_ENV') !== 'testing') { // fix to prevent github action Pest tests from failing
             // if (!app()->environment('testing')) {//caused error Uncaught ReflectionException: Class "env" does not exist as is not safe to call inside bootstrap/app.php or before the app is fully
             $middleware->append(\App\Http\Middleware\Prometheus_metrcis\CountVisits::class);           // Prometheus metrics, how many times a page is visited
@@ -25,6 +27,11 @@ return Application::configure(basePath: dirname(__DIR__))
             $middleware->append(\App\Http\Middleware\Prometheus_metrcis\RegisterIPVisits::class);      // Prometheus metrics, tracks IP visits
         }
         // End Prometheus metrics
+
+        // Translate middleware
+        $middleware->web(append: [SetLocale::class]);
+
+        // --------------
 
         // ✅ Route middleware (only applied to specific routes when declared)
         $middleware->alias([
