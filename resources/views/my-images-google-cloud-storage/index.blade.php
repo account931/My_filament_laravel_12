@@ -197,14 +197,26 @@ $('.thumbnail').click(function() {
                                @csrf
                                @method('DELETE')
                                <!--<input type="hidden" name="id" value="{{ $item->id }}" />-->
-                               <button type="submit" class="btn btn-danger rounded" onclick="return confirm('Are you sure you want to hard delete image (NOT SOFT DELETE) ID: {{ $item->id }} ?')"> Delete ID {{ $item->id }}</button> 
+                               <button type="submit" class="btn btn-danger rounded" onclick="return confirm('Are you sure you want to hard delete image (NOT SOFT DELETE) ID: {{ $item->id }} ?')"> Delete ID {{ $item->id }} from both GCS and local DB</button> 
                            </form>
 
                             <!-- Display image itself, below we have Lightbox-style modal for the image -->
-                            @if(\Illuminate\Support\Facades\Storage::disk('gcs')->exists($relativePath))
-                                <img src="{{ Storage::disk('gcs')->url($relativePath) }}" class="resizable-image thumbnail" alt="Image" style="width:33%;"> <!-- "/my-laravel-gcs-bucket/images/OYJnc9m.jpg" --> 
+                            <!-- Fix to avoid crash when GCS not available, lets say free tier is off-->
+                            @php
+                            try {
+                                $exists = \Illuminate\Support\Facades\Storage::disk('gcs')->exists($relativePath);
+                            } catch (\Exception $e) {
+                                $exists = false;
+                            }
+                            @endphp
+
+                            @if($exists)
+                                 <img src="{{ \Illuminate\Support\Facades\Storage::disk('gcs')->url($relativePath) }}">
                             @else
-                                <br><span style="color:red;">No image available</span> <i class="fas fa-times-circle" style="font-size:14px; color:red;"></i>
+                                <p class="text-white rounded  bg-danger m-2 p-2">
+                                     <span class="me-2">&#9888;</span> <!-- ⚠️ Unicode warning/exclamation icon -->
+                                     Image not available, GSC free tier is off
+                                </p>
                             @endif
                             
 

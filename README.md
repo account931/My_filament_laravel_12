@@ -106,6 +106,14 @@ FIX if 404  => Give the correct ownership to storage/ and bootstrap/cache/ => in
 sudo chown -R $USER:$USER storage bootstrap/cache
 sudo chmod -R 775 storage bootstrap/cache
 </code> 
+
+
+or
+<code> 
+sudo chown -R $USER:www-data bootstrap storage
+sudo chmod -R 775 bootstrap storage
+</code> 
+
 In .env add  
 WWWUSER=1000
 WWWGROUP=1000
