@@ -58,7 +58,7 @@ git restore .  git clean -fd
 - [22. Save Images to Google Cloud Storage](#22-save-images-to-google-cloud-storage-bucket-in-laravel)
 - [23. Google BigQuery](#23-google-bigquery)
 - [24. Booking on Vue](#24-booking-on-vue)
-
+- [25. Render.com](#25-render.com)
 
 - [111.V.A](#111-va)
 - [112.Known errors ](#112-known-errors)
@@ -952,6 +952,70 @@ Booking on Vue (Option Api), uses own router and re-usable components for diffre
     <router-link class="nav-link" to="/booking/3"> Room 3</router-link> 
   </li>
   </code>
+
+
+
+
+
+<p> ----------------------------------------------------------------------------------------- </p>
+
+## 25. Render.com
+<p> "Laravel_2024_migration" (on Laravel 6) is deployed to alwaysdata.com (acc****1@ukr.net). Deploy is performem via Github action via ssh (copy files, migrate, etc). But free space is limited to 100 MB, so this one "My_filament_laravel_12" goes to render.com </p>
+
+Render.com set up:
+<p> 1 Create Dockerfile specifically for Render and set in Render settins => ./docker_db_setup/render.com/Dockerfile </p>
+<p> 2. Create external db at alwaysdata, as native render.com will be erased in 30 days </p>
+<p> 3. Create redis instance at render.com </p>
+
+<p> 4. Fix 1: Disable redis for production as it crashes, in /botstrap/app.hp
+ <code>
+   // Prometheus metrics middleware
+        $env = getenv('APP_ENV') ?: 'production';
+        if ($env === 'local') {
+ </code>
+
+<p> 4.2 Fix 2: Fix for https, or css will fail. Force HTTPS in Laravel in App\Providers\AppServiceProvider.php:
+ <code>
+ use Illuminate\Support\Facades\URL;
+ public function boot()
+ {
+    if (config('app.env') === 'production') {
+        URL::forceScheme('https');
+    }
+ }
+ 
+ </code>
+
+
+<p> 5. Add env variables at render.com. Minimal working env set up:
+ <code>
+APP_DEBUG=true   # tempo
+APP_ENV=production
+APP_KEY="base64:ZungqS*************"
+APP_NAME=Laravel
+APP_URL=https://my-fil****-laravel-12.onrender.com/   # your actual app url 
+CACHE_DRIVER=file
+DB_CONNECTION=mysql
+DB_DATABASE=d***_laravel_filament  
+DB_HOST=mysql-******.alwaysdata.net #db host at alwaysdata.net
+DB_PASSWORD=m***********
+DB_PORT=3306
+DB_USERNAME=d******
+LOG_CHANNEL=stderr
+LOG_LEVEL=debug
+PROMETHEUS_REDIS_PASSWORD=null
+PROMETHEUS_REDIS_PORT=6379
+QUEUE_CONNECTION=sync
+REDIS_CACHE_DB=1
+REDIS_CLIENT=phpredis
+REDIS_CLUSTER=false
+REDIS_DB=0
+REDIS_PASSWORD=null
+REDIS_PORT=6379
+REDIS_PREFIX=laravel_database_
+REDIS_URL=redis://red-d5v1bfqq***********  # redis separate service at render.com
+SESSION_DRIVER=file
+</code>
 
 
 

@@ -5,6 +5,7 @@ namespace App\Providers;
 use Filament\Tables\Columns\TextColumn;
 // use to create custom method for TextInput
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
 
@@ -42,6 +43,12 @@ class AppServiceProvider extends ServiceProvider
             });
         });
         // End Add my custom Filament TextColumn method, can use as ->myCustomDisplay()
+
+        // fix for Render.com, Force HTTPS in Laravel (important on Render)
+        if (config('app.env') === 'production') {
+            URL::forceScheme('https');
+        }
+        // End fix for Render.com
 
     }
 }

@@ -17,14 +17,17 @@ return Application::configure(basePath: dirname(__DIR__))
         // Global middleware (applied to every request)
         // register middleware here
 
-        // Prometheus metrics middleware
-        if (getenv('APP_ENV') !== 'testing') { // fix to prevent github action Pest tests from failing
-            // if (!app()->environment('testing')) {//caused error Uncaught ReflectionException: Class "env" does not exist as is not safe to call inside bootstrap/app.php or before the app is fully
-            $middleware->append(\App\Http\Middleware\Prometheus_metrcis\CountVisits::class);           // Prometheus metrics, how many times a page is visited
-            $middleware->append(\App\Http\Middleware\Prometheus_metrcis\TrackRequestDuration::class);  // Prometheus metrics, measure how long requests take
-            $middleware->append(\App\Http\Middleware\Prometheus_metrcis\CountHttpStatusCodes::class);  // Prometheus metrics, counts 200/400/500 responses
-            $middleware->append(\App\Http\Middleware\Prometheus_metrcis\CountExceptions::class);       // Prometheus metrics, tracks exceptions thrown during request
-            $middleware->append(\App\Http\Middleware\Prometheus_metrcis\RegisterIPVisits::class);      // Prometheus metrics, tracks IP visits
+        // Prometheus metrics middleware, set to work only on local and when not testing, because of crash at Render.com
+        $env = getenv('APP_ENV') ?: 'production';
+        if ($env === 'local') {
+            if (getenv('APP_ENV') !== 'testing') { // fix to prevent github action Pest tests from failing
+                // if (!app()->environment('testing')) {//caused error Uncaught ReflectionException: Class "env" does not exist as is not safe to call inside bootstrap/app.php or before the app is fully
+                $middleware->append(\App\Http\Middleware\Prometheus_metrcis\CountVisits::class);           // Prometheus metrics, how many times a page is visited
+                $middleware->append(\App\Http\Middleware\Prometheus_metrcis\TrackRequestDuration::class);  // Prometheus metrics, measure how long requests take
+                $middleware->append(\App\Http\Middleware\Prometheus_metrcis\CountHttpStatusCodes::class);  // Prometheus metrics, counts 200/400/500 responses
+                $middleware->append(\App\Http\Middleware\Prometheus_metrcis\CountExceptions::class);       // Prometheus metrics, tracks exceptions thrown during request
+                $middleware->append(\App\Http\Middleware\Prometheus_metrcis\RegisterIPVisits::class);      // Prometheus metrics, tracks IP visits
+            }
         }
         // End Prometheus metrics
 
