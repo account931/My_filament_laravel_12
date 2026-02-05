@@ -12,7 +12,9 @@
     <div class="row justify-content-center">
         <div class="col-12 col-md-12">
             <div class="card">
-                <div class="card-header">Booking on Vue, uses package V-calendar,  <b> `/api/rooms/${roomId}/calendar` + date param </b> (open route, does not require Sanctum/Passport(access token)) </br> http://localhost:8000/api/rooms/1/calendar?date=2025-12-16</div>
+                <div class="card-header" style="word-break: break-word;">
+                    Booking on Vue, uses package V-calendar,  <b> `/api/rooms/${roomId}/calendar` + date param </b> (open route, does not require Sanctum/Passport(access token)) </br> http://localhost:8000/api/rooms/1/calendar?date=2025-12-16
+                </div>
 
                 <div class="card-body">
                     @if (session('status'))

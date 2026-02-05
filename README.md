@@ -983,7 +983,6 @@ Render.com set up:
         URL::forceScheme('https');
     }
  }
- 
  </code>
 
 
@@ -1015,7 +1014,12 @@ REDIS_PORT=6379
 REDIS_PREFIX=laravel_database_
 REDIS_URL=redis://red-d5v1bfqq***********  # redis separate service at render.com
 SESSION_DRIVER=file
+VITE_MAPBOX_API_KEY=pk.eyJ1**********
 </code>
+
+
+<p> 6. Add json keys Google bigQuery, etc</p>
+
 
 
 

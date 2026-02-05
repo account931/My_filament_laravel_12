@@ -54,6 +54,8 @@ Route::middleware('force.json')->group(function () {
     Route::post('/rooms/{room}/bookings', [RoomCalendarController::class, 'store']); // save new booking
     Route::delete('/booking/{booking}', [RoomCalendarController::class, 'destroy']); // delete
 
+    Route::get('/rooms/{room}/getLatestBooking/{quantity?}', [RoomCalendarController::class, 'getLatestBooking']); // get next 20 bookings, {quantity?} can be missing,   localhost:8000/api/rooms/1/getLatestBooking
+
     // ----------------------------- End Open routes (do not require Passport/Sanctum ( does not require token in request) --------------------------------------
 
     // User Api Registration/Login, API Token Authentication

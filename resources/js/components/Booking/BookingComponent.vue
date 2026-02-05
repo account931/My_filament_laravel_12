@@ -53,10 +53,10 @@ export default {
   name: 'Booking',
 
   components: {
-      BookingCalendarSubComponent, // Register the imported component
+      BookingCalendarSubComponent, // Register the imported component, it is specified in router, that it should be displayed in  <router-view/>
   },
 
-  data() {
+  dcata() {
     return {
       title: 'Booking system',
       bookingFetchedData: [],  //{"room_id":1,"room_name":"Room-officia","date":"2025-12-16","slots":[{"start":"2025-12-16 00:00","end":"2025-12-16 01:00","status":"free"},{"start":"2025-12-16 01:00","end":"2025-12-16 02:00","status":"free"},

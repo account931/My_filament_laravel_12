@@ -37,10 +37,15 @@ class BookingBooking extends Model implements Auditable  // Laravel Audit
         'username',
         'start_time',
         'end_time',
-        'password_to_delete',
+        // 'password_to_delete',
         'total_hours',
         'total_price',
         'status',
+    ];
+
+    // Hide sensitive attributes from JSON / API responses
+    protected $hidden = [
+        'password_to_delete',
     ];
 
     protected $casts = [

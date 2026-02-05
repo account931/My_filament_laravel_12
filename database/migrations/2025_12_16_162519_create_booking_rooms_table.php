@@ -1,5 +1,6 @@
 <?php
 
+// migratioin for rooms, e,g room1, room2
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;

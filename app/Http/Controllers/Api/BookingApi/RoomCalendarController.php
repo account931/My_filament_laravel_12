@@ -6,6 +6,7 @@
 namespace App\Http\Controllers\Api\BookingApi;
 
 // use App\Http\Controllers\Controller\Owner;
+use App\Http\Controllers\Api\Resources\Booking\BookingResource;
 use App\Http\Controllers\Controller;
 use App\Models\Booking\BookingBooking;
 use App\Models\Booking\BookingRoom;
@@ -15,7 +16,7 @@ use Illuminate\Support\Facades\Auth;
 
 class RoomCalendarController extends Controller
 {
-    // gets booking data for selected date and room
+    // gets booking data for selected date and room, http://localhost:8000/api/rooms/1/calendar?date=2025-12-16
     public function index(Request $request, BookingRoom $room)
     {
         /*
@@ -227,6 +228,26 @@ class RoomCalendarController extends Controller
 
         return response()->json([
             'message' => 'Booking deleted successfully',
+        ]);
+    }
+
+    // get last 20 bookings, http://localhost:8000/api/rooms/1/getLatestBooking Or specify quantity http://localhost:8000/api/rooms/1/getLatestBooking/5
+    public function getLatestBooking(BookingRoom $room, int $quantity = 20)
+    {
+        // safety: clamp quantity (avoid insane numbers)
+        $quantity = max(1, min((int) $quantity, 50));
+
+        $bookings = BookingBooking::where('start_time', '>=', Carbon::today())
+            ->where('room_id', $room->id)
+            ->where('status', 'confirmed') // optional, remove if not needed
+            ->orderBy('start_time', 'asc') // soonest first
+            ->limit($quantity)
+            ->get();
+
+        return response()->json([
+            'room_id' => $room->id,
+            'count' => $bookings->count(),
+            'data' => BookingResource::collection($bookings), // ✅ use resource  // $bookings
         ]);
     }
 }

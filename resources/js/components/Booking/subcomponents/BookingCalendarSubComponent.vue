@@ -1,10 +1,13 @@
  <!-- Re-usable component for one room (1, 2, etc), fetches booking data onload and on calendar change, modal with form to add new booking, uses props from parent component -->
+
+ <!--it is specified in router, that it should be displayed in  <router-view/>  -->
+
 <template>
   <div class="container">
 
     <!-- Logged user -->
-    <div class="col-12 text-center mb-2">
-      Logged as: {{ userLogged?.data?.user?.name || 'no user name so far' }}
+    <div class="col-12 text-center mb-2 fs-6 fs-md-5">
+      Logged as: {{ userLogged?.data?.user?.name || 'no user name' }}
     </div>
 
     <!-- Error -->
@@ -121,9 +124,9 @@
     <!-- Room name and selected date-->
     <h2 class="room-info">  {{ this.bookingFetchedData.room_name }} , room id: {{ this.bookingFetchedData.room_id }} ,  <span class="bold"> {{ this.bookingFetchedData.date }} </span> </h2>
 
-    <!-- Booking slots -->
+    <!-- Booking slots, green/red -->
     <div class="row mt-3">
-      <div v-for="(slot, index) in bookingFetchedData.slots" :key="index" class="col-12 col-md-3 mb-2">
+      <div v-for="(slot, index) in bookingFetchedData.slots" :key="index" class="col-4 col-lg-2 mb-2">   <!-- 3 per row on mobile, 6 per row on large screens -->
         <div class="p-2 small text-center" :class="slot.status === 'free' ? 'slot-free' : 'slot-booked'">
           <strong>{{ formatTime(slot.start) }} - {{ formatTime(slot.end) }}</strong>
           <div v-if="slot.user_name">by {{ slot.user_name }} <i class="fa fa-trash text-danger" @click="deleteItem(slot.book_id)" style="cursor: pointer;"></i> <!-- Bootstrap delete icon --></div>  
@@ -132,6 +135,36 @@
     </div>
 
 
+      <!-- Display next 20 bookings-->
+      <div class="bg-info p-2 mt-2 mb-2"> Next 20 bookings for room {{ this.roomId }}</div>
+      <div v-if="next20Bookings.length == 0"> No bookings found.</div>
+
+      <div v-else class="table-responsive">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Date</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="booking in next20Bookings" :key="booking.id">
+            <td>{{ booking.id }}</td>
+            <td>{{ booking.username }}</td>
+            <td>{{ new Date(booking.start_time).toISOString().split('T')[0] }}</td>
+            <td>{{ formatTime(booking.start_time) }}</td>
+            <td>{{ formatTime(booking.end_time) }}</td>
+            <td>{{ booking.status }}</td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+      <!-- End Display next 20 bookings-->
+
       <!--  -->
       <div class="col-12 text-center">
         <hr><br>
@@ -139,6 +172,8 @@
         <!-- Debugging chart data -->
         {{ this.selectedDate }}       <!-- Date selected in V calendar-->
         Selected {{ this.bookingFetchedData }} <!-- Fetched data from Api endpoint for selected date -->
+        <p>Next 20  </p> {{ this.next20Bookings}}   
+
       </div>
 
       <!-- GIF Loader -->
@@ -211,6 +246,8 @@ export default {
       errors: {},
       setToday: new Date().toISOString().split('T')[0],  //to set in minimal date in modal form date input, so user cant select past
 
+      next20Bookings: [],  //next 20 bookings for selected room
+
 
     };
   },
@@ -226,15 +263,19 @@ export default {
   },
 
   mounted() {
-    this.roomId = this.$route.params.id;  //get id from router, prev used props from parents
-    this.fetchBookingDataForSelectedDate(this.selectedDate);
+    this.roomId = Number(this.$route.params.id) || 1; //get id from router, prev used props from parents // default to 1 if no id
+
+    this.fetchBookingDataForSelectedDate(this.selectedDate);    //get booking slots data for selected date and selcted room
+
+    this.fetchNext20Bookings();    //get 20 next bookings fro selcted room
   },
 
   //since use router, on router switch booking/1, booking/2 mounted method is not fired, have to watch it manually. I fuse props from parent, then not needed
    watch: {
     '$route'(to, from) {
-      this.roomId = to.params.id;
+      this.roomId = Number(this.$route.params.id) || 1;
       this.fetchBookingDataForSelectedDate(this.selectedDate);
+      this.fetchNext20Bookings();    //get 20 next bookings fro selcted room
     }
   },
 
@@ -250,10 +291,10 @@ export default {
       await this.$nextTick(); // ensures DOM updates before API call
       
       //const today = new Date().toISOString().split('T')[0];
-      //const roomId = 1; // Change if dynamic
+      //const roomId = 1; // Change it dynamic // now roomId is from router
 
       try {
-        const response = await axios.get(`/api/rooms/${this.roomId}/calendar`, { //http://localhost:8000/api/rooms/1/calendar?date=2025-12-16
+        const response = await axios.get(`/api/rooms/${this.roomId}/calendar`, { //http://localhost:8000/api/rooms/1/calendar?date=2025-12-16  //roomId is from router
           params: { date: dateSelected },
           headers: { Accept: 'application/json' }   //to see validation error
         });
@@ -460,7 +501,25 @@ export default {
     // Or do anything you want when the date changes
     //fetch new booking data for this date
     this.fetchBookingDataForSelectedDate(this.selectedDate);
-  }
+  },
+
+  //Get next 20 booking for selected room
+  // **************************************************************************************
+  // **************************************************************************************
+  //                                                                                     **
+  async fetchNext20Bookings () {
+        await this.$nextTick(); // ensures DOM updates before API call
+        try {
+           const response = await axios.get(`/api/rooms/${this.roomId}/getLatestBooking`, {   //roomId is from router
+               headers: { Accept: 'application/json' }
+           });
+           this.next20Bookings = response.data.data; // <-- must use .data
+        } catch (err) {
+           console.error(err);
+          this.error = err.response?.data?.message || 'Failed to fetch next 20 bookings';
+        }
+},
+
   
   }
 };

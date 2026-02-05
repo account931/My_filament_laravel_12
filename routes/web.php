@@ -188,7 +188,7 @@ Route::middleware('auth')->group(function () {
     Route::get('bigQuery/bigquery/data', [BigQueryController::class, 'showBigQueryData'])->name('bigQuery.data');  // index
 
     // BookingController
-    Route::get('booking/index', [BookingController::class, 'index'])->name('booking.index');  // index with Vue, display calendar for booking
+    Route::get('booking/index/{any?}', [BookingController::class, 'index'])->name('booking.index')->where('any', '.*');  // index with Vue, display calendar for booking
 
     // TranslateController
     Route::get('translate/index', [TranslateController::class, 'index'])->name('translate.index');  // translate, multi languages

@@ -7,15 +7,17 @@ import BookingVue   from '../components/Booking/subcomponents/BookingCalendarSub
 
 
 const routes = [
+  
   {
-    path: '/',
+    path: '/booking',
     redirect: '/booking/1',
   },
+  
 
   
   //Booking Vue
     {
-    path: '/booking/:id',
+    path: '/booking/:id?',
     name: 'booking-vue',
     component: BookingVue,
     props: true,
@@ -24,7 +26,8 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHashHistory(), // working fix, was getting localhost:8000/contact  instead of  localhost:8000/vue-pages-with-router /contact
+  history: createWebHistory(''),  //fix to remove #/booking/1 ending on every laravel route
+  //history: createWebHashHistory(), // working fix, was getting localhost:8000/contact  instead of  localhost:8000/vue-pages-with-router /contact
   //history: createWebHistory('/vue-pages-with-router'),  //Vue Router takes over all routes under and corrupt routes/web.php
   //history: createWebHistory()
   routes,

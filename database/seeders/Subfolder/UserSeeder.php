@@ -26,6 +26,8 @@ class UserSeeder extends Seeder
             'password' => Hash::make('password'),
         ]);
 
+        // add sanctum token here ? No, it does not matter, you need to have actual sanctum token to send it in request
+
         User::factory()->create([                 // in Laravel 12
             // factory(\App\User::class, 1)->create([
             'name' => 'Olya',
