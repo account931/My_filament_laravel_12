@@ -8,11 +8,13 @@ import BookingVue   from '../components/Booking/subcomponents/BookingCalendarSub
 
 const routes = [
   
+  //default routing to room 1 was not working, so now we set default room 1 in Booking/subcomponents/BookingCalendarSubComponent => this.roomId = Number(this.$route.params.id) || 1;
+  /*
   {
     path: '/booking',
     redirect: '/booking/1',
   },
-  
+  */
 
   
   //Booking Vue

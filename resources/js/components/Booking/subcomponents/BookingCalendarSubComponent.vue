@@ -1,6 +1,8 @@
- <!-- Re-usable component for one room (1, 2, etc), fetches booking data onload and on calendar change, modal with form to add new booking, uses props from parent component -->
+ <!-- Re-usable component for any one room (1, 2, etc) -->
+ <!-- Fetches booking data from API onMount and on calendar date change -->
+<!--  Contains: calendar (uses package v-calendar Vue 3), block to display free/taken slots, form to add new bookings, 20 next bookings (Following NOT TRUE any more => uses props from parent component to get room ID) -->
 
- <!--it is specified in router, that it should be displayed in  <router-view/>  -->
+ <!--it is specified in router "/router_for_booking.js", that this subcomponent should be displayed in  <router-view/>  with different/dynamic rooms -->
 
 <template>
   <div class="container">
@@ -124,7 +126,7 @@
     <!-- Room name and selected date-->
     <h2 class="room-info">  {{ this.bookingFetchedData.room_name }} , room id: {{ this.bookingFetchedData.room_id }} ,  <span class="bold"> {{ this.bookingFetchedData.date }} </span> </h2>
 
-    <!-- Booking slots, green/red -->
+    <!-- Display Booking slots, green/red -->
     <div class="row mt-3">
       <div v-for="(slot, index) in bookingFetchedData.slots" :key="index" class="col-4 col-lg-2 mb-2">   <!-- 3 per row on mobile, 6 per row on large screens -->
         <div class="p-2 small text-center" :class="slot.status === 'free' ? 'slot-free' : 'slot-booked'">
@@ -143,22 +145,22 @@
       <table class="table table-bordered">
         <thead>
           <tr>
-            <th>ID</th>
             <th>Username</th>
             <th>Date</th>
             <th>Start Time</th>
             <th>End Time</th>
-            <th>Status</th>
+            <th>Delete </th> 
+            <!-- <th>Status</th>  -->
           </tr>
         </thead>
         <tbody>
           <tr v-for="booking in next20Bookings" :key="booking.id">
-            <td>{{ booking.id }}</td>
             <td>{{ booking.username }}</td>
             <td>{{ new Date(booking.start_time).toISOString().split('T')[0] }}</td>
             <td>{{ formatTime(booking.start_time) }}</td>
             <td>{{ formatTime(booking.end_time) }}</td>
-            <td>{{ booking.status }}</td>
+            <td><i class="fa fa-trash text-danger" @click="deleteItem(booking.id)" style="cursor: pointer;"></i></td>
+            <!-- <td>{{ booking.status }}</td> -->
           </tr>
         </tbody>
       </table>
@@ -263,17 +265,17 @@ export default {
   },
 
   mounted() {
-    this.roomId = Number(this.$route.params.id) || 1; //get id from router, prev used props from parents // default to 1 if no id
+    this.roomId = Number(this.$route.params.id) || 1; //get id from router, default room to 1 if no id.  Prev used props from parents, but not any more 
 
-    this.fetchBookingDataForSelectedDate(this.selectedDate);    //get booking slots data for selected date and selcted room
+    this.fetchBookingDataForSelectedDate(this.selectedDate);    //get booking slots data from API for selected date and selected room
 
-    this.fetchNext20Bookings();    //get 20 next bookings fro selcted room
+    this.fetchNext20Bookings();    //get 20 next bookings from Api for selected room
   },
 
   //since use router, on router switch booking/1, booking/2 mounted method is not fired, have to watch it manually. I fuse props from parent, then not needed
    watch: {
     '$route'(to, from) {
-      this.roomId = Number(this.$route.params.id) || 1;
+      this.roomId = Number(this.$route.params.id) || 1; //get id from router, default room to 1 if no id.  Prev used props from parents, but not any more
       this.fetchBookingDataForSelectedDate(this.selectedDate);
       this.fetchNext20Bookings();    //get 20 next bookings fro selcted room
     }
@@ -485,7 +487,9 @@ export default {
     .finally (() => { 
         //this.loading = false;
         setTimeout(() => { this.showLoader = false;}, 900); // 2000ms = 2 seconds
-        this.fetchBookingDataForSelectedDate(this.booking_date);  //update calendar bookings
+
+        this.fetchBookingDataForSelectedDate(this.booking_date);  //update calendar bookings from Api
+        this.fetchNext20Bookings();    //update 20 next bookings from Api for selected room
 
     })
 },

@@ -14,7 +14,7 @@ class BigQueryLineAjaxChartWidget extends ChartWidget  // Widget
 {
     public ?array $chartData = null;
 
-    protected static ?string $heading = 'Working!!! BigQuery two top viewed products Chart via ajax, protected by Sanctum type 2';
+    protected static ?string $heading = 'Working!!! BigQuery two top viewed products Chart via ajax, protected by Sanctum type 2 (BQ free tier ends)';
 
     protected int|string|array $columnSpan = 12; // full width
 
@@ -52,7 +52,7 @@ class BigQueryLineAjaxChartWidget extends ChartWidget  // Widget
     public function loadData()
     {
         $user = \App\Models\User::first();
-        $token = $user->createToken('filament')->plainTextToken;
+        $token = $user->createToken('filament')->plainTextToken; //sanctum token
         $response = Http::withToken($token) /* Http::withToken(config('app.filament_api_token')) */ ->get('http://host.docker.internal:8000/api/bigquery/2topviewed');
 
         $this->chartData = $response->json();

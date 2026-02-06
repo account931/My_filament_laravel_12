@@ -1,10 +1,11 @@
-<!-- Show Booking calendar, uses package v-calendar Vue 3) -->
+<!-- Contains vue router to display subcomponent from "Booking/subcomponents/BookingCalendarSubComponent" for different rooms -->
+<!-- All the following items is now in "Booking/subcomponents/BookingCalendarSubComponent":  calendar (uses package v-calendar Vue 3), block to display free/taken slots, form to add new bookings, 20 next bookings -->
 <template>
 
   <div class="container">
     <div class="col-sm-12 col-xs-12 ">
       
-      <!--- Router Menu Variant 3 --->
+      <!--- Router Menu Variant 3, it displays subcomponent from "Booking/subcomponents/BookingCalendarSubComponent" for different rooms, default room 1 is set there too  --->
         <nav class="navbar navbar-expand-lg navbar-light bg-light" > <!-- fix for BS 4+--> <!-- .fix-for-non-working-click-in-mobile is a fix for non-working click in mobile -->
             <ul class="nav navbar-nav">
 				
@@ -56,8 +57,11 @@ export default {
       BookingCalendarSubComponent, // Register the imported component, it is specified in router, that it should be displayed in  <router-view/>
   },
 
-  dcata() {
+  // All data is moved to /subcomponents/BookingCalendarSubComponent.vue
+  data() {
     return {
+
+      /*
       title: 'Booking system',
       bookingFetchedData: [],  //{"room_id":1,"room_name":"Room-officia","date":"2025-12-16","slots":[{"start":"2025-12-16 00:00","end":"2025-12-16 01:00","status":"free"},{"start":"2025-12-16 01:00","end":"2025-12-16 02:00","status":"free"},
       userLogged: null,  // Logged user data
@@ -98,7 +102,10 @@ export default {
       success: false,
       errors: {},
       setToday: new Date().toISOString().split('T')[0],  //to set in modal form date input, so user cant select past
+
+      */
     };
+    
   },
 
   setup() {
@@ -106,21 +113,27 @@ export default {
   },
 
   mounted() {
+
+    //Moved to /subcomponents/BookingCalendarSubComponent.vue
     // Call fetch on component mount
+    /*
     const today = new Date().toISOString().split('T')[0];
     const roomId = 1; // Change if dynamic
 
     this.fetchBookingDataForSelectedDate(today, roomId);  //fetch calendar  data from APi for today
+    */
   },
 
 
-
+  //all methods moved to /subcomponents/BookingCalendarSubComponent.vue, so not needed here!!!
   methods: {
 
     //get data from Api endpoint for selected date
     // **************************************************************************************
     // **************************************************************************************
     //                                                                                     **
+
+    /*
     async fetchBookingDataForSelectedDate(dateSelected, roomId) {
       this.showLoader = true;
       this.error = '';
@@ -143,19 +156,24 @@ export default {
         setTimeout(() => { this.showLoader = false;}, 500); // 2000ms = 2 seconds
       }
     },
+    */
     
     // **************************************************************************************
     // **************************************************************************************
     //                                                                                     **
+
+    /*
     formatTime(datetime) {
       return new Date(datetime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     },
-
+    */
 
     //watch calendar clicks and update data from Api
     // **************************************************************************************
     // **************************************************************************************
     //                                                                                     **
+
+    /*
     onDayClick(day) {
       console.log(day.date);        // Date object
       //console.log(day.id);          // YYYY-MM-DD
@@ -173,25 +191,32 @@ export default {
       const roomId = 1; // Change if dynamic
       this.fetchBookingDataForSelectedDate(this.booking_date, roomId);  //fetch calendar for today
     },
+    */
 
     //show modal with new booking form
     // **************************************************************************************
     // **************************************************************************************
     //                                                                                     **
+
+    /*
     showModal() {
       this.isModalVisible = true;
     },
+    */
 
+    /*
     hideModal() {
       this.isModalVisible = false;
     },
-    
+    */
 
 
     //save new booking
     // **************************************************************************************
     // **************************************************************************************
     //                                                                                     **
+
+    /*
     async saveNewBooking() {
 
       //validation
@@ -232,11 +257,14 @@ export default {
         setTimeout(() => { this.showLoader = false;}, 500); // 2000ms = 2 seconds
       }
     },
+    */
 
     //validate Add new bookingfrom
     // **************************************************************************************
     // **************************************************************************************
     //                                                                                     **
+
+     /*
      validateForm() {
         this.errors = {};
 
@@ -267,18 +295,24 @@ export default {
 
         return Object.keys(this.errors).length === 0;
     },
+    */
 
     //Format date in form, hour must be with zero minutes
     // **************************************************************************************
     // **************************************************************************************
     //                                                                                     **
+
+    /*
     formatHour(hour) {
         return String(hour).padStart(2, '0') + ':00';
     },
+    */
 
     // **************************************************************************************
     // **************************************************************************************
     //                                                                                     **
+
+    /*
     deleteItem(id) {
     // Example: confirm first
     if (confirm('Are you sure you want to delete this booking ' +  id  +  ' ?')) {
@@ -295,17 +329,21 @@ export default {
         });
     }
   },
+  */
 
   //when user changes date in form, update data from Api
   // **************************************************************************************
   // **************************************************************************************
   //                                                                                     **
+
+  /*
   onFormDateChange(event) {
     console.log('Selected date:', this.booking_date);
     // Or do anything you want when the date changes
     //fetch new booking data for this date
     this.fetchBookingDataForSelectedDate(this.booking_date, this.roomId);
   }
+  */
 
     
 
