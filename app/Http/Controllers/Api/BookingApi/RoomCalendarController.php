@@ -13,6 +13,7 @@ use App\Models\Booking\BookingRoom;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class RoomCalendarController extends Controller
 {
@@ -187,8 +188,7 @@ class RoomCalendarController extends Controller
             'username' => $request->user_name, // Auth::user()->name,
             'start_time' => $startTimestamp,
             'end_time' => $endTimestamp,
-            'password_to_delete' => $request->booking_password,
-            'status' => 'confirmed', // or default status
+            'password_to_delete' => Hash::make($request->booking_password),  // password is hashed
         ]);
 
         return response()->json([
@@ -214,7 +214,8 @@ class RoomCalendarController extends Controller
         */
 
         // 2️⃣ Check password against booking's password_to_delete
-        if ($request->password !== $booking->password_to_delete) {
+        // if ($request->password !== $booking->password_to_delete) {  //ver for non-hashed pass
+        if (! Hash::check($request->password, $booking->password_to_delete)) {      // ver for hashed pass
             return response()->json([
                 'message' => 'Invalid password',
             ], 403);

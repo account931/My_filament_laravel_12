@@ -37,7 +37,7 @@ class BookingBooking extends Model implements Auditable  // Laravel Audit
         'username',
         'start_time',
         'end_time',
-        // 'password_to_delete',
+        'password_to_delete',
         'total_hours',
         'total_price',
         'status',
@@ -52,6 +52,7 @@ class BookingBooking extends Model implements Auditable  // Laravel Audit
         'start_time' => 'datetime',
         'end_time' => 'datetime',
         'total_price' => 'decimal:2',
+        // 'password' => 'hashed',  //hash password (we use in Controller =>  Hash::make($request->booking_password))
     ];
 
     /**
@@ -76,5 +77,11 @@ class BookingBooking extends Model implements Auditable  // Laravel Audit
     public function overlaps(Carbon $start, Carbon $end): bool
     {
         return $this->start_time < $end && $this->end_time > $start;
+    }
+
+    // When the model is in a subfolder, Laravel sometimes needs an explicit factory method in the model
+    protected static function newFactory(): \Database\Factories\BookingBookingFactory
+    {
+        return \Database\Factories\BookingBookingFactory::new();
     }
 }

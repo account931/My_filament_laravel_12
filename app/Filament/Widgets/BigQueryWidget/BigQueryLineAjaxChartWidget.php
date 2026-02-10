@@ -52,7 +52,7 @@ class BigQueryLineAjaxChartWidget extends ChartWidget  // Widget
     public function loadData()
     {
         $user = \App\Models\User::first();
-        $token = $user->createToken('filament')->plainTextToken; //sanctum token
+        $token = $user->createToken('filament')->plainTextToken; // sanctum token
         $response = Http::withToken($token) /* Http::withToken(config('app.filament_api_token')) */ ->get('http://host.docker.internal:8000/api/bigquery/2topviewed');
 
         $this->chartData = $response->json();

@@ -58,17 +58,19 @@
                 </div>        
                 <!-- End Show booked slots for selected date in form for better UI -->
 
-              <!-- Save form -->
+              <!-- Form to save new booking -->
               <form @submit.prevent="saveNewBooking">
 
+                <!-- Form: date field -->
                 <div class="form-group">
                   <label>Date</label>
                   <input type="date" v-model="booking_date" :min="this.setToday" @change="onFormDateChange" class="form-control" required>
                 </div>
 
+                <!-- Form: time from field -->
                 <div class="form-group">
                   <label>Start time</label>
-                  <select v-model="start_time" class="form-control" required>
+                  <select v-model="start_time" class="form-control"  @change="setEndTime" required>  <!--setEndTime is to set end_time + 1 for better UI -->
                     <option value="" disabled>Select start hour</option>
                     <option v-for="hour in 23" :key="hour" :value="formatHour(hour)">
                       {{ formatHour(hour) }}
@@ -76,6 +78,7 @@
                   </select>
                 </div>
 
+                <!-- Form: time to field -->
                 <div class="form-group">
                   <label>End time</label>
                   <select v-model="end_time" class="form-control" required>
@@ -85,17 +88,21 @@
                     </option>
                   </select>
                 </div>
-
+                
+                <!-- Form: userName field -->
                 <div class="form-group">
                   <label>User name</label>
                   <input type="text" v-model="user_name" class="form-control" required>
                 </div>
-
+                
+                <!-- Form: password field -->
                 <div class="form-group">
                   <label>Password</label>
                   <input type="text" v-model="booking_password" class="form-control" required>
                 </div>
+
               </form>
+              <!-- END Form to save new booking -->
 
               <div v-if="errors" :class="{'alert': true, 'alert-success': success, 'alert-danger': !success}" class="mt-3">
                     {{ errors }}
@@ -338,6 +345,8 @@ export default {
       this.booking_date = day.date.toLocaleDateString('en-CA'); //fix to return current dats // YYYY-MM-DD  //was returning prev day toISOString().split('T')[0];
       const roomId = 1; // Change if dynamic
       this.fetchBookingDataForSelectedDate(this.booking_date);  //fetch calendar for today
+
+      this.showModal(); //open modal with form to create new for better UI
     },
 
     //show modal with new booking form
@@ -398,8 +407,11 @@ export default {
         }
       } finally {
         //this.loading = false;
+        this.isModalVisible = false;
         setTimeout(() => { this.showLoader = false;}, 900); // 2000ms = 2 seconds
         this.fetchBookingDataForSelectedDate(this.booking_date);  //update calendar bookings
+
+        this.fetchNext20Bookings();    //update 20 next bookings from Api for selected room
 
       }
     },
@@ -505,6 +517,24 @@ export default {
     // Or do anything you want when the date changes
     //fetch new booking data for this date
     this.fetchBookingDataForSelectedDate(this.selectedDate);
+  },
+
+  // is to set end_time + 1 when u select start_time (for better UI)
+  // **************************************************************************************
+  // **************************************************************************************
+  //                                                                                     **
+  setEndTime() {
+    if (!this.start_time) {
+      this.end_time = ''
+      return
+    }
+
+    const hour = parseInt(this.start_time, 10)
+    const nextHour = hour + 1
+
+    this.end_time = nextHour <= 23
+      ? this.formatHour(nextHour)
+      : ''
   },
 
   //Get next 20 booking for selected room

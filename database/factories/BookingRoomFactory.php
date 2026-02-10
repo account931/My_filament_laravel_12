@@ -1,5 +1,7 @@
 <?php
 
+// create a romm for booking, 1, 2, etc
+
 namespace Database\Factories;
 
 use App\Models\Booking\BookingRoom;
