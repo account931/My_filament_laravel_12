@@ -69,4 +69,11 @@
 
 {{-- @endsection --}}   {{-- Laravel 12 fix--}}
 
+<script>
+    //used to use VITE_MAPBOX_API_KEY,  but get this fix for render.com. We will get this token in vue with mapboxgl.accessToken = window.MAPBOX_API_KEY
+    window.MAPBOX_API_KEY = "{{ config('services.mapbox.token') }}";
+</script>
+
+
+
 </x-app-layout>
