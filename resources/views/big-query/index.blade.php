@@ -20,7 +20,7 @@
                 <div class="card">
                     <div class="card-header">
                         uses Shop e-commerce db table to get and display products for which we will track analytics (when u click on a single product, BigQuery is collected) <br>
-                        <span class="small text-danger">NB: BigQuery was trial option only, so it stopped working. Wish to continue you have to pay ! </span> 
+                        <span class="small text-danger"> <del> NB: BigQuery was trial option only, so it stopped working. Wish to continue you have to pay ! </del>  NB:FALSE, you have free BQ limit every month</span> 
                         <a href="{{route('bigQuery.data')}}" class="btn btn-success btn-sm w-100 pt-3 pb-3"> <i class='far fa-eye' style='font-size:16px'></i> 
                             View BigData data stats
                         </a>  
@@ -78,7 +78,10 @@
                                             <div class="col-md-3 mb-4"> <!-- 4 columns per row (12/4 = 3) -->
                                                 <div class="card h-100">
                                                     @if ($product->image)
-                                                        <img src="{{ $product->image }}" class="card-img-top w-1/2 mx-auto" alt="{{ $product->name }}">
+                                                        <img src="{{ $product->image }}" class="card-img-top w-1/2 mx-auto" alt="{{ $product->name }}" 
+                                                        onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"> <!--when no internet and img url not available -->
+                                                       <span class="d-none">No Image</span>
+
                                                     @else
                                                         <img src="https://via.placeholder.com/300x200?text=No+Image" class="card-img-top" alt="No Image">
                                                     @endif
@@ -114,9 +117,9 @@
                                                             @endif
                                                             <!------------End Show if product is in Cart already --------->
 
-                                                            <!--- View single product -- Implicit Route Model Binding ------->
+                                                            <!--- View single product & collect BQ -- Implicit Route Model Binding ------->
                                                             <a href="{{route('bigQuery.list.product',   ['product' => $product])}}" class="btn btn-primary btn-sm w-100"> <i class='far fa-eye' style='font-size:16px'></i> 
-                                                            View it&collect BG (by model binding)...
+                                                            View it&collect BQ (by model binding)...
                                                             </a>  
 
                                                             <br><br>
@@ -124,7 +127,7 @@
 
                                                             <!---DISABLED Button to add to cart, show if product was already added--------->
                                                             <a href="javascript:void(0)" class="btn btn-secondary btn-sm w-100"
-                                                            onclick="alert('Disabled, as it is not real Shop, just BigQuety test!'); return false;" class="btn btn-info btn-sm w-100">
+                                                            onclick="alert('Disabled, as it is not real Shop, just BigQuery test!'); return false;" class="btn btn-info btn-sm w-100">
                                                                 Add to Cart (N/A)
                                                                 <!------------Show if product is in Cart already --------->
                                                                 @if (isset(session()->get('cart', [])[$product->id]))

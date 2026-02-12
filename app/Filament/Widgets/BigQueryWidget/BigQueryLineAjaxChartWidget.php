@@ -14,7 +14,7 @@ class BigQueryLineAjaxChartWidget extends ChartWidget  // Widget
 {
     public ?array $chartData = null;
 
-    protected static ?string $heading = 'Working!!! BigQuery two top viewed products Chart via ajax, protected by Sanctum type 2 (BQ free tier ends)';
+    protected static ?string $heading = 'Working!!! BigQuery two top viewed products Chart via ajax, protected by Sanctum type 2. Inet required';
 
     protected int|string|array $columnSpan = 12; // full width
 

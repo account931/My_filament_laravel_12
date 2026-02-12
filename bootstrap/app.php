@@ -47,6 +47,17 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
     })
+    // instead of /app/Exceptions/Handler.php ( used in Laravev < 10) handle your exceptions here
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+
+        $exceptions->render(function (\Throwable $e, $request) {
+
+            // show my custom error when there is curl error, i.e no internet, e.g for pages with BigQuery or GCS
+            if (str_contains($e->getMessage(), 'cURL error 6')) {
+                return response()->view('errors.no-internet', [], 503);
+            }
+
+            return null; // let Laravel handle other errors
+        });
+
     })->create();

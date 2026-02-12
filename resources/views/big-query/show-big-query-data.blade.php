@@ -13,8 +13,12 @@
             <div class="col-md-10">
                 <div class="card shadow-sm">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <span>Products Views from BigData</span> 
-                        <span class="small text-danger">NB: BigQuery was trial option only, so it stopped working. Wish to continue you have to pay ! </span> 
+                        <p>Products Views from BigData</p> 
+
+                        <p class="small text-danger"> 
+                            <del> NB: BigQuery was trial option only, so it stopped working. Wish to continue you have to pay ! </del> <br> 
+                            NB:FALSE, you have free BQ limit every month
+                        </p> 
 
                         <a href="{{ route('bigQuery.index') }}" class="btn btn-info btn-sm">
                             <i class="fas fa-sign-in-alt"></i> Go Back to List

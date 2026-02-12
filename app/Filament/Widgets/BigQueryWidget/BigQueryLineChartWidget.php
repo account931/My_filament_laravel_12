@@ -12,7 +12,7 @@ use Filament\Widgets\Widget;
 
 class BigQueryLineChartWidget extends ChartWidget  // Widget
 {
-    protected static ?string $heading = 'BigQuery Two top viewed products Chart via direct fetch (BQ free tier ends) ';
+    protected static ?string $heading = 'BigQuery Two top viewed products Chart via direct fetch. Inet is required ';
 
     protected int|string|array $columnSpan = 12; // full width
 

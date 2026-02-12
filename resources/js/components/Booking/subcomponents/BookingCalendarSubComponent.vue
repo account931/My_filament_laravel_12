@@ -104,13 +104,16 @@
               </form>
               <!-- END Form to save new booking -->
 
-              <div v-if="errors" :class="{'alert': true, 'alert-success': success, 'alert-danger': !success}" class="mt-3">
+              <!-- Validation errors -->
+              <div v-if="Object.keys(errors).length"  :class="{'alert': true, 'alert-success': success, 'alert-danger': !success}" class="mt-3" style="white-space: pre-line;">
                     {{ errors }}
               </div>
 
+              
               <div v-if="message" :class="{'alert': true, 'alert-success': success, 'alert-danger': !success}" class="mt-3">
                     {{ message }}
               </div>
+              
 
 
             </div>
@@ -141,42 +144,57 @@
           <div v-if="slot.user_name">by {{ slot.user_name }} <i class="fa fa-trash text-danger" @click="deleteItem(slot.book_id)" style="cursor: pointer;"></i> <!-- Bootstrap delete icon --></div>  
         </div>
       </div>
-    </div>
+    </div><br>
 
 
       <!-- Display next 20 bookings-->
-      <div class="bg-info p-2 mt-2 mb-2"> Next 20 bookings for room {{ this.roomId }}</div>
+      <div class="bg-info p-2 mt-2 mb-2"> Next bookings for <span class="px-2 py-1 text-white bg-danger rounded"> Room {{ this.roomId }} </span></div>
       <div v-if="next20Bookings.length == 0"> No bookings found.</div>
 
       <div v-else class="table-responsive">
-      <table class="table table-bordered">
-        <thead>
-          <tr>
-            <th>Username</th>
-            <th>Date</th>
-            <th>Start Time</th>
-            <th>End Time</th>
-            <th>Delete </th> 
-            <!-- <th>Status</th>  -->
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="booking in next20Bookings" :key="booking.id">
-            <td>{{ booking.username }}</td>
-            <td>{{ new Date(booking.start_time).toISOString().split('T')[0] }}</td>
-            <td>{{ formatTime(booking.start_time) }}</td>
-            <td>{{ formatTime(booking.end_time) }}</td>
-            <td><i class="fa fa-trash text-danger" @click="deleteItem(booking.id)" style="cursor: pointer;"></i></td>
-            <!-- <td>{{ booking.status }}</td> -->
-          </tr>
-        </tbody>
-      </table>
+      
+      <div class="d-flex flex-column gap-2">
+        <div v-for="(booking, index) in next20Bookings" :key="booking.id" class="d-flex flex-row align-items-center gap-2 p-2 bg-light rounded shadow-sm">
+        
+        <!-- Index -->
+        <span class="px-2 py-1 bg-dark text-white rounded">
+            {{ index + 1 }}
+        </span>
+
+        <!-- Username -->
+        <span class="px-2 py-1 bg-primary text-white rounded">
+            {{ booking.username }}
+        </span>
+
+        <!-- Date -->
+        <span class="px-2 py-1 bg-secondary text-white rounded">
+            {{ new Date(booking.start_time).toISOString().split('T')[0] }}
+        </span>
+
+        <!-- Start Time -->
+        <span class="px-2 py-1 bg-success text-white rounded">
+            {{ formatTime(booking.start_time) }}
+        </span>
+
+        <!-- End Time -->
+        <span class="px-2 py-1 bg-success text-white rounded">
+            {{ formatTime(booking.end_time) }}
+        </span>
+
+        <!-- Delete -->
+        <span class="px-2 py-1 bg-danger text-white rounded" style="cursor:pointer;" @click="deleteItem(booking.id)">
+            <i class="fa fa-trash"></i>
+        </span>
+      </div>
+      </div>
+
+
       </div>
       <!-- End Display next 20 bookings-->
 
       <!--  -->
       <div class="col-12 text-center">
-        <hr><br>
+        <hr><br><br><br><br>
 
         <!-- Debugging chart data -->
         {{ this.selectedDate }}       <!-- Date selected in V calendar-->
@@ -359,6 +377,7 @@ export default {
 
     hideModal() {
       this.isModalVisible = false;
+      this.errors = {};
     },
     
 

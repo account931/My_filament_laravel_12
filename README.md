@@ -1018,7 +1018,15 @@ VITE_MAPBOX_API_KEY=pk.eyJ1**********
 </code>
 
 
-<p> 6. Add json keys Google bigQuery, etc</p>
+<p> 6. Add json keys Google bigQuery, etc 
+
+add json files 'app/gcs/service-account.json' and  'storage/app/bigQuery_keys/laravel-bigquery-8****f.json' to Render as Secret Files and since in Render they go in root folder (unlike local), add fixed var to render env
+
+<code>
+GOOGLE_CLOUD_KEY_FILE=service-account.json .
+BIGQUERY_KEY_FILE=laravel-bigquery-8****f.json 
+</code>
+</p>
 
 
 
