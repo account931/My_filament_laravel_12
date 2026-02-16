@@ -9,6 +9,7 @@ What is new: Filament 3, Sail, Sanctum, CI/CD, Laravel Audit, PHPStan static ana
 Scramble – Laravel OpenAPI (Swagger), one-time expirable signed routes(signed means that URL includes a signature hash), send emails,
 auto SQL db back-up via sheduled job + save it at G Drive (saves to pre-defined G Drive at dim***1@gmail.com), Socialite to get oAuth access token (login via Google), images at Google Cloud Storage bucket, upload files to personal Google Drive, Google BigQuery (saving analytics), displaying BQ data in Blade, Vue (Options API), git cola, Sanctum type 2 (SPA Authentication (Session-Based / Cookie Authentication)),Booking on Vue
 
+<p>  .env, can be found at  drafts at acc***1@u**.net or at G Drive </p>
 
 <p> Represents data from 3 main tables (owners (HasMany), venues (BelongsToMany), equipments) in 4 ways: REST API, Filament, Vue JS, regular Laravel Controller + Blade </p>
 
@@ -148,8 +149,8 @@ If table session is missing
 ## 1.2 Deploy this app from Git
 
 <p>1. Copy from github => <code> git pull Name_HERE </code> </p>
-<p>2. Paste .env </p>
-<p>3. Here you need to run Sail up and create /vendor folder inside container, but yet u dont have /vendor folder which should contain Sail and u cant run create container with Sail and run
+<p>2. Paste .env, can be found at  drafts at acc***1@u**.net or G Drive </p>
+<p>3. Here you need to run Sail up and create /vendor folder inside container, but yet u dont have /vendor folder which should contain Sail and u cant run create container with Sail + run
 <code> composer install </code>  inside container, outside container also wont work because of diffretent php versions and missing extension 
 </p>
 <p>So fix is => First time start container with <code> docker compose up -d </code> 
@@ -157,7 +158,7 @@ then go container  <code> docker exec -it my_filament_laravel_12-laravel.test-1 
 and run <code> composer install </code> inside container. After then you can start with <code>./vendor/bin/sail bash </code>
 </p>
 <p>4. Create /node_modules with <code> npm install </code> and create build <code> npm run build </code> </p>
-<p>5. Paste json credentials for BigQuery and other stuff, like /storage/app/bigQuery_keys/laravel-bigquery-8c7d1271c73f.json OR /gcs/service-account.json </p>
+<p>5. Paste json credentials files for BigQuery, GCS and other stuff, like /storage/app/bigQuery_keys/laravel-bigquery-8c7d1271c73f.json OR /gcs/service-account.json </p>
 <p>6. Follow missing steps from 1. Install Laravel 12, like generate key, create DB, migrate, seed, etc</p>
 
 
@@ -913,6 +914,11 @@ Display  => <img src="{{ Storage::disk('gcs')->url($relativePath) }}" style="wid
 
 ## 23. Google BigQuery
 
+<p>
+https://console.cloud.google.com/  => Menu -> BigQuery -> Studio -> Select project, e.g "laravel-bigquery" -> select dataset, e.g "analytics_dataset" -> select table e.g "product_views"
+</p>
+BQ was trial only, now it is finished, you can get recorded BQ data but cant add new </br>
+
 BigQuery is typically used for Reporting, analytics, metrics. MySQL is for application logic, users, sessions </br>
 In this example, when user visits one product view, we send to BigQuery this data => 
        Route::get('bigQuery/list/{product}', [BigQueryController::class, 'show'])->name('bigQuery.list.product');
@@ -960,7 +966,7 @@ Booking on Vue (Option Api), uses own router and re-usable components for diffre
 <p> ----------------------------------------------------------------------------------------- </p>
 
 ## 25. Render.com
-<p> "Laravel_2024_migration" (on Laravel 6) is deployed to alwaysdata.com (acc****1@ukr.net). Deploy is performem via Github action via ssh (copy files, migrate, etc). But free space is limited to 100 MB, so this one "My_filament_laravel_12" goes to render.com </p>
+<p> "Laravel_2024_migration" (on Laravel 6) is deployed to alwaysdata.com (acc****1@ukr.net). Deploy is performed via Github action via ssh (copy files, migrate, etc). But free space is limited to 100 MB, so this one "My_filament_laravel_12" goes to render.com </p>
 
 Render.com set up:
 <p> 1 Create Dockerfile specifically for Render and set in Render settins => ./docker_db_setup/render.com/Dockerfile </p>
@@ -1014,7 +1020,7 @@ REDIS_PORT=6379
 REDIS_PREFIX=laravel_database_
 REDIS_URL=redis://red-d5v1bfqq***********  # redis separate service at render.com
 SESSION_DRIVER=file
-VITE_MAPBOX_API_KEY=pk.eyJ1**********
+MAPBOX_API_KEY=pk.eyJ1**********
 </code>
 
 
@@ -1029,9 +1035,11 @@ BIGQUERY_KEY_FILE=laravel-bigquery-8****f.json
 </p>
 
 
+<p> 7. 
+  Now it is auto-deployed according to Render.com setting, but if u wish to change it in future to manual trigger, do it in /.github/workflow/ci.yml  + turning off auto deploy at Render
+</p>
 
-
-
+<p> 8.Run migrations in Pre-Deploy Command at Render dashboard</p>
 
 <p> ----------------------------------------------------------------------------------------- </p>
 

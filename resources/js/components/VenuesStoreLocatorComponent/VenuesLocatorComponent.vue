@@ -50,7 +50,7 @@
 			
 			// Mapbox access token. It is set in .env -> then defined in /config.app as app.frontend.mapbox_token_from_config => then we pass it in Blade /views/venue-store-locator/index
             //mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_API_KEY; //reads Mapbox directly from .env, works fine on local, but fails on render.com  //window.mapbox_api_token_from_config.tokenMapBox;  //env('MAPBOX_API_KEY');  // Replace with your actual Mapbox access token
-            mapboxgl.accessToken = window.MAPBOX_API_KEY;  //fix for render, gets it from from blade => window.MAPBOX_API_KEY = "{{ config('services.mapbox.token') }}";
+            mapboxgl.accessToken = window.MAPBOX_API_KEY;  //fix for render.com, gets it from from blade as => window.MAPBOX_API_KEY = "{{ config('services.mapbox.token') }}";
 
             //alert(import.meta.env.VITE_MAPBOX_API_KEY);
             // Initialize map

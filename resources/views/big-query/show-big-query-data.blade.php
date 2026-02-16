@@ -17,7 +17,7 @@
 
                         <p class="small text-danger"> 
                             <del> NB: BigQuery was trial option only, so it stopped working. Wish to continue you have to pay ! </del> <br> 
-                            NB:FALSE, you have free BQ limit every month
+                             NB:Semi-FALSE, after trial you can view already collected BQ, but cant collect new
                         </p> 
 
                         <a href="{{ route('bigQuery.index') }}" class="btn btn-info btn-sm">

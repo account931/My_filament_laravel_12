@@ -23,9 +23,10 @@
     </div>
 
     <!-- V-calendar -->
-    <div class="col-12 text-center">
+    <div class="col-12 d-flex justify-content-center">
       <VCalendar v-model="selectedDate" :attributes="attrs" @dayclick="onDayClick" :min-date="todayLimit"/>
     </div>
+
 
     <!-- Hidden Booking modal window with form -->
     <transition name="fadeModal">
@@ -137,9 +138,9 @@
     <h2 class="room-info">  {{ this.bookingFetchedData.room_name }} , room id: {{ this.bookingFetchedData.room_id }} ,  <span class="bold"> {{ this.bookingFetchedData.date }} </span> </h2>
 
     <!-- Display Booking slots, green/red -->
-    <div class="row mt-3">
+    <div class="row mt-3 g-0">
       <div v-for="(slot, index) in bookingFetchedData.slots" :key="index" class="col-4 col-lg-2 mb-2">   <!-- 3 per row on mobile, 6 per row on large screens -->
-        <div class="p-2 small text-center" :class="slot.status === 'free' ? 'slot-free' : 'slot-booked'">
+        <div class="p-2 small text-center slots" :class="slot.status === 'free' ? 'slot-free' : 'slot-booked'">
           <strong>{{ formatTime(slot.start) }} - {{ formatTime(slot.end) }}</strong>
           <div v-if="slot.user_name">by {{ slot.user_name }} <i class="fa fa-trash text-danger" @click="deleteItem(slot.book_id)" style="cursor: pointer;"></i> <!-- Bootstrap delete icon --></div>  
         </div>
@@ -154,7 +155,7 @@
       <div v-else class="table-responsive">
       
       <div class="d-flex flex-column gap-2">
-        <div v-for="(booking, index) in next20Bookings" :key="booking.id" class="d-flex flex-row align-items-center gap-2 p-2 bg-light rounded shadow-sm">
+        <div v-for="(booking, index) in next20Bookings" :key="booking.id" class="booking-card d-flex flex-row flex-wrap align-items-center gap-1 p-2 bg-light rounded shadow-sm">
         
         <!-- Index -->
         <span class="px-2 py-1 bg-dark text-white rounded">
@@ -162,22 +163,22 @@
         </span>
 
         <!-- Username -->
-        <span class="px-2 py-1 bg-primary text-white rounded">
+        <span class="px-2 py-1 bg-primary text-white rounded flex-shrink-1 text-truncate">
             {{ booking.username }}
         </span>
 
         <!-- Date -->
-        <span class="px-2 py-1 bg-secondary text-white rounded">
+        <span class="px-2 py-1 bg-secondary text-white rounded flex-shrink-1 text-truncate">
             {{ new Date(booking.start_time).toISOString().split('T')[0] }}
         </span>
 
         <!-- Start Time -->
-        <span class="px-2 py-1 bg-success text-white rounded">
+        <span class="px-2 py-1 bg-success text-white rounded flex-shrink-0">
             {{ formatTime(booking.start_time) }}
         </span>
 
         <!-- End Time -->
-        <span class="px-2 py-1 bg-success text-white rounded">
+        <span class="px-2 py-1 bg-success text-white rounded flex-shrink-0">
             {{ formatTime(booking.end_time) }}
         </span>
 
@@ -584,4 +585,11 @@ export default {
 .fadeModal-enter-active, .fadeModal-leave-active { transition: all 0.7s ease; }
 .fadeModal-enter-from, .fadeModal-leave-to { opacity: 0; transform: translateY(20px); }
 .fadeModal-enter-to, .fadeModal-leave-from { opacity: 1; transform: translateY(0); }
+
+/* Mobile styles */
+@media (max-width: 768px) {
+  .slots {
+    font-size: 0.4em;
+  }
+}
 </style>

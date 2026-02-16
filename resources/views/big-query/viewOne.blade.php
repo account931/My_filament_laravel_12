@@ -13,7 +13,11 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">View one, BigData is collected here....</div>
+                <div class="card-header">
+                    View one, BigData is collected here....
+                    <p>NB:after trial you can view already collected BQ, but cant collect new </p>
+
+                </div>
 
                 <div class="card-body">
                     @if (session('status'))
