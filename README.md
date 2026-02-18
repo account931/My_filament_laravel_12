@@ -992,7 +992,7 @@ Render.com set up:
  </code>
 
 
-<p> 5. Add env variables at render.com. Minimal working env set up:
+<p> 5. Add env variables at render.com. Can find env_Render at G Drive or Paypal draft at acc**1@ukr.net. Minimal working env set up:
  <code>
 APP_DEBUG=true   # tempo
 APP_ENV=production
@@ -1039,7 +1039,11 @@ BIGQUERY_KEY_FILE=laravel-bigquery-8****f.json
   Now it is auto-deployed according to Render.com setting, but if u wish to change it in future to manual trigger, do it in /.github/workflow/ci.yml  + turning off auto deploy at Render
 </p>
 
-<p> 8.Run migrations in Pre-Deploy Command at Render dashboard</p>
+<p> 8.Cant run migrations in Pre-Deploy Command at Render dashboard as it is paid option, so add it to Dockerfile for Render.</p>
+
+
+
+
 
 <p> ----------------------------------------------------------------------------------------- </p>
 

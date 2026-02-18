@@ -19,7 +19,7 @@
 
     <!-- Create booking button -->
     <div class="col-12 text-center mb-2">
-      <button class="btn btn-success" @click="showModal">Create new booking</button>
+      <button class="btn btn-success" @click="showModal">Create new booking  &nbsp; <i class="fa fa-calendar"></i></button>
     </div>
 
     <!-- V-calendar -->
@@ -34,22 +34,23 @@
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-body">
-              <h4 class="modal-title">Add new booking for {{this.roomId}} </h4>
+              <h4 class="modal-title">Add new booking for <i class="fa fa-building"></i> Room {{this.roomId}} </h4>
 
                <!-- Show booked slots for selected date in form for better UI -->
-                <div class="row border border-danger m-1 mb-5 p-1" v-if="bookingFetchedData.slots.some(s => s.status === 'booked')">
-                  <p class="pull-right text-danger small ml-3"> See already booked </p>
+                <div class="row border border-danger m-1 mb-5 p-1 rounded" v-if="bookingFetchedData.slots.some(s => s.status === 'booked')">
+                  <p class="pull-right text-danger small ml-3"> See already booked slots </p>
 
                   <div v-for="(slot, index) in bookingFetchedData.slots.filter(s => s.status === 'booked')" :key="index" class="col-xs-12 col-sm-12 col-md-12">
                     <div class="panel-body text-danger">
 
-                      <div class="panel-body small row ">
+                      <div class="panel-body small row slots">
                       
-                        <div class="col-5"> 
+                        <div class="col-8 col-md-8"> 
                             <strong>{{ formatTime(slot.start) }} - {{ formatTime(slot.end) }}</strong> 
                         </div>
+
                          <!--  <div class="col-3"> <span class="pull-right">({{ slot.status }})</span> </div> -->
-                        <div class="col-3"> 
+                        <div class="col-4 col-md-4"> 
                           <span v-if="slot.user_name"> by {{ slot.user_name }} <i class="fa fa-trash text-danger pl-2" @click="deleteItem(slot.book_id)" style="cursor:pointer;"></i></span> 
                         </div>
                         
@@ -135,7 +136,7 @@
 
 
     <!-- Room name and selected date-->
-    <h2 class="room-info">  {{ this.bookingFetchedData.room_name }} , room id: {{ this.bookingFetchedData.room_id }} ,  <span class="bold"> {{ this.bookingFetchedData.date }} </span> </h2>
+    <h2 class="room-info rounded"> <i class="fa fa-building"></i>  {{ this.bookingFetchedData.room_name }} , room id: {{ this.bookingFetchedData.room_id }} ,  <span class="bold"> <i class="fa fa-calendar"></i> {{ this.bookingFetchedData.date }} </span> </h2>
 
     <!-- Display Booking slots, green/red -->
     <div class="row mt-3 g-0">
@@ -155,7 +156,7 @@
       <div v-else class="table-responsive">
       
       <div class="d-flex flex-column gap-2">
-        <div v-for="(booking, index) in next20Bookings" :key="booking.id" class="booking-card d-flex flex-row flex-wrap align-items-center gap-1 p-2 bg-light rounded shadow-sm">
+        <div v-for="(booking, index) in next20Bookings" :key="booking.id" class="booking-card d-flex flex-row flex-wrap align-items-center gap-1 p-2 bg-light rounded shadow-sm slots">
         
         <!-- Index -->
         <span class="px-2 py-1 bg-dark text-white rounded">
@@ -588,8 +589,11 @@ export default {
 
 /* Mobile styles */
 @media (max-width: 768px) {
-  .slots {
-    font-size: 0.4em;
-  }
+
+  .slots {font-size: 0.4em;}
+
+  .room-info  {font-size: 0.8em;}
+
+  /* .modal-content  {padding-left: 2px !important; padding-right: 2px !important; } */
 }
 </style>

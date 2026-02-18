@@ -18,12 +18,18 @@ const routes = [
 
   
   //Booking Vue
-    {
-    path: '/booking/:id?',
+  //fix: now by default it sets path to /booking/1 (when u select now room, e.g on load) + settings in /router/web.php
+  {
+    path: '/booking',
+    redirect: '/booking/1'
+  },
+  {
+    path: '/booking/:id',
     name: 'booking-vue',
     component: BookingVue,
     props: true,
-  },
+  }
+
 
 ];
 

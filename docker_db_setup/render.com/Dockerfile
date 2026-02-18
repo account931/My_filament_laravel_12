@@ -79,4 +79,27 @@ RUN mkdir -p storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
 EXPOSE 80
-CMD ["apache2-foreground"]
+# CMD ["apache2-foreground"]
+
+#run migrations, cahce clear and other stuff here as can not use Render.com paid post-deploy command/hook 
+CMD sh -c "
+echo 'Clearing Laravel caches...' &&
+
+php artisan config:clear &&
+php artisan cache:clear &&
+php artisan route:clear &&
+php artisan view:clear &&
+
+echo 'Rebuilding Laravel caches...' &&
+
+php artisan config:cache &&
+php artisan route:cache &&
+php artisan view:cache &&
+
+echo 'Running database migrations...' &&
+php artisan migrate --force || true &&
+
+echo 'Starting Apache...' &&
+apache2-foreground
+"
+

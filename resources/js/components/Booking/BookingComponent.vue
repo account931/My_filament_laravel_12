@@ -400,4 +400,14 @@ export default {
     color: #007bff;
 }
 
+/* Mobile styles */
+@media (max-width: 768px) {
+
+  /* fix for mobile to take all screen space horizontally */
+  .container {
+    padding-left: 2px !important;
+    padding-right: 2px !important;
+  }
+}
+
 </style>

@@ -188,7 +188,8 @@ Route::middleware('auth')->group(function () {
     Route::get('bigQuery/bigquery/data', [BigQueryController::class, 'showBigQueryData'])->name('bigQuery.data');  // index
 
     // BookingController
-    Route::get('booking/index/{any?}', [BookingController::class, 'index'])->name('booking.index')->where('any', '.*');  // index with Vue, display calendar for booking
+    // Route::get('booking/index/{any?}', [BookingController::class, 'index'])->name('booking.index')->where('any', '.*');  // index with Vue, display calendar for booking
+    Route::get('/booking/{any?}', [BookingController::class, 'index'])->where('any', '.*')->name('booking.index');  // fix: now by default it sets /booking/1 (when u select now room, e.g on load) + settings in router
 
     // TranslateController
     Route::get('translate/index', [TranslateController::class, 'index'])->name('translate.index');  // translate, multi languages
