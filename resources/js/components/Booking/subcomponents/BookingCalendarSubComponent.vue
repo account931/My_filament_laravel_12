@@ -34,7 +34,7 @@
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-body">
-              <h4 class="modal-title">Add new booking for <i class="fa fa-building"></i> Room {{this.roomId}} </h4>
+              <h4 class="modal-title">Add new booking for <i class="fa fa-building"></i> {{ this.bookingFetchedData.room_name }}, ID: {{this.roomId}} </h4>
 
                <!-- Show booked slots for selected date in form for better UI -->
                 <div class="row border border-danger m-1 mb-5 p-1 rounded" v-if="bookingFetchedData.slots.some(s => s.status === 'booked')">

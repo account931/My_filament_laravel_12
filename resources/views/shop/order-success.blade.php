@@ -31,6 +31,20 @@
     @endif
     <!------------ Flash message --------->
 
+    <!------------ Validation errors, including when someone faked the price--------->
+    @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
+    <!------------ Validation errors, including when someone faked the price--------->
+
+
+
 
     <!------------ Order Success page, show button to pay--------->
     <div class="row">

@@ -21,8 +21,14 @@
     pointer-events: none; /* so it doesn’t interfere with clicks */
 }
 
-.my-orders {
-    margin-right: 4em; font-size: 1.2rem; color: orange;
+.my-orders {margin-right: 4em; font-size: 1.2rem; color: orange; }
+
+/* Mobile styles */
+@media (max-width: 768px) {
+  .cart-icon {font-size: 1em; padding-right: 1em; }
+  .cart-quantity {right: 0px; background-color: red; }
+}
+
 </style>
 @endpush
 
@@ -146,6 +152,8 @@
         {{ $products->links() }}
     </div>
 </div>
+
+
 
 
 </x-app-layout>

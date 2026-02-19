@@ -65,7 +65,7 @@
 
                         <!------ select api route ------>
                         <label for="category">Select Aoi route:</label>
-                        <select name="category" id="category" required>
+                        <select name="category" id="category" class="text-mobile"  required>
                             <option value="">-- Choose --</option>
                             @foreach($apiRoutes as $route)
                                 <option value="{{ $route['route'] ? $route['route'] : $route['uri'] }}">
@@ -116,6 +116,17 @@
 </div>
 
 {{-- @endsection --}}   {{-- Laravel 12 fix--}}
+
+<style>
+/* Mobile styles */
+@media (max-width: 768px) {
+
+  /* fix for mobile to take all screen space horizontally */
+  .text-mobile { font-size: 0.5em;}
+}
+
+</style>
+
 
 </x-app-layout>
 

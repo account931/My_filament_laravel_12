@@ -15,6 +15,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request; // my notification class (both db and email)
 use Illuminate\Support\Facades\Auth;
 // use Stripe\PaymentIntent;
+use Illuminate\Validation\ValidationException;
 use Stripe\Checkout\Session;
 use Stripe\Stripe;
 
@@ -28,7 +29,7 @@ class ShopController extends Controller
     }
 
     /**
-     * renders views with buttons to pay
+     * renders shop view with products
      *
      * @return \Illuminate\View\View
      */
@@ -205,7 +206,7 @@ class ShopController extends Controller
         return redirect()->route('ordermade.success', ['order' => $order])->with('message', 'Order placed successfully!');
     }
 
-    // show my orders list
+    // show my orders list, orders are created in cart when u confirm cart and  enter your name, address
     public function myOrders()
     {
         $orders = Order::where('user_id', Auth::id())->get();
@@ -213,7 +214,7 @@ class ShopController extends Controller
         return view('shop.my-orders')->with(compact('orders'));
     }
 
-    // when u placed an order, it shows a page with stripe payment
+    // when u placed an order successfully, it shows a page with stripe payment button
     public function orderSuccess($order)
     {
         $orderFind = Order::findOrFail($order);
@@ -224,10 +225,19 @@ class ShopController extends Controller
     // handles Stripe payment variant 2 via CheckOut (redirects to Stripe page)
     public function stripeCheckout(Request $request)
     {
-        $price = $request->input('price');
-        $order = $request->input('orderName');
+        $price = $request->input('price');      // price from form
+        $order = $request->input('orderName');  // order ID from form
         // $orderID = $request->input('orderID');
         // dd($price);
+
+        // validation, check if price is not faked from F12: pull Order from DB by $request->input('orderName') and check if it\s price == $request->input('price')
+        $order = Order::findOrFail($order);
+        if ((int) $price !== (int) ($order->total_amount * 100)) {  // as it should be in cents $20.00
+            abort(422, 'Fake detected.The provided price does not match the order price.');
+
+            // working variant with validation exception, it redirects back and you can display error in blade
+            // throw ValidationException::withMessages(['price' => ['Faked. The provided price does not match the order price.'],]);
+        }
 
         // Stripe::setApiKey(env('STRIPE_SECRET'));
         Stripe::setApiKey(config('services.stripe.secret'));
@@ -253,7 +263,7 @@ class ShopController extends Controller
         ]);
 
         // save Stripe session id to Order, save as array of ids, so it includes old ones, when user did not pay
-        $order = Order::find($order);
+        // $order = Order::find($order);
         // $order->stripe_session_id = $session->id;
         // $order->save();
 
