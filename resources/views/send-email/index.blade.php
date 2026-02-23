@@ -42,14 +42,14 @@
 
                                 {{-- Flash messages --}}
                                 @if(session()->has('flashSuccess'))
-                                    <div class="row alert alert-success">
+                                    <div class="alert alert-info">
                                         <i class="fas fa-charging-station" style="font-size:21px"></i> &nbsp;
                                         {{ session('flashSuccess') }}
                                     </div>
                                 @endif
 
                                 @if(session()->has('flashFailure'))
-                                    <div class="row alert alert-danger">
+                                    <div class="alert alert-danger">
                                         {{ session('flashFailure') }}
                                     </div>
                                 @endif

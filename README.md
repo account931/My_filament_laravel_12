@@ -1078,6 +1078,9 @@ Infolists\Components\TextEntry::make('permissions_from_roles')
 
 
 
+<p> Email now goes to  Mailtrap (acc9***@uk*.net) -> Sandbox-> My Inbox_Laravel </p> 
+
+
 
 
 

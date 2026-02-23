@@ -1,6 +1,6 @@
 <?php
 
-// Job to create SQL DB dump and send it to to Google Drive. There is a console command which do all the same  /routes/console.php => 'run_db_backup_to_google_drive'
+// Job to create SQL DB dump and send it to to Google Drive. There is also a console command which do all the same  /routes/console.php => 'run_db_backup_to_google_drive'
 // Saves SQL dump locally to /var/www/html/storage/app/backup-2025-09-**-**, on Google Drive saves to folder 'Laravel_Sql_backup'
 
 namespace App\Jobs;

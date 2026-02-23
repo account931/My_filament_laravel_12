@@ -1,6 +1,6 @@
 <?php
 
-//
+// according to .env sends letters to mailtrap (acc9***@uk*.net) -> Sandbox-> My Inbox_Laravel
 
 namespace App\Http\Controllers\SendEmail;
 
@@ -52,12 +52,13 @@ class SendEmailController extends Controller
         $data = $request->input();
         // dd($data['email']);
 
-        // Mail Facade, Variant 1, send usual email via Mail facade (just to test)
-        // Mail::to($data['email'])->send(new CustomEmail('User', $data['message']));
+        // Variant 1 Mail Facade, send usual email via Mail facade (just to test). Working.
+        Mail::to($data['email'])->send(new CustomEmail('User', $data['message']));
 
-        // Mail Facade, Variant 2, If you want to queue the email instead of sending it immediately:
-        Mail::to($data['email'])->queue(new CustomEmail($data['email'], $data['message']));  // wont run unless u do => php artisan queue:work
+        // Variant 2 Mail Facade via Job, If you want to queue the email instead of sending it immediately. Working.
+        // Mail::to($data['email'])->queue(new CustomEmail($data['email'], $data['message']));  // wont run unless u do => php artisan queue:work
 
+        // after any of variants, make redirect back
         return redirect()->back()->with('flashSuccess', 'Your Mail Facade letter was sent successfully to user '.$data['email']);
 
     }

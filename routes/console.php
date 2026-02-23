@@ -215,13 +215,6 @@ Artisan::command('run_test_job', function () {
     TestJob::dispatch($user);    // php artisan queue:work
 });
 
-// End Custom Artisan commands-------------------------------------------------
-
-// Start Scheduled tasks-------------------------------------------------
-// Schedule::job(new TestJob(User::find(1)))->everyMinute();  //->daily();
-Schedule::job(new BackupDatabaseToGoogleDrive)->everyMinute();
-// End Scheduled tasks-------------------------------------------------
-
 //
 //
 //
@@ -286,3 +279,14 @@ Artisan::command('send_email', function () {
 
     $this->info("Email sent to {$email}");
 });
+
+// End Custom Artisan commands-------------------------------------------------
+//
+//
+//
+
+// Start Scheduled tasks-------------------------------------------------
+// Schedule::job(new TestJob(User::find(1)))->everyMinute();  //->daily();
+Schedule::job(new BackupDatabaseToGoogleDrive)->daily();  //
+//
+// End Scheduled tasks-------------------------------------------------

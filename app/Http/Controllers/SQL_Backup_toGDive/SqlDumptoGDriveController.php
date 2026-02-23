@@ -5,6 +5,7 @@
 namespace App\Http\Controllers\SQL_Backup_toGDive;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\BackupDatabaseToGoogleDrive;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Support\Facades\Artisan;
@@ -34,8 +35,15 @@ class SqlDumptoGDriveController extends Controller
 
     public function runJob()
     {
+
+        // Variant 1, make dump and save to Google drive by console command, so no 'php artisan queue:work' is needed. Working.
+        // Use it as it is more simple for testing
         Artisan::call('run_db_backup_to_google_drive');
-        dd('Sending to G Drive....');
+        dd('Sending SQL dump to Google Drive....');
+
+        // Variant 2, via Job, 'php artisan queue:work' is needed. Working.
+        // BackupDatabaseToGoogleDrive::dispatch();
+        // return "Job dispatched! Sending SQL dump to Google Drive";
 
     }
 }

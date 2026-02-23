@@ -79,11 +79,11 @@
                                                 <div class="card h-100">
                                                     @if ($product->image)
                                                         <img src="{{ $product->image }}" class="card-img-top w-1/2 mx-auto" alt="{{ $product->name }}" 
-                                                        onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"> <!--when no internet and img url not available -->
-                                                       <span class="d-none">No Image</span>
+                                                        onerror="this.onerror=null; this.src='{{ asset('img/no-internet.jpeg') }}'; this.classList.add('no-inet-image');"> <!--when no internet and img url not available -->
+                                                       
 
                                                     @else
-                                                        <img src="https://via.placeholder.com/300x200?text=No+Image" class="card-img-top" alt="No Image">
+                                                        <img src="img/no-image.png" class="card-img-top mx-auto no-image" alt="No Image">
                                                     @endif
 
                                                     <div class="card-body d-flex flex-column">
@@ -152,4 +152,14 @@
             </div>
         </div>
     </div>
+
+<style>
+/* No internet error image */
+.no-inet-image  {width: 18% !important; padding-top: 1em; }
+
+/* No image in DB error image */
+.no-image  {width: 22% !important; padding-top: 1em; }
+
+</style>
+
 </x-app-layout>
