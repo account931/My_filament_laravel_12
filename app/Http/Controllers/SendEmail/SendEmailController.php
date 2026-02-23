@@ -53,10 +53,10 @@ class SendEmailController extends Controller
         // dd($data['email']);
 
         // Variant 1 Mail Facade, send usual email via Mail facade (just to test). Working.
-        Mail::to($data['email'])->send(new CustomEmail('User', $data['message']));
+        //Mail::to($data['email'])->send(new CustomEmail('User', $data['message']));
 
-        // Variant 2 Mail Facade via Job, If you want to queue the email instead of sending it immediately. Working.
-        // Mail::to($data['email'])->queue(new CustomEmail($data['email'], $data['message']));  // wont run unless u do => php artisan queue:work
+        // Variant 2 Mail Facade via Job, If you want to queue the email instead of sending it immediately. Working. Connected to Pest Test
+         Mail::to($data['email'])->queue(new CustomEmail($data['email'], $data['message']));  // wont run unless u do => php artisan queue:work
 
         // after any of variants, make redirect back
         return redirect()->back()->with('flashSuccess', 'Your Mail Facade letter was sent successfully to user '.$data['email']);
