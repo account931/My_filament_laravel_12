@@ -7,6 +7,7 @@ use App\Models\User;
 use Database\Seeders\Subfolder\BookingRoomSeeder;
 use Database\Seeders\Subfolder\OwnerSeeder;
 use Database\Seeders\Subfolder\ProductSeeder;
+use Database\Seeders\Subfolder\QuestionSeeder;
 use Database\Seeders\Subfolder\RolesPermissionSeeder;
 use Database\Seeders\Subfolder\UserSeeder;
 use Illuminate\Database\Seeder;
@@ -39,9 +40,11 @@ class DatabaseSeeder extends Seeder
             OwnerSeeder::class,  // fill DB table {owners} with data (also include seeding table {venues} vis hasMany)
             // NOT USED //VenueSeeder::class,  //fill DB table {venues} with data
 
-            ProductSeeder::class, // products for shop
+            ProductSeeder::class,      // products for shop
 
             BookingRoomSeeder::class,  // rooms for booking
+
+            QuestionSeeder::class,     // questions
         ]);
 
         $this->command->info('Seedering action was successful!');

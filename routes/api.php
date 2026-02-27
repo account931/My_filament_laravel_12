@@ -2,8 +2,9 @@
 
 use App\Http\Controllers\Api;
 use App\Http\Controllers\Api\BookingApi\RoomCalendarController;
-use App\Http\Controllers\Auth_Api\AuthController;   // Api cotrollers
-use Illuminate\Http\Request; // Api login/register, e.x for Vue
+use App\Http\Controllers\Api\QuestionApi\QuestionController;   // Api controller
+use App\Http\Controllers\Auth_Api\AuthController; // Api login/register, e.x for Vue
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -56,6 +57,10 @@ Route::middleware('force.json')->group(function () {
 
     Route::get('/rooms/{room}/getLatestBooking/{quantity?}', [RoomCalendarController::class, 'getLatestBooking']); // get next 20 bookings, {quantity?} can be missing,   localhost:8000/api/rooms/1/getLatestBooking
 
+    // Questions Api
+    Route::get('/ask', [QuestionController::class, 'ask']);
+    Route::get('/suggestions', [QuestionController::class, 'suggestions']);  // typehint suggestions for questions
+    //
     // ----------------------------- End Open routes (do not require Passport/Sanctum ( does not require token in request) --------------------------------------
 
     // User Api Registration/Login, API Token Authentication

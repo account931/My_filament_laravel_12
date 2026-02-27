@@ -10,12 +10,13 @@ use App\Http\Controllers\OneTimeLink\OneTimeLinkController;
 use App\Http\Controllers\OwnerController\OwnerController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PrometheusMetrics\PrometheusMetricsController;
+use App\Http\Controllers\Questions\QuestionVueController;
 use App\Http\Controllers\SendEmail\SendEmailController;
 use App\Http\Controllers\SendNotification\NotificationController;
 use App\Http\Controllers\Shop\ShopController;
-use App\Http\Controllers\Socialite\SocialiteController;
 // Prometheus_and_Redis
 // use Illuminate\Support\Facades\Redis;
+use App\Http\Controllers\Socialite\SocialiteController;
 use App\Http\Controllers\Socialite\SocialiteGoogleAuthController;
 use App\Http\Controllers\SQL_Backup_toGDive\SqlDumptoGDriveController;
 use App\Http\Controllers\Stripe\StripeController;
@@ -194,6 +195,9 @@ Route::middleware('auth')->group(function () {
     // TranslateController
     Route::get('translate/index', [TranslateController::class, 'index'])->name('translate.index');  // translate, multi languages
     Route::get('translate/lang/{lang}', [TranslateController::class, 'changeLanguage'])->name('translate.changeLanguage');
+
+    // Question Vue front-end
+    Route::get('questions/index', [QuestionVueController::class, 'index'])->name('questions.index');  // Questions index with vue
 
 });
 // End Auth (logged) users only------------------------------------------------------------------------------------------

@@ -7,6 +7,7 @@ import router from './router/index.js';
 import routerBooking from './router/router_for_booking.js';
 //import $ from 'jquery';  //jquery  //import where it is used, e.g login.vue
 import ElementPlus from 'element-plus'; //Element Plus instead of Element UI
+import { Delete, Edit, Check } from '@element-plus/icons-vue';  //icons
 import 'element-plus/dist/index.css';   //Element Plus instead of Element UI
 import VCalendar from 'v-calendar';   //v calendar
 import 'v-calendar/style.css';  //v calendar
@@ -16,6 +17,8 @@ import RouterMenu from './components/OwnersListComponentsWithRouter/VueRouterMen
 import VenuesLocatorComponent from './components/VenuesStoreLocatorComponent/VenuesLocatorComponent.vue';
 import BigQueryVue from './components/BigQuery/BigQueryStatsComponent.vue';
 import Booking from './components/Booking/BookingComponent.vue';
+import QuestionsComp from './components/Questions/QuestionsComponent.vue';
+//import 'bootstrap/dist/css/bootstrap.min.css';
 
 window.Alpine = Alpine; //used in dashboard menu drop down
 Alpine.start();  //used in dashboard menu drop down
@@ -69,3 +72,12 @@ appBooking.use(VCalendar);  //use V-calendar package
 //appBooking.use(pinia);        //Piania store instead of Vuex
 appBooking.use(routerBooking);
 appBooking.mount('#bookingVueSection');  //div id
+
+
+//Vue App 6, Questions Vue component
+const appQuestions = createApp({});  
+appQuestions.component('questions-vue-component', QuestionsComp);  //Vue component used in Blade = component you load here
+appQuestions.use(ElementPlus);  //Element Plus instead of Element UI
+//appQuestions.use(pinia);        //Piania store instead of Vuex
+//appQuestions.use(routerBooking);
+appQuestions.mount('#questions');  //div id
