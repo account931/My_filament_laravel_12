@@ -119,6 +119,12 @@
                     </ul>
                 </div>
                 <div class="bg-[#fff2f2] dark:bg-[#1D0002] relative lg:-ml-px -mb-px lg:mb-0 rounded-t-lg lg:rounded-t-none lg:rounded-r-lg aspect-[335/376] lg:aspect-auto w-full lg:w-[438px] shrink-0 overflow-hidden">
+                    
+                    {{-- My 2F --}}
+                    <svg viewBox="0 0 260 120" width="65" height="30" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:auto;color:#FF0000"><path d="M30 35 C30 18 48 8 78 8 C108 8 125 22 125 42 C125 58 115 70 95 80 L60 96 H130 V112 H20 V95 L85 68 C102 61 105 55 105 45 C105 33 95 26 78 26 C60 26 50 33 50 45 H30Z" fill="currentColor"/><path d="M155 8 H240 V28 H180 V50 H225 V68 H180 V112 H155 V8Z" fill="currentColor"/></svg>   
+                
+
+                
                     {{-- Laravel Logo --}}
                     <svg class="w-full text-[#F53003] dark:text-[#F61500] transition-all translate-y-0 opacity-100 max-w-none duration-750 starting:opacity-0 starting:translate-y-6" viewBox="0 0 438 104" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M17.2036 -3H0V102.197H49.5189V86.7187H17.2036V-3Z" fill="currentColor" />

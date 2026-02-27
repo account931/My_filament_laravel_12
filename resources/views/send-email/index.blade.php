@@ -18,8 +18,8 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        Send emails (it sends usual Facade Mail in queue). 
-                        See messages at Mailtrap.io in sandbox, log there as acc***1@ukr.net
+                        Send emails (it sends usual Facade Mail in queued job)  <i class="fa fa-envelope"></i><br>
+                        See messages at Mailtrap.io in sandbox, log there as acc***1@ukr.net <i class="fa fa-home"></i>
                     </div>
 
                     <div class="card-body">
@@ -73,17 +73,17 @@
                                         @csrf
 
                                         <div class="form-group">
-                                            <label class="form-label" for="email">User email:</label>
+                                            <label class="form-label" for="email"><i class="fa fa-envelope"></i> Recipient"s email: <br></label>
                                             <input type="text" name="email" value="{{ old('email') }}" class="form-control">
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="message" class="form-label">Your Message:</label>
+                                            <label for="message" class="form-label"><i class="fa fa-envelope"></i> Your Message:</label>
                                             <textarea name="message" id="message" rows="4" class="form-control" placeholder="Enter your message here...">{{ old('message') }}</textarea>
                                         </div>
 
                                         <div class="form-group">
-                                            <button class="btn btn-primary" type="submit">Send</button>
+                                            <button class="btn btn-primary" type="submit"><i class="fa fa-envelope"></i> Send </button>
                                         </div>
                                     </form>
                                     {{-- End form --}}

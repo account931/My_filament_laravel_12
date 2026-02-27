@@ -7,7 +7,7 @@
 Contains 80% of Laravel_2024_migration transffered from Laravel 6 to 12 + Filament + Stripe + E-commerce shop, etc</br>
 What is new: Filament 3, Sail, Sanctum, CI/CD, Laravel Audit, PHPStan static analysis tool 2.1.17, Pint, Tailwind CSS out of the box, Vue 3, Pinia insead of Vuex store, dotswan/filament-map-picker, Laravel Cashier with Stripe, Sentry, Prometheus_and_Grafana, 
 Scramble – Laravel OpenAPI (Swagger), one-time expirable signed routes(signed means that URL includes a signature hash), send emails,
-auto SQL db back-up via sheduled job + save it at G Drive (saves to pre-defined G Drive at dim***1@gmail.com), Socialite to get oAuth access token (login via Google), images at Google Cloud Storage bucket, upload files to personal Google Drive, Google BigQuery (saving analytics), displaying BQ data in Blade, Vue (Options API), git cola, Sanctum type 2 (SPA Authentication (Session-Based / Cookie Authentication)),Booking on Vue
+auto SQL db back-up via sheduled job + save it at G Drive (saves to pre-defined G Drive at dim***1@gmail.com), Socialite to get oAuth access token (login via Google), images at Google Cloud Storage bucket, upload files to personal Google Drive, Google BigQuery (saving analytics), displaying BQ data in Blade, Vue (Options API), git cola, Sanctum type 2 (SPA Authentication (Session-Based / Cookie Authentication)),Booking on Vue, Translate , Redis (Prometeus + Queques + Cache + Sessions), Horizon
 
 <p>  .env, can be found at  drafts at acc***1@u**.net or at G Drive </p>
 
@@ -59,7 +59,9 @@ git restore .  git clean -fd
 - [22. Save Images to Google Cloud Storage](#22-save-images-to-google-cloud-storage-bucket-in-laravel)
 - [23. Google BigQuery](#23-google-bigquery)
 - [24. Booking on Vue](#24-booking-on-vue)
-- [25. Render.com](#25-render.com)
+- [25. Render.com](#25-rendercom)
+- [26. Redis](#26redis)
+- [27. Queue on Redis + Horizon](27-Queue-on-redis--horizon)
 
 - [111.V.A](#111-va)
 - [112.Known errors ](#112-known-errors)
@@ -703,7 +705,7 @@ One-time link uses middleware '/Middleware/CheckOneTimeToken' registered in /con
 
 ## 19. Jobs
 
-1. DB for jobs should exist:
+1. DB for jobs should exist (if you use QUEUE_CONNECTION=database)
 <code> php artisan queue:table   php artisan migrate </code>
 
 Optional:
@@ -969,9 +971,9 @@ Booking on Vue (Option Api), uses own router and re-usable components for diffre
 <p> "Laravel_2024_migration" (on Laravel 6) is deployed to alwaysdata.com (acc****1@ukr.net). Deploy is performed via Github action via ssh (copy files, migrate, etc). But free space is limited to 100 MB, so this one "My_filament_laravel_12" goes to render.com </p>
 
 Render.com set up:
-<p> 1 Create Dockerfile specifically for Render and set in Render settins => ./docker_db_setup/render.com/Dockerfile </p>
-<p> 2. Create external db at alwaysdata, as native render.com will be erased in 30 days </p>
-<p> 3. Create redis instance at render.com </p>
+<p> 1 Create Dockerfile specifically for Render and set it in Render settins => ./docker_db_setup/render.com/Dockerfile </p>
+<p> 2. Create external sql db at alwaysdata,com, as native render.com  DB will be erased in 30 days </p>
+<p> 3. Create redis instance at render.com or somewhere else</p>
 
 <p> 4. Fix 1: Disable redis for production as it crashes, in /botstrap/app.hp
  <code>
@@ -992,7 +994,7 @@ Render.com set up:
  </code>
 
 
-<p> 5. Add env variables at render.com. Can find env_Render at G Drive or Paypal draft at acc**1@ukr.net. Minimal working env set up:
+<p> 5. Add env variables at render.com. Can find env_Render at GDrive or Paypal draft at acc**1@ukr.net. Minimal working env set up:
  <code>
 APP_DEBUG=true   # tempo
 APP_ENV=production
@@ -1036,11 +1038,42 @@ BIGQUERY_KEY_FILE=laravel-bigquery-8****f.json
 
 
 <p> 7. 
-  Now it is auto-deployed according to Render.com setting, but if u wish to change it in future to manual trigger, do it in /.github/workflow/ci.yml  + turning off auto deploy at Render
+  Now it is auto-deployed according to Render.com setting, but if u wish to change it in future to manual trigger, do it in /.github/workflow/ci.yml  + turning off auto deploy at Render. NB: as per 24.02.26 auto-deploy is OFF because of pipeline shrtage minutes.
 </p>
 
 <p> 8.Cant run migrations in Pre-Deploy Command at Render dashboard as it is paid option, so add it to Dockerfile for Render.</p>
 
+<p> 9. Implement job supervisor </p>
+
+<p> 10. Email implementation, to use real emails instead of Mailtrap, do......... </p>
+
+
+<p> ----------------------------------------------------------------------------------------- </p>
+
+
+
+
+
+## 26. Redis
+Redis is used for Prometeus (Prometeus works with Redis only)
+
+Redis can also be used for Queques + Cache + Sessions instead of DB (make changes in env)
+
+
+
+<p> ----------------------------------------------------------------------------------------- </p>
+
+
+## 27. Queue on Redis + Horizon
+Queue can be run on Redis instead of database (QUEUE_CONNECTION=redis). Horizon works with redis-based queques only.
+If you use Horizon, instead of "php artisan queue:work" you may just run "php artisan horizon"
+
+1. <code> composer require laravel/horizon  </code>
+2. <code> php artisan horizon:install       </code> publish config file → config/horizon.php, Publish migration for failed_jobs
+3. <code>  php artisan migrate </code>
+4. In .env =>  QUEUE_CONNECTION=redis
+5. <code>  php artisan horizon</code>
+6. Dashboard =>   http://localhost:8000/horizon
 
 
 
@@ -1170,7 +1203,8 @@ add to config/filesystem.php to
 ![Screenshot](public/img/screenshots/flmt-17-g-big-query4.png)    </br>
 ![Screenshot](public/img/screenshots/flmt-18-booking.png)    </br>
 
-
+<p> Horizin, redis, queque</p>
+![Screenshot](public/img/screenshots/flmt-19-horizon.png)    </br>
 
 
 

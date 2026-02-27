@@ -285,8 +285,8 @@ Artisan::command('send_email', function () {
 //
 //
 
-// Start Scheduled tasks-------------------------------------------------
-// Schedule::job(new TestJob(User::find(1)))->everyMinute();  //->daily();
+// Start Scheduled tasks. To test locally: php artisan queue:work +  php artisan schedule:run Or configure both of them  in docker -------------------------------------
+// Schedule::job(new TestJob(User::find(1)))->everyMinute();  //->daily();  //>everyFiveMinutes();
 Schedule::job(new BackupDatabaseToGoogleDrive)->daily();  //
 //
 // End Scheduled tasks-------------------------------------------------

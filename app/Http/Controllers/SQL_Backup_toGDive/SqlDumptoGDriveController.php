@@ -39,9 +39,9 @@ class SqlDumptoGDriveController extends Controller
         // Variant 1, make dump and save to Google drive by console command, so no 'php artisan queue:work' is needed. Working.
         // Use it as it is more simple for testing
         Artisan::call('run_db_backup_to_google_drive');
-        dd('Sending SQL dump to Google Drive....');
+        dd('Sending SQL dump to Google Drive(Note: it is not queued job but console command)....');
 
-        // Variant 2, via Job, 'php artisan queue:work' is needed. Working.
+        // Variant 2, via Queue Job, 'php artisan queue:work' is needed. Working.
         // BackupDatabaseToGoogleDrive::dispatch();
         // return "Job dispatched! Sending SQL dump to Google Drive";
 
