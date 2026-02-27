@@ -6,7 +6,7 @@ FROM php:8.4-cli AS builder
 # Install PHP deps
 RUN apt-get update && apt-get install -y \
     git unzip libicu-dev libzip-dev libpng-dev libonig-dev libcurl4-openssl-dev \
-    && docker-php-ext-install intl zip mbstring pdo pdo_mysql bcmath \
+    && docker-php-ext-install intl zip mbstring pdo pdo_mysql bcmath pcntl \
     && pecl install redis \
     && docker-php-ext-enable redis \
     && rm -rf /var/lib/apt/lists/*
@@ -54,7 +54,7 @@ FROM php:8.4-apache
 
 RUN apt-get update && apt-get install -y \
     git unzip libicu-dev libzip-dev libpng-dev libonig-dev libcurl4-openssl-dev \
-    && docker-php-ext-install intl zip mbstring pdo pdo_mysql bcmath \
+    && docker-php-ext-install intl zip mbstring pdo pdo_mysql bcmath pcntl \
     && pecl install redis \
     && docker-php-ext-enable redis \
     && rm -rf /var/lib/apt/lists/*
