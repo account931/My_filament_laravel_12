@@ -81,8 +81,8 @@ RUN mkdir -p storage bootstrap/cache \
 EXPOSE 80
 # CMD ["apache2-foreground"]
 
-#run migrations, cahce clear and other stuff here as can not use Render.com paid post-deploy command/hook 
-CMD sh -c "php artisan config:clear && php artisan cache:clear && php artisan route:clear && php artisan view:clear && php artisan config:cache && php artisan route:cache && php artisan view:cache && php artisan migrate --force || true && apache2-foreground"
+#run migrations, cache clear, horizon for jobs and other stuff here as can not use Render.com paid post-deploy command/hook 
+CMD sh -c "php artisan config:clear && php artisan cache:clear && php artisan route:clear && php artisan view:clear && php artisan config:cache && php artisan route:cache && php artisan view:cache && php artisan migrate --force || true && php artisan horizon & apache2-foreground"
 
 
 
