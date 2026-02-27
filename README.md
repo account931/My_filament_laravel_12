@@ -1074,6 +1074,18 @@ If you use Horizon, instead of "php artisan queue:work" you may just run "php ar
 4. In .env =>  QUEUE_CONNECTION=redis
 5. <code>  php artisan horizon</code>
 6. Dashboard =>   http://localhost:8000/horizon
+7. On live production allow access in app/Providers/HorizonServiceProvider.php:
+ <code>
+public function boot()
+{
+    Horizon::auth(function ($request) {
+        // allow access only for your admin emails
+        return in_array($request->user()->email, [
+            'admin@example.com',
+        ]);
+    });
+}
+</code>
 
 
 
