@@ -27,8 +27,8 @@ class HorizonServiceProvider extends HorizonApplicationServiceProvider
      */
     protected function gate(): void
     {
-        //allow users to view horizont on live production
-        $allowed = explode(',', config('services.horizon.allowed_emails', ''));  //from env  //env('HORIZON_ALLOWED_EMAILS', '')
+        // allow users to view horizont on live production
+        $allowed = explode(',', config('services.horizon.allowed_emails', ''));  // from env  //env('HORIZON_ALLOWED_EMAILS', '')
 
         Gate::define('viewHorizon', function ($user = null) use ($allowed) {
             return in_array(optional($user)->email, $allowed);

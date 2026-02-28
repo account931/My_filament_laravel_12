@@ -59,7 +59,6 @@ return [
         'token' => env('MAPBOX_API_KEY'),
     ],
 
-
     // horizon allowed emails
     'horizon' => [
         'allowed_emails' => env('HORIZON_ALLOWED_EMAILS'),
