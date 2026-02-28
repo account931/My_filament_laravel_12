@@ -5,7 +5,7 @@ FROM php:8.4-cli AS builder
 
 # Install PHP deps
 RUN apt-get update && apt-get install -y \
-    git unzip libicu-dev libzip-dev libpng-dev libonig-dev libcurl4-openssl-dev \
+    git unzip curl libicu-dev libzip-dev libpng-dev libonig-dev libcurl4-openssl-dev \
     && docker-php-ext-install intl zip mbstring pdo pdo_mysql bcmath pcntl \
     && pecl install redis \
     && docker-php-ext-enable redis \
@@ -34,9 +34,9 @@ RUN composer install \
 # ------------------------------
 # Install Node.js (needed for Vite)
 # (Using official node image binaries instead of curl installer for speed)
-COPY --from=node:20-alpine /usr/local/bin/node /usr/local/bin/node
-COPY --from=node:20-alpine /usr/local/lib/node_modules /usr/local/lib/node_modules
-RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs \
+    && npm install -g npm@latest
 
 # Copy Node package files
 COPY package.json package-lock.json ./
