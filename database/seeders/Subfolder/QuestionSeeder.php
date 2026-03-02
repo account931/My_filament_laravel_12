@@ -14,12 +14,22 @@ class QuestionSeeder extends Seeder
     {
         $data = [
             [
+                'question' => 'Jungle?',
+                'answers' => json_encode(['Massive', 'Massive - no doubt', 'Definetely, massive']),
+            ],
+
+            [
+                'question' => 'Beer?',
+                'answers' => json_encode(['Yes, two', 'No doubt', 'Definetely']),
+            ],
+
+            [
                 'question' => 'What is the capital of France?',
-                'answers' => json_encode(['Paris', 'The city of lights', 'Paris, France']),
+                'answers' => json_encode(['Paris', 'Paris - the city of lights', 'Definetely Paris, France']),
             ],
             [
                 'question' => 'How are you?',
-                'answers' => json_encode(['I am fine', 'Doing well, thanks!', 'All good!']),
+                'answers' => json_encode(['I am fine', 'Doing well, thanks!', 'All good!', 'Screwed']),
             ],
             [
                 'question' => 'What is 2 + 2?',
@@ -129,10 +139,6 @@ class QuestionSeeder extends Seeder
                 'question' => 'Which ocean is the largest?',
                 'answers' => json_encode(['Pacific Ocean', 'The Pacific']),
             ],
-            [
-                'question' => 'What is the main ingredient in bread?',
-                'answers' => json_encode(['Flour', 'Wheat flour']),
-            ],
 
             [
                 'question' => 'Hello!',
@@ -153,7 +159,7 @@ class QuestionSeeder extends Seeder
             ],
             [
                 'question' => 'What’s your name?',
-                'answers' => json_encode(['I am John.', 'My name is Alex.', 'Call me Sarah.']),
+                'answers' => json_encode(['I am John.', 'My name is Dima.', 'Call me Sarah.']),
             ],
             [
                 'question' => 'Nice to meet you!',
@@ -211,7 +217,364 @@ class QuestionSeeder extends Seeder
                 'question' => 'Have a nice day!',
                 'answers' => json_encode(['Thank you!', 'You too!', 'Thanks, same to you!']),
             ],
-            // Additional 69 questions
+
+            // Cards against humanity, light version
+            [
+                'question' => 'Pizza?',
+                'answers' => json_encode(['Always', 'Without hesitation', 'Absolutely, every time']),
+            ],
+            [
+                'question' => 'Monday?',
+                'answers' => json_encode(['Unacceptable', 'Should be illegal', 'Hard pass']),
+            ],
+
+            [
+                'question' => 'Coffee?',
+                'answers' => json_encode(['Mandatory', 'IV drip level', 'Non-negotiable']),
+            ],
+            [
+                'question' => 'WiFi down?',
+                'answers' => json_encode(['Panic', 'Total chaos', 'Civilization collapses']),
+            ],
+            [
+                'question' => 'Gym?',
+                'answers' => json_encode(['Tomorrow', 'Next week', 'January for sure']),
+            ],
+            [
+                'question' => 'Drama?',
+                'answers' => json_encode(['Not today', 'I live for it', 'Only a little']),
+            ],
+            [
+                'question' => 'Pineapple on pizza?',
+                'answers' => json_encode(['Absolutely', 'Call the police', 'Debatable']),
+            ],
+            [
+                'question' => 'Road trip?',
+                'answers' => json_encode(['Pack snacks', 'Full send', 'No map needed']),
+            ],
+            [
+                'question' => 'Group project?',
+                'answers' => json_encode(['I’ll do it', 'Where is everyone?', 'Classic disaster']),
+            ],
+            [
+                'question' => 'Sleep?',
+                'answers' => json_encode(['Overrated', 'Need 12 hours', 'What is that?']),
+            ],
+            [
+                'question' => 'Spicy food?',
+                'answers' => json_encode(['Bring it on', 'Mild please', 'Regret incoming']),
+            ],
+            [
+                'question' => 'Ghosts?',
+                'answers' => json_encode(['Friendly', 'Definitely real', 'Nope nope nope']),
+            ],
+            [
+                'question' => 'Text from ex?',
+                'answers' => json_encode(['Ignore', 'Who dis?', 'Absolutely not']),
+            ],
+            [
+                'question' => 'Dessert?',
+                'answers' => json_encode(['First', 'Always room', 'Double portion']),
+            ],
+            [
+                'question' => 'Conspiracy theories?',
+                'answers' => json_encode(['Tell me more', 'Deep dive', 'Red string board ready']),
+            ],
+            [
+                'question' => 'Rain?',
+                'answers' => json_encode(['Cozy vibes', 'Cancel plans', 'Nap time']),
+            ],
+            [
+                'question' => 'Autocorrect?',
+                'answers' => json_encode(['Betrayal', 'Why though?', 'Never helpful']),
+            ],
+            [
+                'question' => 'Dance floor?',
+                'answers' => json_encode(['Main character', 'Two left feet', 'After three drinks']),
+            ],
+            [
+                'question' => 'Surprise meeting?',
+                'answers' => json_encode(['Decline', 'Camera off', 'Sudden WiFi issues']),
+            ],
+
+            // Cards against humanity, absurd / dark / chaotic CAH-style energy
+            [
+                'question' => 'My secret talent?',
+                'answers' => json_encode(['Aggressively microwaving fish', 'Crying in HD', 'Weaponized incompetence']),
+            ],
+            [
+                'question' => 'What ruined the family dinner?',
+                'answers' => json_encode(['Grandma’s OnlyFans', 'A political podcast', 'Unsupervised tequila']),
+            ],
+            [
+                'question' => 'My biggest fear?',
+                'answers' => json_encode(['Being perceived', 'Slow WiFi during a crisis', 'Accidentally liking a 2014 post']),
+            ],
+            [
+                'question' => 'What’s in the box?',
+                'answers' => json_encode(['Emotional baggage', 'Bees. Just bees.', 'A disappointing sequel']),
+            ],
+            [
+                'question' => 'Why am I single?',
+                'answers' => json_encode(['Competitive oversharing', 'A PowerPoint presentation on crypto', 'Calling it “networking”']),
+            ],
+            [
+                'question' => 'The school banned ____.',
+                'answers' => json_encode(['Jazz hands', 'Existential dread', 'Gluten with attitude']),
+            ],
+            [
+                'question' => 'My superpower?',
+                'answers' => json_encode(['Turning red flags green', 'Summoning mild inconvenience', 'Explaining memes to boomers']),
+            ],
+            [
+                'question' => 'What’s trending?',
+                'answers' => json_encode(['Artificial confidence', 'Low-budget villain energy', 'Sponsored apologies']),
+            ],
+            [
+                'question' => 'The wedding was ruined by ____.',
+                'answers' => json_encode(['A gender reveal explosion', 'Unskippable ads', 'The groom’s search history']),
+            ],
+            [
+                'question' => 'Doctors recommend ____ for better health.',
+                'answers' => json_encode(['Screaming into the void', 'Organic chaos', 'Three hours of doomscrolling']),
+            ],
+            [
+                'question' => 'What’s my retirement plan?',
+                'answers' => json_encode(['Winning an argument online', 'Becoming cryptid folklore', 'Marrying into generational wealth']),
+            ],
+            [
+                'question' => 'Breaking news: ____ causes global panic.',
+                'answers' => json_encode(['A shortage of iced coffee', 'The moon acting suspicious', 'Another live-action remake']),
+            ],
+            [
+                'question' => 'The real reason I got fired?',
+                'answers' => json_encode(['Accidental honesty', 'Reply-all confidence', 'Vibes alone']),
+            ],
+            [
+                'question' => 'My toxic trait?',
+                'answers' => json_encode(['Clapping when the plane lands', 'Saying “let’s circle back”', 'Main character syndrome']),
+            ],
+            [
+                'question' => 'What’s under the bed?',
+                'answers' => json_encode(['Student loans', 'A Victorian child', 'Unfinished group projects']),
+            ],
+            [
+                'question' => 'My autobiography is titled ____.',
+                'answers' => json_encode(['Bold of You to Assume', 'Oops, Again', 'The Audacity']),
+            ],
+            [
+                'question' => 'The government doesn’t want you to know about ____.',
+                'answers' => json_encode(['Free breadsticks', 'Sentient pigeons', 'The true cost of guacamole']),
+            ],
+            [
+                'question' => 'Date night?',
+                'answers' => json_encode(['Competitive trauma bonding', 'Arguing about parking', 'A shared identity crisis']),
+            ],
+            [
+                'question' => 'My childhood nickname?',
+                'answers' => json_encode(['Budget Batman', 'Chaos Goblin', 'Mildly Concerning']),
+            ],
+            [
+                'question' => 'The apocalypse started with ____.',
+                'answers' => json_encode(['A TikTok challenge', 'Expired hummus', 'One guy named Greg']),
+            ],
+
+            // darker, more unhinged, or NSFW-level
+            [
+                'question' => 'The real cause of the apocalypse?',
+                'answers' => json_encode(['A toddler with admin privileges', 'Weaponized essential oils', 'A group chat named “No Drama”']),
+            ],
+            [
+                'question' => 'My villain origin story?',
+                'answers' => json_encode(['They said “per my last email”', 'One unpaid internship too many', 'The ice cream machine was broken']),
+            ],
+            [
+                'question' => 'What’s in my basement?',
+                'answers' => json_encode(['Unfinished business', 'A startup podcast', 'Three raccoons in a trench coat']),
+            ],
+            [
+                'question' => 'The worst thing to hear during surgery?',
+                'answers' => json_encode(['“Oops.”', '“That’s not supposed to be there.”', '“Quick, Google it.”']),
+            ],
+            [
+                'question' => 'My last words?',
+                'answers' => json_encode(['“Watch this.”', '“It’ll be fine.”', '“Trust me.”']),
+            ],
+            [
+                'question' => 'What did I bring to the potluck?',
+                'answers' => json_encode(['Unseasoned confidence', 'A suspiciously wet lasagna', 'Emotional damage']),
+            ],
+            [
+                'question' => 'The children yearn for ____.',
+                'answers' => json_encode(['Structured chaos', 'Anarchy with snacks', 'A mildly cursed mascot']),
+            ],
+            [
+                'question' => 'Breaking news: Local man arrested for ____.',
+                'answers' => json_encode(['Excessive vibe checks', 'Illegal use of finger guns', 'Tax fraud but make it aesthetic']),
+            ],
+            [
+                'question' => 'What’s hiding in the attic?',
+                'answers' => json_encode(['Victorian secrets', 'A sentient Furby', 'My search history']),
+            ],
+            [
+                'question' => 'The wedding vows included ____.',
+                'answers' => json_encode(['A non-disclosure agreement', 'Shared trauma', 'Access to my streaming passwords']),
+            ],
+            [
+                'question' => 'My toxic coping mechanism?',
+                'answers' => json_encode(['Irony poisoning', 'Competitive suffering', 'Retail therapy at 2am']),
+            ],
+            [
+                'question' => 'The theme of this year’s family reunion?',
+                'answers' => json_encode(['Passive aggression', 'Inherited medical conditions', 'Who’s in jail now?']),
+            ],
+            [
+                'question' => 'The science fair project was just ____.',
+                'answers' => json_encode(['Unregulated ambition', 'A potato with WiFi', 'Moral bankruptcy']),
+            ],
+            [
+                'question' => 'What ended my political career?',
+                'answers' => json_encode(['A hot mic moment', 'Leaked karaoke footage', 'The phrase “hear me out”']),
+            ],
+
+            [
+                'question' => 'What’s actually in the energy drink?',
+                'answers' => json_encode(['Liquid anxiety', 'Crushed dreams', 'A legally concerning amount of caffeine']),
+            ],
+            [
+                'question' => 'The support group is for people addicted to ____.',
+                'answers' => json_encode(['Overexplaining', 'Doomscrolling', 'Starting sentences with “technically”']),
+            ],
+            [
+                'question' => 'What’s trending in 2030?',
+                'answers' => json_encode(['Renting oxygen', 'AI-generated childhood memories', 'Subscription-based emotions']),
+            ],
+            [
+                'question' => 'The haunted house features ____.',
+                'answers' => json_encode(['Affordable housing', 'A ghost with commitment issues', 'My unresolved childhood']),
+            ],
+            [
+                'question' => 'Why was I banned from the zoo?',
+                'answers' => json_encode(['Trying to unionize the penguins', 'Making eye contact with the alpha', 'Teaching the parrots profanity']),
+            ],
+
+            [
+                'question' => 'Midlife crisis?',
+                'answers' => json_encode(['Convertible acquired', 'New personality unlocked', 'Tattoo incoming']),
+            ],
+            [
+                'question' => 'Trust issues?',
+                'answers' => json_encode(['Earned, not given', 'Documented history', 'See attached evidence']),
+            ],
+            [
+                'question' => 'Lie detector test?',
+                'answers' => json_encode(['Immediately sweating', 'Define “lie”', 'Technical difficulties']),
+            ],
+            [
+                'question' => 'Childhood trauma?',
+                'answers' => json_encode(['Character development', 'Lore expansion', 'Director’s cut']),
+            ],
+            [
+                'question' => 'Emergency contact?',
+                'answers' => json_encode(['Do not call', 'They don’t know either', 'We ride together']),
+            ],
+            [
+                'question' => 'Family group chat?',
+                'answers' => json_encode(['Muted forever', 'Unhinged opinions', 'Forwarded misinformation']),
+            ],
+            [
+                'question' => 'Life insurance?',
+                'answers' => json_encode(['Suspicious timing', 'Asking for a friend', 'Just in case']),
+            ],
+            [
+                'question' => 'Secret ingredient?',
+                'answers' => json_encode(['Spite', 'Denial', 'Mild resentment']),
+            ],
+            [
+                'question' => 'Witness protection?',
+                'answers' => json_encode(['New haircut', 'Different accent', 'Delete Facebook']),
+            ],
+            [
+                'question' => 'Polygraph results?',
+                'answers' => json_encode(['Inconclusive', 'Concerning', 'Let’s move on']),
+            ],
+            [
+                'question' => 'Tax audit?',
+                'answers' => json_encode(['Sudden illness', 'Lost receipts', 'Spiritual journey']),
+            ],
+            [
+                'question' => 'Inheritance?',
+                'answers' => json_encode(['One spoon', 'Emotional baggage', 'A cursed painting']),
+            ],
+            [
+                'question' => 'Last will?',
+                'answers' => json_encode(['Delete my browser history', 'Burn the journals', 'No open casket']),
+            ],
+            [
+                'question' => 'Anger management?',
+                'answers' => json_encode(['Work in progress', 'Define anger', 'Punching air respectfully']),
+            ],
+            [
+                'question' => 'Polyamory?',
+                'answers' => json_encode(['Advanced difficulty', 'Color-coded calendar', 'Pray for me']),
+            ],
+            [
+                'question' => 'Court appearance?',
+                'answers' => json_encode(['Allegedly', 'No further questions', 'Smile politely']),
+            ],
+            [
+                'question' => 'Hospital bill?',
+                'answers' => json_encode(['Life-ending', 'Second injury', 'Guess I’ll pass away']),
+            ],
+            [
+                'question' => 'Exorcism?',
+                'answers' => json_encode(['Wrong demon', 'Try turning it off', 'Premium subscription required']),
+            ],
+            [
+                'question' => 'Moral compass?',
+                'answers' => json_encode(['Under maintenance', 'Spinning rapidly', 'Sold separately']),
+            ],
+            [
+                'question' => 'Unsupervised?',
+                'answers' => json_encode(['Bold move', 'Immediate regret', 'Chaos confirmed']),
+            ],
+            [
+                'question' => 'Sleep paralysis?',
+                'answers' => json_encode(['Roommate vibes', 'Shadow DLC', 'Not paying rent']),
+            ],
+            [
+                'question' => 'Debt?',
+                'answers' => json_encode(['Generational', 'Character building', 'Collector’s edition']),
+            ],
+            [
+                'question' => 'Therapist notes?',
+                'answers' => json_encode(['Concerned silence', 'Underline twice', 'Needs supervision']),
+            ],
+            [
+                'question' => 'Internet history?',
+                'answers' => json_encode(['Classified', 'Redacted', 'Destroy immediately']),
+            ],
+            [
+                'question' => 'Fun fact?',
+                'answers' => json_encode(['Not fun', 'Legally questionable', 'Emotionally damaging']),
+            ],
+            [
+                'question' => 'Witness?',
+                'answers' => json_encode(['Saw nothing', 'Suddenly blind', 'Out of town']),
+            ],
+            [
+                'question' => 'Side effects?',
+                'answers' => json_encode(['Mild chaos', 'Existential dread', 'Spontaneous honesty']),
+            ],
+            [
+                'question' => 'Reputation?',
+                'answers' => json_encode(['In shambles', 'Allegedly fine', 'Under investigation']),
+            ],
+            [
+                'question' => 'Life choices?',
+                'answers' => json_encode(['Bold strategy', 'We learn', 'Not reversible']),
+            ],
+
         ];
 
         // Generate remaining 69 questions dynamically

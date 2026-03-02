@@ -9,6 +9,7 @@ namespace App\Http\Controllers\Api\QuestionApi;
 use App\Http\Controllers\Controller;
 use App\Models\Question\Question;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class QuestionController extends Controller
 {
@@ -43,9 +44,27 @@ class QuestionController extends Controller
     {
         $q = $request->query('q', '');
 
+        // avoid caching empty queries
+        if (empty($q)) {
+            return response()->json([]);
+        }
+
+        /*
         $results = Question::where('question', 'like', "%{$q}%")
             ->limit(10)
             ->pluck('question'); // returns array of matching questions
+        */
+
+        // Variant with cache
+        $results = Cache::remember(
+            'suggestions_'.md5($q),  // unique cache key per query
+            now()->addMinutes(60),     // cache duration
+            function () use ($q) {
+                return Question::where('question', 'like', "%{$q}%")
+                    ->limit(10)
+                    ->pluck('question');
+            }
+        );
 
         return response()->json($results);
     }

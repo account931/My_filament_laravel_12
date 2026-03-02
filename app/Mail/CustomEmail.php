@@ -37,7 +37,8 @@ class CustomEmail extends Mailable
     {
         // $mailText = 'This is Mail facade';
 
-        return $this->subject('Email sent Via Mail Facade!')
+        return $this->from(config('mail.from.address'), config('mail.from.name'))
+            ->subject('Email sent Via Mail Facade!')
             ->markdown('emails.regular-mail');
 
         // $this->view('emails.mail-facade')->with(compact('user', 'mailText'));

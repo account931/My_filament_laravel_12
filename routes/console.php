@@ -287,6 +287,13 @@ Artisan::command('send_email', function () {
 
 // Start Scheduled tasks. To test locally: php artisan queue:work +  php artisan schedule:run Or configure both of them  in docker -------------------------------------
 // Schedule::job(new TestJob(User::find(1)))->everyMinute();  //->daily();  //>everyFiveMinutes();
+
+// SQL back-up
 Schedule::job(new BackupDatabaseToGoogleDrive)->daily();  //
+
+// clear Horizon failed jobs daily. Clear all failed queue jobs daily at midnight
+// create job that run 'php artisan queue:flush' and add it here
+// ............
+
 //
 // End Scheduled tasks-------------------------------------------------

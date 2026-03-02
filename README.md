@@ -1043,9 +1043,11 @@ BIGQUERY_KEY_FILE=laravel-bigquery-8****f.json
 
 <p> 8.Cant run migrations in Pre-Deploy Command at Render dashboard as it is paid option, so add it to Dockerfile for Render.</p>
 
-<p> 9. Implement job supervisor </p>
+<p> 9. Implement Queue Jobs: to run queue jobs add to your /docker_db_setup/render.com/Dockerfile command "php artisan horizon" OR "php artisan queue:work". NB: it is bad practice, good practice - you should create a new instance where u run the command "php artisan horizon", but it will take free tier limits</p>
 
-<p> 10. Email implementation, to use real emails instead of Mailtrap, do......... </p>
+<p> 10. Implement job supervisor: cant do this as server on free tier sleeps after inactivity </p>
+
+<p> 10. Email implementation, to use real emails instead of Mailtrap, do......... Still use Mailtrap sandbox, as it requires separate domain </p>
 
 
 <p> ----------------------------------------------------------------------------------------- </p>
@@ -1074,6 +1076,18 @@ If you use Horizon, instead of "php artisan queue:work" you may just run "php ar
 4. In .env =>  QUEUE_CONNECTION=redis
 5. <code>  php artisan horizon</code>
 6. Dashboard =>   http://localhost:8000/horizon
+7. On live production allow access in app/Providers/HorizonServiceProvider.php:
+ <code>
+public function boot()     // OR protected function gate()
+{
+    Horizon::auth(function ($request) {
+        // allow access only for your admin emails
+        return in_array($request->user()->email, [
+            'admin@example.com',
+        ]);
+    });
+}
+</code>
 
 
 
