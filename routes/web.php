@@ -6,6 +6,7 @@ use App\Http\Controllers\BigQuery\BigQueryController;   // Api cotrollers
 use App\Http\Controllers\Booking\BookingController;
 use App\Http\Controllers\MyGoogleCloudStorageImages\MyGoogleCloudStorageImagesController;
 use App\Http\Controllers\MyGoogleDrive\MyGoogleDriveController;
+use App\Http\Controllers\MySupabaseCloudStorageImages\SupabaseStorageController;
 use App\Http\Controllers\OneTimeLink\OneTimeLinkController;
 use App\Http\Controllers\OwnerController\OwnerController;
 use App\Http\Controllers\ProfileController;
@@ -13,9 +14,9 @@ use App\Http\Controllers\PrometheusMetrics\PrometheusMetricsController;
 use App\Http\Controllers\Questions\QuestionVueController;
 use App\Http\Controllers\SendEmail\SendEmailController;
 use App\Http\Controllers\SendNotification\NotificationController;
-use App\Http\Controllers\Shop\ShopController;
 // Prometheus_and_Redis
 // use Illuminate\Support\Facades\Redis;
+use App\Http\Controllers\Shop\ShopController;
 use App\Http\Controllers\Socialite\SocialiteController;
 use App\Http\Controllers\Socialite\SocialiteGoogleAuthController;
 use App\Http\Controllers\SQL_Backup_toGDive\SqlDumptoGDriveController;
@@ -196,8 +197,12 @@ Route::middleware('auth')->group(function () {
     Route::get('translate/index', [TranslateController::class, 'index'])->name('translate.index');  // translate, multi languages
     Route::get('translate/lang/{lang}', [TranslateController::class, 'changeLanguage'])->name('translate.changeLanguage');
 
-    // Question Vue front-end
+    // Question Vue front-end. handles Questions Api
     Route::get('questions/index', [QuestionVueController::class, 'index'])->name('questions.index');  // Questions index with vue
+
+    // Supabase Cloud Storage
+    Route::get('supabase/storage/index', [SupabaseStorageController::class, 'index'])->name('supabase.storage.index');  // supabase index
+    Route::post('supabase/storage/upload', [SupabaseStorageController::class, 'uploadSupabaseImage'])->name('supabase.storage.upload');  // form to upload file to DB and to Google Cloud Storage bucket + display user images via  Relations\HasMany (user()->google_storage_images)
 
 });
 // End Auth (logged) users only------------------------------------------------------------------------------------------

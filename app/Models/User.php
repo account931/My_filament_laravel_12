@@ -72,6 +72,16 @@ class User extends Authenticatable implements Auditable, FilamentUser  // Larave
         return $this->hasMany(\App\Models\UserImageGCloud::class);
     }
 
+    /**
+     * Get the Supabse cloud storage images associated with the user from $table = 'user_images_supabase';
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function supabase_storage_images()
+    {
+        return $this->hasMany(\App\Models\UserImageSuperbaseCloud::class);
+    }
+
     // filament staff
     public function canAccessPanel(Panel $panel): bool
     {

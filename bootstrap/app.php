@@ -52,9 +52,9 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $exceptions->render(function (\Throwable $e, $request) {
 
-            // show my custom error when there is curl error, i.e no internet, e.g for pages with BigQuery or GCS
-            if (str_contains($e->getMessage(), 'cURL error 6')) {
-                return response()->view('errors.no-internet', [], 503);
+            // show my custom error when there is curl error, i.e no internet OR real curl error, e.g for pages with BigQuery or GCS
+            if (str_contains($e->getMessage(), 'cURL error')) {  // 'cURL error 6')
+                return response()->view('errors.no-internet', ['exception' => $e], 503);
             }
 
             return null; // let Laravel handle other errors

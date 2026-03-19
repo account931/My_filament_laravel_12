@@ -119,3 +119,9 @@
                             <i class="fas fa-cloud-sun" style="font-size:12px"></i>
                             {{ __('Questions Vue') }}
                         </x-dropdown-link>
+
+                        <!-- Supabase Cloud storage -->
+                        <x-dropdown-link :href="route('supabase.storage.index')"  :class="request()->routeIs('supabase.storage.index') ? 'bg-gray-300 text-gray-900 font-semibold' : ''">
+                            <i class="fas fa-cloud-sun" style="font-size:12px"></i>
+                            {{ __('Supabase Cloud storage') }}
+                        </x-dropdown-link>

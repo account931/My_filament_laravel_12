@@ -20,7 +20,7 @@ class BigQueryService
     {
         $this->bigQuery = new BigQueryClient([
             'projectId' => env('BIGQUERY_PROJECT_ID'),
-            'keyFilePath' => base_path(env('BIGQUERY_KEY_FILE')),
+            'keyFilePath' => storage_path(env('BIGQUERY_KEY_FILE')),
             // 'keyFilePath' => storage_path('app/' . env('BIGQUERY_KEY_FILE')),
         ]);
 

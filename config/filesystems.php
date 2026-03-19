@@ -77,6 +77,46 @@ return [
         ],
         // End Google cloud storage
 
+        // Supabase cloud storage
+        // public bucket
+        'supabase_public' => [
+            'driver' => 's3',
+            'key' => env('SUPABASE_ACCESS_KEY'),
+            'secret' => env('SUPABASE_SECRET_KEY'),
+            'region' => env('SUPABASE_REGION', 'eu-west-1'),
+            'bucket' => env('SUPABASE_BUCKET'),
+            // 'url' => env('SUPABASE_URL'),
+            'endpoint' => env('SUPABASE_ENDPOINT'),
+            'use_path_style_endpoint' => true,
+        ],
+        // private bucket
+        'supabase_private' => [
+            'driver' => 's3',
+            'key' => env('SUPABASE_ACCESS_KEY'),
+            'secret' => env('SUPABASE_SECRET_KEY'),
+            'region' => env('SUPABASE_REGION', 'eu-west-1'),
+            'bucket' => env('SUPABASE_PRIVATE_BUCKET'),
+            // 'url' => env('SUPABASE_URL'),
+            'endpoint' => env('SUPABASE_ENDPOINT'),
+            'use_path_style_endpoint' => true,
+        ],
+        /*
+        'supabase' => [
+            'driver' => 's3',
+            'key' => env('SUPABASE_ACCESS_KEY'),
+            'secret' => env('SUPABASE_SECRET_KEY'),
+            'region' => env('SUPABASE_REGION'),
+            'buckets' => [
+                'public' => env('SUPABASE_BUCKET'),   // public bucket
+                'private' => env('SUPABASE_PRIVATE_BUCKET'), // private bucket, needs signed routes
+            ],
+            // 'endpoint' => env('SUPABASE_ENDPOINT'),
+            'url' => env('SUPABASE_URL'),
+            'use_path_style_endpoint' => true,
+        ],
+        */
+        // End Supabase cloud storage
+
     ],
 
     /*

@@ -62,6 +62,8 @@ git restore .  git clean -fd
 - [25. Render.com](#25-rendercom)
 - [26. Redis](#26redis)
 - [27. Queue on Redis + Horizon](27-Queue-on-redis--horizon)
+- [28. Tableplus](#28-tableplus)
+- [29. Supabase cloud storage](29-supabase-cloud-storage)
 
 - [111.V.A](#111-va)
 - [112.Known errors ](#112-known-errors)
@@ -1088,6 +1090,34 @@ public function boot()     // OR protected function gate()
     });
 }
 </code>
+
+
+<p> ----------------------------------------------------------------------------------------- </p>
+
+# 28. Tableplus
+ Connect SQL connection to host '127.0.0.1' instead of 'sql' as in .env
+
+
+
+
+
+
+
+
+
+<p> ----------------------------------------------------------------------------------------- </p>
+
+
+# 29. Supabase cloud storage
+https://supabase.com/dashboard/project/drgudgvxqszdwxxfmieb/storage/files/buckets/laravel_12_bucket
+
+ Registered to acc*1@ukr.net
+composer require league/flysystem-aws-s3-v3 "^3.15"
+You can find Supabase Api Keys (NOT USED): Supabase => select Project =>  Project settings => Api  => Api keys
+You can find Supabase S3 Keys(USE THIS) Supabase => Storage =>  Config => S3 //generated in dashboard, can see only once
+
+
+
 
 
 
