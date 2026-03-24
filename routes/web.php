@@ -202,7 +202,8 @@ Route::middleware('auth')->group(function () {
 
     // Supabase Cloud Storage
     Route::get('supabase/storage/index', [SupabaseStorageController::class, 'index'])->name('supabase.storage.index');  // supabase index
-    Route::post('supabase/storage/upload', [SupabaseStorageController::class, 'uploadSupabaseImage'])->name('supabase.storage.upload');  // form to upload file to DB and to Google Cloud Storage bucket + display user images via  Relations\HasMany (user()->google_storage_images)
+    Route::post('supabase/storage/upload', [SupabaseStorageController::class, 'uploadSupabaseImage'])->name('supabase.storage.upload');  // form to upload file to DB and to Supabase Cloud Storage bucket + display user images via  Relations\HasMany (user()->google_storage_images)
+    Route::delete('supabase/storage/delete/{id}', [SupabaseStorageController::class, 'deleteSupabaseImage'])->name('supabase.storage.delete');  // delete image from DB and Supabase
 
 });
 // End Auth (logged) users only------------------------------------------------------------------------------------------

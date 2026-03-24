@@ -81,7 +81,7 @@ class SupabaseStorageController extends Controller
             return redirect()->back()->with('error', $uploadResponse->body());
             /*
             return response()->json([
-                'error' => 'Ошибка загрузки на Supabase',
+                'error' => 'Load error на Supabase',
                 'details' => $uploadResponse->body(),
             ], 500);
             */
@@ -91,7 +91,7 @@ class SupabaseStorageController extends Controller
 
         // dd(4);
 
-        // 2️⃣ Загрузка в Supabase Storage (raw binary body)
+        // 2️⃣ Upload to Supabase Storage ( as raw binary body). Api type upload
         // Api type upload, but we use S3
         /*
         $uploadResponse = Http::withHeaders([
@@ -107,7 +107,6 @@ class SupabaseStorageController extends Controller
         // dd('SUPABASE_OKK');
 
         // 3️⃣ Save to local DB path and other details
-
         $userImage = UserImageSuperbaseCloud::create([
             'user_id' => auth()->id(),
             'path' => $filePath,
@@ -116,7 +115,7 @@ class SupabaseStorageController extends Controller
 
         ]);
 
-        // 4️⃣ Генерация signed URL на 1 час
+        // 4️⃣ Generate signed URLfor 1 hour
         /*
         $signedUrlResponse = Http::withHeaders([
             'Authorization' => 'Bearer '.$key,
@@ -152,5 +151,49 @@ class SupabaseStorageController extends Controller
             return redirect()->back()->with('success', 'Image uploaded successfully to  '.(request('is_private') ? 'Private ' : 'Public ').'bucket, path is => '.$bucket.'/'.$filePath);
         }
 
+    }
+
+    /**
+     * Delete an image from Supabase and local DB
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function deleteSupabaseImage($id)
+    {
+        // 1️⃣ Find the image record
+        $image = UserImageSuperbaseCloud::find($id);
+
+        if (! $image) {
+            return redirect()->back()->with('error', 'Image not found.');
+        }
+
+        // 2️⃣ Make sure the authenticated user owns the image
+        if ($image->user_id !== Auth::id()) {
+            return redirect()->back()->with('error', 'You do not have permission to delete this image.');
+        }
+
+        // 3️⃣ Select correct Supabase disk
+        $disk = $image->is_private_bucket
+            ? Storage::disk('supabase_private')
+            : Storage::disk('supabase_public');
+
+        // 4️⃣ Delete the file from Supabase storage (if exists)
+        try {
+            if ($disk->exists($image->path)) {
+                $disk->delete($image->path);
+            }
+        } catch (\Exception $e) {
+            // Optional: log error
+            \Log::error('Failed to delete Supabase image: '.$e->getMessage());
+
+            return redirect()->back()->with('error', 'Failed to delete image from Supabase storage.');
+        }
+
+        // 5️⃣ Delete the record from local database
+        $image->delete();
+
+        // 6️⃣ Return success message
+        return redirect()->back()->with('success', 'Image deleted successfully from both Supabase and local database.');
     }
 }

@@ -20,8 +20,10 @@ class BigQueryService
     {
         $this->bigQuery = new BigQueryClient([
             'projectId' => env('BIGQUERY_PROJECT_ID'),
-            'keyFilePath' => storage_path(env('BIGQUERY_KEY_FILE')),
-            // 'keyFilePath' => storage_path('app/' . env('BIGQUERY_KEY_FILE')),
+            // 'keyFilePath' => storage_path(env('BIGQUERY_KEY_FILE')), //Points to the storage/ directory inside your project VS base_path(...) - Points to the root of your Laravel project
+            'keyFilePath' => app()->environment('production')
+                ? base_path(env('BIGQUERY_KEY_FILE'))     // fix for Render.com
+                : storage_path(env('BIGQUERY_KEY_FILE')), // for local //Points to the storage/ directory inside your project
         ]);
 
         $this->dataset = $this->bigQuery->dataset(env('BIGQUERY_DATASET'));

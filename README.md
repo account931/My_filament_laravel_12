@@ -1040,7 +1040,7 @@ BIGQUERY_KEY_FILE=laravel-bigquery-8****f.json
 
 
 <p> 7. 
-  Now it is auto-deployed according to Render.com setting, but if u wish to change it in future to manual trigger, do it in /.github/workflow/ci.yml  + turning off auto deploy at Render. NB: as per 24.02.26 auto-deploy is OFF because of pipeline shrtage minutes.
+  Now it is auto-deployed according to Render.com setting (connected to my Github), but if u wish to change it in future to manual trigger, do it in /.github/workflow/ci.yml  + turning off auto deploy at Render. NB: as per 24.02.26 auto-deploy is OFF because of pipeline shrtage minutes.
 </p>
 
 <p> 8.Cant run migrations in Pre-Deploy Command at Render dashboard as it is paid option, so add it to Dockerfile for Render.</p>
@@ -1111,10 +1111,12 @@ public function boot()     // OR protected function gate()
 # 29. Supabase cloud storage
 https://supabase.com/dashboard/project/drgudgvxqszdwxxfmieb/storage/files/buckets/laravel_12_bucket
 
- Registered to acc*1@ukr.net
-composer require league/flysystem-aws-s3-v3 "^3.15"
-You can find Supabase Api Keys (NOT USED): Supabase => select Project =>  Project settings => Api  => Api keys
-You can find Supabase S3 Keys(USE THIS) Supabase => Storage =>  Config => S3 //generated in dashboard, can see only once
+<p>Registered to acc*1@ukr.net </p>
+
+<code>composer require league/flysystem-aws-s3-v3 "^3.15"</code>
+
+<p>You can find Supabase Api Keys (NOT USED): Supabase => select Project =>  Project settings => Api  => Api keys </p>
+<p>You can find Supabase S3 Keys(USE THIS) Supabase => Storage =>  Config => S3 //generated in dashboard, can see only once </p>
 
 
 

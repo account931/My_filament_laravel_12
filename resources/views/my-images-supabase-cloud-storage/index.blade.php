@@ -2,7 +2,7 @@
 
     @push('styles')
     <style>
-        /* -----------Gallary images CSS, hover and open in modal ---------*/
+ /* -----------Gallary images CSS, hover and open in modal ---------*/
  
 
  .thumbnail-lightbox {
@@ -84,6 +84,36 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
+.delete-btn-text {font-size: 0.7rem !important;}
+.descr-text {font-size: 0.8rem !important;}
+
+/* Applies to screens smaller than 768px */ /* Small devices (phones) */
+@media (max-width: 576px) {
+    .delete-btn-text {font-size: 0.2rem !important;}
+    .descr-text {font-size: 0.4rem !important; line-height: 0.4 !important;}
+    .descr-supa-text {font-size: 0.5rem !important; }
+    .my-flash-success {font-size: 0.5rem !important; }
+    .my-fixed-mobile {
+        position: relative;      /* stays in normal flow */
+        width: 100vw !important;            /* full viewport width */
+        left: 0 !important;                /* align to left edge */
+        margin-left: calc(-1 * var(--tw-space-x)) !important; /* remove parent padding if needed */
+        border-radius: 0;        /* optional: remove rounding on mobile */
+        padding-left: 0.5rem !important;    /* optional padding for text */
+        padding-right: 0.5rem !important; 
+    }
+     .modal-content {
+        max-width: 95%;
+        max-height: 90%;
+        border-radius: 5px;
+    }
+
+    .close {
+        top: 10px;
+        right: 15px;
+        font-size: 30px;
+    }
+}
 
     </style>
 @endpush
@@ -94,7 +124,7 @@ $(document).ready(function () {
 
 
 //Modal Lightbox style window with image
-$('.humbnail-lightbox').click(function() {
+$('.thumbnail-lightbox').click(function() {
         var src = $(this).attr('src');
         $('#modalImage').attr('src', src);
         $('#imageModal').fadeIn();
@@ -145,7 +175,7 @@ $('.humbnail-lightbox').click(function() {
 
                 <!-- Flash for success -->
                 @if (session('success'))
-                    <div class="mb-4 p-4 border border-success  text-success rounded"><!-- Usese Bootstrap class as Tailwinf fails fo no reason -->
+                    <div  style="word-wrap: break-word;" class="mb-4 p-4 border border-success  text-success rounded my-flash-success"><!-- Usese Bootstrap class as Tailwinf fails fo no reason -->
                         {{ session('success') }}
                     </div>
                 @endif
@@ -153,7 +183,7 @@ $('.humbnail-lightbox').click(function() {
 
                 <!-- Flash for failure -->
                 @if (session('error'))
-                    <div class="mb-4 p-4 border border-red-500 bg-red-100 text-red-700 rounded"><!-- Uses tailwind-->
+                    <div class="mb-4 p-4 border border-red-500 bg-red-100 text-red-700 rounded my-flash-success"><!-- Uses tailwind-->
                         {{ session('error') }}
                     </div>
                 @endif
@@ -166,9 +196,9 @@ $('.humbnail-lightbox').click(function() {
 
                     <!-- Upload Form -->
                     <div>
-                        <p class="change-color  bg-red-500 border-2 border-black  text-black font-bold py-2 px-4 rounded">
+                        <p class="change-color bg-red-500 border-2 border-black  text-black font-bold py-2 px-4 rounded w-screen my-fixed-mobile">
                             Upload your images to SupaBase Cloud Storage, <br>
-                            <span style="font-size: smaller;">it saves the user_id and path to local DB as well, but in Supabase Cloud it does not matter who you are (no Socialite login needed), it just saves to common Supabse bucket registered to acc***1@ukr.net</span>
+                            <span class="descr-text">it saves the user_id and path to local DB as well, but in Supabase Cloud it does not matter who you are (no Socialite login needed), it just saves to common Supabse bucket registered to acc***1@ukr.net</span>
                         </p>
                         <br>
 
@@ -206,7 +236,7 @@ $('.humbnail-lightbox').click(function() {
 
             <!-- Display Supabase Cloud Storage images -->
             <div>
-                <br><p class="mb-4 p-4 border border-success  text-success rounded"> Supabase Storage images for {{ Auth::user()->name }}, <br> <span style="font-size: 0.5em;"> uses Relations\HasMany (user()->google_storage_images)</span></p>
+                <br><p class="mb-4 p-4 border border-success  text-success rounded descr-supa-text"> Supabase Storage images for {{ Auth::user()->name }},  <span style="font-size: 0.5em;"> uses Relations\HasMany (user()->google_storage_images)</span></p>
 
                 @if (count($mySupabaseImages) == 0)
                     <span style="color:red;">You have uploaded zero images so far</span>
@@ -230,11 +260,11 @@ $('.humbnail-lightbox').click(function() {
                            <p><span style="font-size: 0.5em;">Relative Path:<br> "{{ $item->path}}"</span></p> <!-- $relativePath = "images/OYJncp.jpg" -->
                            
                            <!-- Delete button from  -->
-                            <form action="{{ route('my-google-cloud-storage.image.delete',  $item->id ) }}" method="POST" >
+                            <form action="{{ route('supabase.storage.delete',  $item->id ) }}" method="POST" >
                                @csrf
                                @method('DELETE')
                                <!--<input type="hidden" name="id" value="{{ $item->id }}" />-->
-                               <button type="submit" class="btn btn-danger rounded" onclick="return confirm('Are you sure you want to hard delete image (NOT SOFT DELETE) ID: {{ $item->id }} ?')"> Delete ID {{ $item->id }} from both Supabase cloud and local DB</button> 
+                               <button type="submit" class="btn btn-danger rounded delete-btn-text" onclick="return confirm('Are you sure you want to hard delete image (NOT SOFT DELETE) ID: {{ $item->id }} ?')"> <i class="fa fa-trash"></i> Delete ID {{ $item->id }} from both Supabase cloud and local DB</button> 
                            </form>
 
 
@@ -259,10 +289,10 @@ $('.humbnail-lightbox').click(function() {
                                 ? config('filesystems.disks.supabase_private.bucket')
                                 : config('filesystems.disks.supabase_public.bucket');
 
-                            // generate URL
+                            // generate URL for public or private image
                             $url = $exists
                                 ? ($item->is_private_bucket
-                                    ? $disk->temporaryUrl($item->path, now()->addMinutes(5))
+                                    ? $disk->temporaryUrl($item->path, now()->addMinutes(5))  //signed route
                                     : "https://drgudgvxqszdwxxfmieb.supabase.co/storage/v1/object/{$bucket}/{$item->path}"
                                   )
                                 : null;
@@ -276,7 +306,7 @@ $('.humbnail-lightbox').click(function() {
                             @if($exists)
                                 <!-- Show public/private badge --> 
                                 <span class="badge {{ $item->is_private_bucket ? 'bg-danger' : 'bg-success' }}">
-                                   {{ (bool)$item->is_private_bucket ? 'Private' : 'Public' }}
+                                   {{ (bool)$item->is_private_bucket ? 'Private. Signed' : 'Public' }}
                                 </span>
 
                                 <!-- Image --> 
