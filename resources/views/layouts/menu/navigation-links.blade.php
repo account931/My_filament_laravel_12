@@ -125,3 +125,9 @@
                             <i class="fas fa-cloud-sun" style="font-size:12px"></i>
                             {{ __('Supabase Cloud storage') }}
                         </x-dropdown-link>
+
+                        <!-- Inertia example -->
+                        <x-dropdown-link :href="route('inertia.index')"  :class="request()->routeIs('inertia.index') ? 'bg-gray-300 text-gray-900 font-semibold' : ''">
+                            <i class="fas fa-cloud-sun" style="font-size:12px"></i>
+                            {{ __('Inertia example') }}
+                        </x-dropdown-link>

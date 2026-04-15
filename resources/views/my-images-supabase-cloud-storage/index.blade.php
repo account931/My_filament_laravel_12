@@ -86,6 +86,7 @@
 
 .delete-btn-text {font-size: 0.7rem !important;}
 .descr-text {font-size: 0.8rem !important;}
+.no-image {width: 30%; margin: 0 auto; padding: 0.7rem;}
 
 /* Applies to screens smaller than 768px */ /* Small devices (phones) */
 @media (max-width: 576px) {
@@ -93,6 +94,7 @@
     .descr-text {font-size: 0.4rem !important; line-height: 0.4 !important;}
     .descr-supa-text {font-size: 0.5rem !important; }
     .my-flash-success {font-size: 0.5rem !important; }
+    .no-image {width: 90%; margin: 0 auto; padding: 0.7rem;}
     .my-fixed-mobile {
         position: relative;      /* stays in normal flow */
         width: 100vw !important;            /* full viewport width */
@@ -257,15 +259,8 @@ $('.thumbnail-lightbox').click(function() {
                         
                       
                         <div class="col-4"> <!-- Bootstrap CSS class-->
-                           <p><span style="font-size: 0.5em;">Relative Path:<br> "{{ $item->path}}"</span></p> <!-- $relativePath = "images/OYJncp.jpg" -->
-                           
-                           <!-- Delete button from  -->
-                            <form action="{{ route('supabase.storage.delete',  $item->id ) }}" method="POST" >
-                               @csrf
-                               @method('DELETE')
-                               <!--<input type="hidden" name="id" value="{{ $item->id }}" />-->
-                               <button type="submit" class="btn btn-danger rounded delete-btn-text" onclick="return confirm('Are you sure you want to hard delete image (NOT SOFT DELETE) ID: {{ $item->id }} ?')"> <i class="fa fa-trash"></i> Delete ID {{ $item->id }} from both Supabase cloud and local DB</button> 
-                           </form>
+                           <p><span class="delete-btn-text" style="font-size: 0.5em;">Relative Path:<br> "{{ $item->path}}"</span></p> <!-- $relativePath = "images/OYJncp.jpg" -->
+                        
 
 
 
@@ -312,12 +307,22 @@ $('.thumbnail-lightbox').click(function() {
                                 <!-- Image --> 
                                 <img src="{{ $url }}" class="thumbnail-lightbox" alt="User Image">
                             @else
-                                <p class="text-white rounded  bg-danger m-2 p-2">
+                                <p class="text-white rounded  bg-info mt-2 p-1 delete-btn-text">
+                                     <img src="/img/no-image.png" class="no-image" alt="no image"
                                      <span class="me-2">&#9888;</span> <!-- ⚠️ Unicode warning/exclamation icon -->
-                                     Image not available, Supabase free tier is off
+                                     Image not available, <br> Supabase or Internet is off
                                 </p>
                             @endif
                             
+
+                            <!-- Delete button  -->
+                            <form action="{{ route('supabase.storage.delete',  $item->id ) }}" method="POST" >
+                               @csrf
+                               @method('DELETE')
+                               <!--<input type="hidden" name="id" value="{{ $item->id }}" />-->
+                               <button type="submit" class="btn btn-danger mt-2 rounded delete-btn-text" onclick="return confirm('Are you sure you want to hard delete image (NOT SOFT DELETE) ID: {{ $item->id }} ?')"> <i class="fa fa-trash"></i> Delete ID {{ $item->id }} <br> from both Supabase cloud and local DB</button> 
+                           </form>
+                           <!-- End Delete button  -->
 
                         </div> <!-- End  class="col-4 -->
                         

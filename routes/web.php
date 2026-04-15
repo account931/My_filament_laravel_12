@@ -4,6 +4,7 @@ use App\Http\Controllers\Api;
 use App\Http\Controllers\Auth_Api\SanctumCSRFbasedSessionAuthentication\CSRFbasedSessionAuthController;
 use App\Http\Controllers\BigQuery\BigQueryController;   // Api cotrollers
 use App\Http\Controllers\Booking\BookingController;
+use App\Http\Controllers\Inertia\InertiaController;
 use App\Http\Controllers\MyGoogleCloudStorageImages\MyGoogleCloudStorageImagesController;
 use App\Http\Controllers\MyGoogleDrive\MyGoogleDriveController;
 use App\Http\Controllers\MySupabaseCloudStorageImages\SupabaseStorageController;
@@ -13,9 +14,9 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PrometheusMetrics\PrometheusMetricsController;
 use App\Http\Controllers\Questions\QuestionVueController;
 use App\Http\Controllers\SendEmail\SendEmailController;
-use App\Http\Controllers\SendNotification\NotificationController;
 // Prometheus_and_Redis
 // use Illuminate\Support\Facades\Redis;
+use App\Http\Controllers\SendNotification\NotificationController;
 use App\Http\Controllers\Shop\ShopController;
 use App\Http\Controllers\Socialite\SocialiteController;
 use App\Http\Controllers\Socialite\SocialiteGoogleAuthController;
@@ -204,6 +205,9 @@ Route::middleware('auth')->group(function () {
     Route::get('supabase/storage/index', [SupabaseStorageController::class, 'index'])->name('supabase.storage.index');  // supabase index
     Route::post('supabase/storage/upload', [SupabaseStorageController::class, 'uploadSupabaseImage'])->name('supabase.storage.upload');  // form to upload file to DB and to Supabase Cloud Storage bucket + display user images via  Relations\HasMany (user()->google_storage_images)
     Route::delete('supabase/storage/delete/{id}', [SupabaseStorageController::class, 'deleteSupabaseImage'])->name('supabase.storage.delete');  // delete image from DB and Supabase
+
+    // Inertia example
+    Route::get('inertia/index', [InertiaController::class, 'index'])->name('inertia.index');  // inertia index
 
 });
 // End Auth (logged) users only------------------------------------------------------------------------------------------

@@ -4,10 +4,10 @@
 
 
 > Laravel: 12.18, PHP: 8.4.8 , Filament: 3, mysql: 8.0.42, db: '', </br></br>
-Contains 80% of Laravel_2024_migration transffered from Laravel 6 to 12 + Filament + Stripe + E-commerce shop, etc</br>
+Contains 80% of Laravel_2024_migration transfered from Laravel 6 to 12 + Filament + Stripe + E-commerce shop, etc</br>
 What is new: Filament 3, Sail, Sanctum, CI/CD, Laravel Audit, PHPStan static analysis tool 2.1.17, Pint, Tailwind CSS out of the box, Vue 3, Pinia insead of Vuex store, dotswan/filament-map-picker, Laravel Cashier with Stripe, Sentry, Prometheus_and_Grafana, 
 Scramble – Laravel OpenAPI (Swagger), one-time expirable signed routes(signed means that URL includes a signature hash), send emails,
-auto SQL db back-up via sheduled job + save it at G Drive (saves to pre-defined G Drive at dim***1@gmail.com), Socialite to get oAuth access token (login via Google), images at Google Cloud Storage bucket, upload files to personal Google Drive, Google BigQuery (saving analytics), displaying BQ data in Blade, Vue (Options API), git cola, Sanctum type 2 (SPA Authentication (Session-Based / Cookie Authentication)),Booking on Vue, Translate , Redis (Prometeus + Queques + Cache + Sessions), Horizon
+auto SQL db back-up via sheduled job + save it at G Drive (saves to pre-defined G Drive at dim***1@gmail.com), Socialite to get oAuth access token (login via Google), images at Google Cloud Storage bucket, upload files to personal Google Drive, Google BigQuery (saving analytics), displaying BQ data in Blade, Vue (Options API), git cola, Sanctum type 2 (SPA Authentication (Session-Based / Cookie Authentication)),Booking on Vue, Translate , Redis (Prometeus + Queques + Cache + Sessions), Horizon, Supabse cloud storage, Inertia
 
 <p>  .env, can be found at  drafts at acc***1@u**.net or at G Drive </p>
 
@@ -64,6 +64,8 @@ git restore .  git clean -fd
 - [27. Queue on Redis + Horizon](27-Queue-on-redis--horizon)
 - [28. Tableplus](#28-tableplus)
 - [29. Supabase cloud storage](29-supabase-cloud-storage)
+- [30. Inertia](30-inertia)
+
 
 - [111.V.A](#111-va)
 - [112.Known errors ](#112-known-errors)
@@ -1118,7 +1120,22 @@ https://supabase.com/dashboard/project/drgudgvxqszdwxxfmieb/storage/files/bucket
 <p>You can find Supabase Api Keys (NOT USED): Supabase => select Project =>  Project settings => Api  => Api keys </p>
 <p>You can find Supabase S3 Keys(USE THIS) Supabase => Storage =>  Config => S3 //generated in dashboard, can see only once </p>
 
+<p>Saving image either tp public or private bucket, absed on checkbox. Private images are displayed as signed</p>
 
+
+
+
+
+
+<p> ----------------------------------------------------------------------------------------- </p>
+
+# 30. Inertia
+
+<br>
+Inertia works as a bridge between Laravel and a JavaScript UI framework. You have to use any front-end framework along with Inertia, for example Vue or React
+<br>
+Laravel controllers return JS components instead of Blade
+The frontend framework renders the page.
 
 
 
