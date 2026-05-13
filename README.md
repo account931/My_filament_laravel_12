@@ -1135,7 +1135,35 @@ https://supabase.com/dashboard/project/drgudgvxqszdwxxfmieb/storage/files/bucket
 Inertia works as a bridge between Laravel and a JavaScript UI framework. You have to use any front-end framework along with Inertia, for example Vue or React
 <br>
 Laravel controllers return JS components instead of Blade
-The frontend framework renders the page.
+The frontend framework renders the page. <br>
+
+Inertia uses root Blade view which renders other components. By default it is views/app.blade.php
+My  custom Root blade is resources/views/inertia/InertiaBladeMainRootView/app.blade.php. It is set in in App/Providers/AppServiceProvider.php in 
+<code> 
+Inertia::setRootView('inertia.InertiaBladeMainRootView.app'); // path is resources/views/inertia/InertiaBladeMainRootView/app.blade.php
+</code>
+Was trying to set it in App\Http/Middleware/HandleInertiaRequests.php but no effect
+
+<br>
+#
+In my case, we return the component in controller 'resourcres/js/InertiaComponents/Users', this component is renders in root Blade view 
+<code>  
+return Inertia::render('InertiaComponents/Users', [  //Users' is frontend component (Vue)
+       //'users' => User::all()                           //just get users only
+        'users' => User::with(['supabase_storage_images', 'roles'])->get()  //users with multiple relations
+]);
+</code>
+
+
+1. Install composer composer "inertiajs/inertia-laravel": "^3.0" <br>
+2. Install npm package "@inertiajs/vue3": "^3.0.3"               <br>
+
+
+6. Run <code>npm run dev</code>
+
+
+
+
 
 
 
@@ -1269,8 +1297,8 @@ add to config/filesystem.php to
 <p> Horizin, redis, queque</p>
 ![Screenshot](public/img/screenshots/flmt-19-horizon.png)    </br>
 
-
-
+<p> Inertia </p>
+![Screenshot](public/img/screenshots/flmt-20-inertia.png)    </br>
 
 
 

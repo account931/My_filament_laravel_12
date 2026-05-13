@@ -23,7 +23,7 @@ class User extends Authenticatable implements Auditable, FilamentUser  // Larave
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
-    use HasRoles;   // Sanctum
+    use HasRoles;   // Spatie RBAC
     use \OwenIt\Auditing\Auditable;      // Laravel Audit
 
     /**
@@ -81,6 +81,8 @@ class User extends Authenticatable implements Auditable, FilamentUser  // Larave
     {
         return $this->hasMany(\App\Models\UserImageSuperbaseCloud::class);
     }
+
+    // ..has build in Spatie RBAC relation roles.........
 
     // filament staff
     public function canAccessPanel(Panel $panel): bool

@@ -17,6 +17,7 @@
         "vite": "^6.2.4"
     },
     "dependencies": {
+        "@inertiajs/vue3": "^3.0.3",
         "@vitejs/plugin-vue": "^6.0.0",
         "chart.js": "^4.5.1",
         "element-plus": "^2.10.3",

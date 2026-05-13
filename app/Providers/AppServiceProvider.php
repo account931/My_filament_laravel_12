@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
+use Inertia\Inertia;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -49,6 +50,9 @@ class AppServiceProvider extends ServiceProvider
             URL::forceScheme('https');
         }
         // End fix for Render.com
+
+        // set inertia root blade view. Was trying to set it in App\Http/Middleware/HandleInertiaRequests.php but no effect
+        Inertia::setRootView('inertia.InertiaBladeMainRootView.app'); // path is resources/views/inertia/InertiaBladeMainRootView/app.blade.php
 
     }
 }

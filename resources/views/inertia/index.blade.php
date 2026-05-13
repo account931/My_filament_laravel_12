@@ -1,3 +1,5 @@
+{{-- NOT USED, switched to pure Inertia, Inertia uses root Blade view which renders other components. Root blade is resources/views/inertia/InertiaBladeMainRootView/app.blade.php --}}
+
 {{-- @extends('layouts.app') --}}   {{-- Laravel 12 fix--}}
 {{-- @section('content') --}}
 
