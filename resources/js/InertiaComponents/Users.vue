@@ -1,10 +1,19 @@
-<!-- User Inertia component -->
+<!-- User Inertia component, list of all users -->
 <template>
   <div class="users-wrapper">
+
     <h1 class="title">👥 Users Dashboard</h1>
 
+    
+    <!-- Link to stat page-->
+    <Link href="/users-stats/stats" class="stats-button">
+      📊 Users statistics
+    </Link>
+
     <ul class="user-list">
-      <li v-for="user in users" :key="user.id" class="user-card">
+      <!-- <li v-for="user in users" :key="user.id" class="user-card"> -->                      <!-- Variant without links-->
+
+      <li v-for="user in users" :key="user.id" class="user-card"> 
 
         <!-- Header, User info-->
         <div class="user-header">
@@ -40,13 +49,18 @@
         <div v-else class="empty">
           ❌ No images found
         </div>
+        
+        <!-- Link to user details-->
+        <Link  :href="`/users/${user.id}`" class="button-user-detail"> User details link  </Link>  
 
-      </li>
+     </li>
     </ul>
   </div>
 </template>
 
 <script setup>
+import { Link } from '@inertiajs/vue3' //Make user clickable with Inertia Link
+
 const props = defineProps({
   users: Array
 })
@@ -86,6 +100,10 @@ console.log(props.users)
   box-shadow: 0 10px 25px rgba(0,0,0,0.08);
   border-left: 6px solid #6366f1;
   transition: transform 0.2s ease;
+    /* Fix link styling */
+  text-decoration: none;
+  color: inherit;
+  display: block;
 }
 
 .user-card:hover {
@@ -157,5 +175,40 @@ console.log(props.users)
   font-size: 12px;
   color: #ef4444;
   font-style: italic;
+}
+.user-card {
+  cursor: pointer;
+}
+
+.stats-button {
+  display: inline-block;
+  margin-bottom: 18px;
+  padding: 10px 16px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #10b981, #34d399);
+  color: white;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 6px 15px rgba(16, 185, 129, 0.25);
+  transition: 0.2s ease;
+}
+
+.stats-button:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #059669, #10b981);
+}
+
+/* Details button */
+.button-user-detail {
+  display: inline-block;
+  margin-bottom: 22px;
+  margin-top: 22px;
+  padding: 10px 16px;
+  background: linear-gradient(135deg, #6366f1, #818cf8);
+  color: white;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.2s ease;
 }
 </style>

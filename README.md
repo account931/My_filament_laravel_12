@@ -1137,16 +1137,23 @@ Inertia works as a bridge between Laravel and a JavaScript UI framework. You hav
 Laravel controllers return JS components instead of Blade
 The frontend framework renders the page. <br>
 
-Inertia uses root Blade view which renders other components. By default it is views/app.blade.php
+
+
+<br>
+#
+
+
+
+1. Install composer composer "inertiajs/inertia-laravel": "^3.0" <br>
+2. Install npm package "@inertiajs/vue3": "^3.0.3"               <br>
+3.  Inertia uses one root Blade view which renders other components. By default it is views/app.blade.php <br>
 My  custom Root blade is resources/views/inertia/InertiaBladeMainRootView/app.blade.php. It is set in in App/Providers/AppServiceProvider.php in 
 <code> 
 Inertia::setRootView('inertia.InertiaBladeMainRootView.app'); // path is resources/views/inertia/InertiaBladeMainRootView/app.blade.php
 </code>
-Was trying to set it in App\Http/Middleware/HandleInertiaRequests.php but no effect
+Was trying to set it in App\Http/Middleware/HandleInertiaRequests.php but no effect  <br>
 
-<br>
-#
-In my case, we return the component in controller 'resourcres/js/InertiaComponents/Users', this component is renders in root Blade view 
+4. Return the component in controller, in this case we  return inertia component 'resourcres/js/InertiaComponents/Users', this component is rendered in root Blade view 
 <code>  
 return Inertia::render('InertiaComponents/Users', [  //Users' is frontend component (Vue)
        //'users' => User::all()                           //just get users only
@@ -1154,12 +1161,17 @@ return Inertia::render('InertiaComponents/Users', [  //Users' is frontend compon
 ]);
 </code>
 
+5. If want links, e.g user-details, add 
+<code>import { Link } from '@inertiajs/vue3'  // add Inertia Link </code>, create route in /web/routes, create new inertia componet
 
-1. Install composer composer "inertiajs/inertia-laravel": "^3.0" <br>
-2. Install npm package "@inertiajs/vue3": "^3.0.3"               <br>
 
+6. In not SPA, add to bootstrap/app.php  
+<code>
+ // Add Inertia middleware
+  $middleware->web(append: [\App\Http\Middleware\HandleInertiaRequests::class]);
+  </code>
 
-6. Run <code>npm run dev</code>
+9. Run <code>npm run dev</code>
 
 
 

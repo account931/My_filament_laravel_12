@@ -43,4 +43,21 @@ class InertiaController extends Controller
         ]);
         // ->withViewData(['layout' => 'layouts.app']);
     }
+
+    // show 1 user
+    public function show(User $user)
+    {
+        $user->load(['roles', 'supabase_storage_images']);
+
+        return Inertia::render('InertiaComponents/UserDetails', [
+            'user' => $user,
+        ]);
+    }
+
+    public function stats()
+    {
+        return Inertia::render('InertiaComponents/UserStats', [
+            'count' => User::count(),
+        ]);
+    }
 }

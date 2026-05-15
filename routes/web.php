@@ -207,7 +207,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('supabase/storage/delete/{id}', [SupabaseStorageController::class, 'deleteSupabaseImage'])->name('supabase.storage.delete');  // delete image from DB and Supabase
 
     // Inertia example
-    Route::get('inertia/index', [InertiaController::class, 'index'])->name('inertia.index');  // inertia index
+    Route::get('inertia/index', [InertiaController::class, 'index'])->name('inertia.index');  // inertia index, show all Users list
+    Route::get('/users/{user}', [InertiaController::class, 'show'])->name('users.show');      // inertia index, 1 user details
+    Route::get('/users-stats/stats', [InertiaController::class, 'stats']); // inertia stats page
 
 });
 // End Auth (logged) users only------------------------------------------------------------------------------------------

@@ -10,6 +10,8 @@ const pages = import.meta.glob('./InertiaComponents/**/*.vue')   //my folder
 createInertiaApp({
   //resolve: name => import(`./Pages/${name}.vue`),  //causes error when component is in subfolder, i.e Pages/InertiaComponents/Users.vue
 
+    //progress: {color: '#6366f1',},
+
     resolve: (name) => {
     const path = `./${name}.vue` 
 
