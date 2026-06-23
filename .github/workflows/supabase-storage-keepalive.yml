@@ -12,7 +12,7 @@ on:
 
 jobs:
   
-  # Job 1, create keep-supabase-alive.txt file on Supabase storage
+  # Job 1, create keep-supabase-alive.txt file on Supabase storage, works!
   # Seems like hitting Storage is not counted as activity, so we add additional step where we hit SQL DB 
   job_1_keep_supabase_alive:
     runs-on: ubuntu-latest
@@ -37,26 +37,57 @@ jobs:
       #      -H "Authorization: Bearer ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}"
   
 
-  # Hit Supabase SQL DB table "keep_supabase_alive", add new record. 
+  # Hit Supabase SQL DB table "keep_supabase_alive", add new record via REST. Works!!!. 
+  # Seems like hitting DB via REST is not counted as activity,
   # It sends empy POST to table and since table has columns: auto-increment "id" and "timestamp with default value Now(), new records are inserted
-  job_2_keep_supabase_sql_alive:
+  # use CTRL + /  to fast comment/uncomment
+  
+
+  # job_2_keep_supabase_sql_alive:
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #     - name: Hit SQL DB table "keep_supabase_alive"
+  #       run: |
+  #         curl --fail --show-error --silent \
+  #           -X POST "${{ secrets.SUPABASE_URL }}/rest/v1/keep_supabase_alive" \
+  #           -H "apikey: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}" \
+  #           -H "Authorization: Bearer ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}" \
+  #           -H "Content-Type: application/json" \
+  #           -d '{}'
+
+
+  # Connect directly to PostgreSQL and insert a keepalive record.
+  # This is more likely to be counted as project activity than REST API requests.
+  job_2_1_keep_supabase_sql_alive_via_PostgreSQL:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Hit SQL DB table "keep_supabase_alive"
+      - name: Install PostgreSQL client
         run: |
-          curl --fail --show-error --silent \
-            -X POST "${{ secrets.SUPABASE_URL }}/rest/v1/keep_supabase_alive" \
-            -H "apikey: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}" \
-            -H "Authorization: Bearer ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}" \
-            -H "Content-Type: application/json" \
-            -d '{}'
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client
+
+      - name: Insert keepalive record
+        env:
+          DATABASE_URL: ${{ secrets.SUPABASE_DB_URL }}
+        run: |
+          psql "$DATABASE_URL" \
+            -c "INSERT INTO keep_supabase_alive DEFAULT VALUES;"
+
+      - name: Verify record count
+        env:
+          DATABASE_URL: ${{ secrets.SUPABASE_DB_URL }}
+        run: |
+          psql "$DATABASE_URL" \
+            -c "SELECT COUNT(*) FROM keep_supabase_alive;"
 
 
   # Job-3  send notification "Created successful" to telegram  ---------------------------------------------------
   job_3_notify_in_telegram:
     runs-on: ubuntu-latest
-    needs: [job_1_keep_supabase_alive, job_2_keep_supabase_sql_alive]  #will run only after these jobs
+    needs: [job_1_keep_supabase_alive, job_2_1_keep_supabase_sql_alive_via_PostgreSQL]  #will run only after these jobs
+    # needs: [job_1_keep_supabase_alive, job_2_keep_supabase_sql_alive]
 
     steps:
       - name: Send message to Telegram
