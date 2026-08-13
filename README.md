@@ -7,7 +7,7 @@
 Contains 80% of Laravel_2024_migration transfered from Laravel 6 to 12 + Filament + Stripe + E-commerce shop, etc</br>
 What is new: Filament 3, Sail, Sanctum, CI/CD, Laravel Audit, PHPStan static analysis tool 2.1.17, Pint, Tailwind CSS out of the box, Vue 3, Pinia insead of Vuex store, dotswan/filament-map-picker, Laravel Cashier with Stripe, Sentry, Prometheus_and_Grafana, 
 Scramble – Laravel OpenAPI (Swagger), one-time expirable signed routes(signed means that URL includes a signature hash), send emails,
-auto SQL db back-up via sheduled job + save it at G Drive (saves to pre-defined G Drive at dim***1@gmail.com), Socialite to get oAuth access token (login via Google), images at Google Cloud Storage bucket, upload files to personal Google Drive, Google BigQuery (saving analytics), displaying BQ data in Blade, Vue (Options API), git cola, Sanctum type 2 (SPA Authentication (Session-Based / Cookie Authentication)),Booking on Vue, Translate , Redis (Prometeus + Queques + Cache + Sessions), Horizon, Supabse cloud storage, Inertia
+auto SQL db back-up via sheduled job + save it at G Drive (saves to pre-defined G Drive at dim***1@gmail.com), Socialite to get oAuth access token (login via Google), images at Google Cloud Storage bucket, upload files to personal Google Drive, Google BigQuery (saving analytics), displaying BQ data in Blade, Vue (Options API), git cola, Sanctum type 2 (SPA Authentication (Session-Based / Cookie Authentication)),Booking on Vue, Translate , Redis (Prometeus + Queques + Cache + Sessions), Horizon, Supabse cloud storage, Inertia, Scout search with Algolia, Prism AI agent.
 
 <p>  .env, can be found at  drafts at acc***1@u**.net or at G Drive </p>
 
@@ -59,12 +59,14 @@ git restore .  git clean -fd
 - [22. Save Images to Google Cloud Storage](#22-save-images-to-google-cloud-storage-bucket-in-laravel)
 - [23. Google BigQuery](#23-google-bigquery)
 - [24. Booking on Vue](#24-booking-on-vue)
-- [25. Render.com](#25-rendercom)
+- [25. Deploy at Render.com](#25-deploy-at-rendercom)
 - [26. Redis](#26redis)
 - [27. Queue on Redis + Horizon](27-Queue-on-redis--horizon)
 - [28. Tableplus](#28-tableplus)
 - [29. Supabase cloud storage](29-supabase-cloud-storage)
 - [30. Inertia](30-inertia)
+- [31. Scout search](31-scout-search)
+- [32. Prism AI](32-prism-ai)
 
 
 - [111.V.A](#111-va)
@@ -971,13 +973,17 @@ Booking on Vue (Option Api), uses own router and re-usable components for diffre
 
 <p> ----------------------------------------------------------------------------------------- </p>
 
-## 25. Render.com
+## 25. Deploy at Render.com
 <p> "Laravel_2024_migration" (on Laravel 6) is deployed to alwaysdata.com (acc****1@ukr.net). Deploy is performed via Github action via ssh (copy files, migrate, etc). But free space is limited to 100 MB, so this one "My_filament_laravel_12" goes to render.com </p>
+
+
+Is registered with acc****1@u**.net
+
 
 Render.com set up:
 <p> 1 Create Dockerfile specifically for Render and set it in Render settins => ./docker_db_setup/render.com/Dockerfile </p>
 <p> 2. Create external sql db at alwaysdata,com, as native render.com  DB will be erased in 30 days </p>
-<p> 3. Create redis instance at render.com or somewhere else</p>
+<p> 3. Create redis instance at render.com </p>
 
 <p> 4. Fix 1: Disable redis for production as it crashes, in /botstrap/app.hp
  <code>
@@ -1024,9 +1030,12 @@ REDIS_DB=0
 REDIS_PASSWORD=null
 REDIS_PORT=6379
 REDIS_PREFIX=laravel_database_
-REDIS_URL=redis://red-d5v1bfqq***********  # redis separate service at render.com
+REDIS_URL=redis://red-d5v***********  # redis separate service at render.com
 SESSION_DRIVER=file
 MAPBOX_API_KEY=pk.eyJ1**********
+SCOUT_DRIVER=algolia
+ALGOLIA_APP_ID=your_algolia_app_id
+ALGOLIA_SECRET=your_write_api_key #SECRET
 </code>
 
 
@@ -1042,7 +1051,8 @@ BIGQUERY_KEY_FILE=laravel-bigquery-8****f.json
 
 
 <p> 7. 
-  Now it is auto-deployed according to Render.com setting (connected to my Github), but if u wish to change it in future to manual trigger, do it in /.github/workflow/ci.yml  + turning off auto deploy at Render. NB: as per 24.02.26 auto-deploy is OFF because of pipeline shrtage minutes.
+  NB: as per 24.02.26 auto-deploy is OFF because of pipeline shortage minutes.
+  It was auto-deployed according to Render.com setting (connected to my Github) but now is OFF. If u wish to change it in future to auto||manual trigger, do it in /.github/workflow/ci.yml  + turning off||on auto deploy at Render. 
 </p>
 
 <p> 8.Cant run migrations in Pre-Deploy Command at Render dashboard as it is paid option, so add it to Dockerfile for Render.</p>
@@ -1061,10 +1071,11 @@ BIGQUERY_KEY_FILE=laravel-bigquery-8****f.json
 
 
 ## 26. Redis
-Redis is used for Prometeus (Prometeus works with Redis only)
+Redis is used for Prometeus (Prometeus works with Redis only).
+Also Redis is used for QUEUE_CONNECTION + Horizon.
 
-Redis can also be used for Queques + Cache + Sessions instead of DB (make changes in env)
-
+Redis can also be used for Cache + Sessions instead of DB (make changes in env)
+On local host we create Redis container, on production at Render.com we use Cloud Redis from Render.com
 
 
 <p> ----------------------------------------------------------------------------------------- </p>
@@ -1092,6 +1103,7 @@ public function boot()     // OR protected function gate()
     });
 }
 </code>
+On local host we create Redis container, on production at Render.com we use Cloud Redis from Render.com
 
 
 <p> ----------------------------------------------------------------------------------------- </p>
@@ -1172,6 +1184,78 @@ return Inertia::render('InertiaComponents/Users', [  //Users' is frontend compon
   </code>
 
 9. Run <code>npm run dev</code>
+
+
+
+
+
+
+
+<p> ----------------------------------------------------------------------------------------- </p>
+
+# 31. Scout search
+
+Scout is a search adopter. You can used it standalone or with Algolia or Meilisearch  <br>
+Meilisearch is easier but requires deploying additional docker container which is not good for production at Render.
+<br> We will use Algolia Cloud with free tier with Product model. Algolia Cloud is registerd with acc****31@ukr.net
+
+Set up
+1. Install
+<code> composer require laravel/scout </code>
+<code> php artisan vendor:publish --provider="Laravel\Scout\ScoutServiceProvider" </code>   publish config
+<code> composer require algolia/algoliasearch-client-php </code> Install the Algolia PHP client
+
+2. add to .env
+<code>
+SCOUT_DRIVER=algolia
+ALGOLIA_APP_ID=your_algolia_app_id
+ALGOLIA_SECRET=your_algolia_admin_api_key
+</code>
+
+3. Make your model searchable, add to desired model
+<code>
+use Laravel\Scout\Searchable; //Scout + Algolia Cloud
+use Searchable;
+
+//Scout + Algolia Cloud, define searchable fields
+    public function toSearchableArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+        ];
+    }
+</code>
+
+
+4. Import existing model to Algolia Cloud, after you scan see a products index in Algolia. Can find it Algolia dashbord/index
+<code>php artisan scout:import "App\Models\Product"</code>
+
+
+
+5. For search form you can use your form, ajax and back-end search method in Controller or Algolia InstantSearch's built-in widgets.
+We use Algolia InstantSearch's built-in widget.
+<code> npm install algoliasearch @algolia/autocomplete-js @algolia/autocomplete-theme-classic</code>
+
+
+
+
+
+
+<p> ----------------------------------------------------------------------------------------- </p>
+
+
+# 32. Prism AI
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -131,3 +131,9 @@
                             <i class="fas fa-cloud-sun" style="font-size:12px"></i>
                             {{ __('Inertia example') }}
                         </x-dropdown-link>
+
+                        <!-- Scout search example -->
+                        <x-dropdown-link :href="route('scout.search')"  :class="request()->routeIs('scout.search') ? 'bg-gray-300 text-gray-900 font-semibold' : ''">
+                            <i class="fas fa-cloud-sun" style="font-size:12px"></i>
+                            {{ __('Scout + Algolia search') }}
+                        </x-dropdown-link>

@@ -13,9 +13,10 @@ use App\Http\Controllers\OwnerController\OwnerController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PrometheusMetrics\PrometheusMetricsController;
 use App\Http\Controllers\Questions\QuestionVueController;
-use App\Http\Controllers\SendEmail\SendEmailController;
+use App\Http\Controllers\Scout\ScoutSearchController;
 // Prometheus_and_Redis
 // use Illuminate\Support\Facades\Redis;
+use App\Http\Controllers\SendEmail\SendEmailController;
 use App\Http\Controllers\SendNotification\NotificationController;
 use App\Http\Controllers\Shop\ShopController;
 use App\Http\Controllers\Socialite\SocialiteController;
@@ -210,6 +211,11 @@ Route::middleware('auth')->group(function () {
     Route::get('inertia/index', [InertiaController::class, 'index'])->name('inertia.index');  // inertia index, show all Users list
     Route::get('/users/{user}', [InertiaController::class, 'show'])->name('users.show');      // inertia index, 1 user details
     Route::get('/users-stats/stats', [InertiaController::class, 'stats']); // inertia stats page
+
+    // Scout Algolia search example
+    Route::get('/scout/{product?}', [ScoutSearchController::class, 'index'])->name('scout.search');  // show search form and results//implicit route model binding,
+    // Route::get('/scout-search', [ScoutSearchController::class, 'index'])->name('scout.search');
+    // Route::get('/scout-search/results', [ScoutSearchController::class, 'search'])->name('scout.search.results');
 
 });
 // End Auth (logged) users only------------------------------------------------------------------------------------------

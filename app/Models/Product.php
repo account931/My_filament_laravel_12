@@ -1,12 +1,22 @@
 <?php
 
+// Uses Scout + Algolia Cloud
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use OwenIt\Auditing\Contracts\Auditable;  // Laravel Audit
+use Laravel\Scout\Searchable;  // Laravel Audit
+use OwenIt\Auditing\Contracts\Auditable; // Scout + Algolia Cloud
 
+/**
+ * @property int $id
+ * @property string $name
+ * @property string|null $description
+ * @property float|null $price
+ * @property string|null $image
+ */
 class Product extends Model implements Auditable  // Laravel Audit
 {
     //
@@ -14,7 +24,10 @@ class Product extends Model implements Auditable  // Laravel Audit
     use HasFactory;
 
     use \OwenIt\Auditing\Auditable;
-    use SoftDeletes;      // Laravel Audit
+    use Searchable;
+
+    // Laravel Audit
+    use SoftDeletes; // Scout + Algolia Cloud
 
     /**
      * The attributes that are mass assignable.
@@ -40,5 +53,15 @@ class Product extends Model implements Auditable  // Laravel Audit
     public function scopeActive($query)
     {
         return $query->where('is_active', true);
+    }
+
+    // Scout + Algolia Cloud, define searchable fields
+    public function toSearchableArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'description' => $this->description,
+        ];
     }
 }

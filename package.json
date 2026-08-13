@@ -17,8 +17,11 @@
         "vite": "^6.2.4"
     },
     "dependencies": {
+        "@algolia/autocomplete-js": "^1.19.9",
+        "@algolia/autocomplete-theme-classic": "^1.19.9",
         "@inertiajs/vue3": "^3.0.3",
         "@vitejs/plugin-vue": "^6.0.0",
+        "algoliasearch": "^5.56.0",
         "chart.js": "^4.5.1",
         "element-plus": "^2.10.3",
         "jquery": "^3.7.1",

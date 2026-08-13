@@ -7,6 +7,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "algolia/algoliasearch-client-php": "^4.46",
         "althinect/filament-spatie-roles-permissions": "^2.3",
         "dedoc/scramble": "^0.12.30",
         "dotswan/filament-map-picker": "^1.8",
@@ -20,6 +21,7 @@
         "laravel/framework": "^12.0",
         "laravel/horizon": "^5.45",
         "laravel/sanctum": "^4.0",
+        "laravel/scout": "^11.5",
         "laravel/socialite": "^5.23",
         "laravel/tinker": "^2.10.1",
         "league/flysystem-aws-s3-v3": "^3.15",

@@ -22,6 +22,9 @@ import Booking from './components/Booking/BookingComponent.vue';
 import QuestionsComp from './components/Questions/QuestionsComponent.vue';
 //import 'bootstrap/dist/css/bootstrap.min.css';
 
+//for scout algolia
+import './algolia_scout/algolia-search';
+
 window.Alpine = Alpine; //used in dashboard menu drop down
 Alpine.start();  //used in dashboard menu drop down
 
