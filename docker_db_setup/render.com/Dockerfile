@@ -1,4 +1,5 @@
 # Dockerfile for Render.com, V.2, more faster version, makes build in 6 min vs prev 13 min
+#13.08.2026 update was made to fix a crash: The failure was caused by a Node.js ↔ npm version mismatch, so we changed Node 20 to Node 22
 # ================================
 # Builder
 # ================================
@@ -35,9 +36,8 @@ RUN composer install \
 # ------------------------------
 # Install Node.js (needed for Vite)
 # (Using official node image binaries instead of curl installer for speed)
-RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
-    && apt-get install -y nodejs \
-    && npm install -g npm@latest
+RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
+    && apt-get install -y nodejs
 
 # Copy Node package files
 COPY package.json package-lock.json ./
