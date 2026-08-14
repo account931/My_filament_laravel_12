@@ -11,11 +11,12 @@ use App\Http\Controllers\MyGoogleDrive\MyGoogleDriveController;
 use App\Http\Controllers\MySupabaseCloudStorageImages\SupabaseStorageController;
 use App\Http\Controllers\OneTimeLink\OneTimeLinkController;
 use App\Http\Controllers\OwnerController\OwnerController;
+use App\Http\Controllers\PrismAIAgent\PrismAIAgentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PrometheusMetrics\PrometheusMetricsController;
-use App\Http\Controllers\Questions\QuestionVueController;
 // Prometheus_and_Redis
 // use Illuminate\Support\Facades\Redis;
+use App\Http\Controllers\Questions\QuestionVueController;
 use App\Http\Controllers\Scout\ScoutSearchController;
 use App\Http\Controllers\SendEmail\SendEmailController;
 use App\Http\Controllers\SendNotification\NotificationController;
@@ -219,6 +220,10 @@ Route::middleware('auth')->group(function () {
     // Read Google spreadsheet. Spreadsheet itself collects answers from Google form
     // Route::get('google-spreadsheet/index', [GoogleSpreadsheetController::class, 'index'])->name('google.spreadsheet.index');  //
     Route::match(['get', 'post'], '/google-spreadsheet/index', [GoogleSpreadsheetController::class, 'index'])->name('google.spreadsheet.index');
+
+    // Prism AI agent
+    Route::get('prism-ai-agent/index', [PrismAIAgentController::class, 'index'])->name('prism.ai.agent.index');  //
+    Route::post('/ai-agent/chat', [PrismAIAgentController::class, 'chat'])->name('ai-agent.chat');
 
 });
 // End Auth (logged) users only------------------------------------------------------------------------------------------

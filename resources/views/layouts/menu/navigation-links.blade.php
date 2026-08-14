@@ -143,3 +143,9 @@
                             <i class="fas fa-cloud-sun" style="font-size:12px"></i>
                             {{ __('Read Google spreadsheet') }}
                         </x-dropdown-link>
+
+                        <!-- Prism AI agent example -->
+                        <x-dropdown-link :href="route('prism.ai.agent.index')"  :class="request()->routeIs('prism.ai.agent.index') ? 'bg-gray-300 text-gray-900 font-semibold' : ''">
+                            <i class="fas fa-cloud-sun" style="font-size:12px"></i>
+                            {{ __('Prism AI agent') }}
+                        </x-dropdown-link>

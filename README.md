@@ -1258,8 +1258,8 @@ Flow: searchbox is looking for search in Algolia Cloud index, return result and 
 
 
 # 32. Read G Spreadsheet
-Using ready Socialite oauth login from /socialite/index  which uses  Google console project 'Laravel DB Backup'<br>
-Using  library "google/apiclient" <br>
+It uses ready Socialite oauth login from /socialite/index  which uses  Google console project 'Laravel DB Backup'<br>
+To read Spreadsheet we use library "google/apiclient" <br>
 Had to add  scope 'https://www.googleapis.com/auth/spreadsheets.readonly' to SocialiteGoogleAuthController <br>
 See details in  => Controllers\GoogleSpreadsheet\GoogleSpreadsheetController.php
 
@@ -1275,12 +1275,19 @@ See details in  => Controllers\GoogleSpreadsheet\GoogleSpreadsheetController.php
 
 
 # 33. Prism AI
+Ai agent on Gemeni using Prism package  <br>
+
+1.Install 
+<code>composer require prism-php/prism </code>
+<code>php artisan vendor:publish --tag=prism-config</code>
+
+2. Generate AI key. We will use Gemini. Genereate key and add to .env at https://aistudio.google.com/api-keys. Reg to ig**.d***y.i***@g
+<code>GEMINI_API_KEY=your-gemini-api-key </code>
 
 
+3. Create tools at App\Ai_Gemini\Tools; <br>
 
-
-
-
+4. Controller => see PrismAIAgent/PrismAIAgentController. You can easily switch AI providers in controller <br>
 
 
 
@@ -1429,9 +1436,10 @@ add to config/filesystem.php to
 ![Screenshot](public/img/screenshots/flmt-21-scout.png)    </br>
 
 <p> Read Spreadsheet</p>
-![Screenshot](public/img/screenshots/flmt-22-spread)    </br>
-
-
+![Screenshot](public/img/screenshots/flmt-22-spread.png)    </br>
+ 
+<p> Ai agent on Gemeni using Prism package</p>
+![Screenshot](public/img/screenshots/flmt-23-ai-agent.png)    </br>
 
 
 
