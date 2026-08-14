@@ -48,6 +48,17 @@ RUN npm ci
 # Copy the rest of your app
 COPY . .
 
+# ------------------------------
+# Algolia + Vite environment variables fix
+# ------------------------------
+# Render provides service environment variables as Docker build arguments.
+# Vite reads VITE_* variables at build time.
+ARG VITE_ALGOLIA_APP_ID
+ARG VITE_ALGOLIA_SEARCH_KEY
+
+ENV VITE_ALGOLIA_APP_ID=$VITE_ALGOLIA_APP_ID
+ENV VITE_ALGOLIA_SEARCH_KEY=$VITE_ALGOLIA_SEARCH_KEY
+
 # Build production assets
 RUN npm run build
 

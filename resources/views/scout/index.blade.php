@@ -1,4 +1,4 @@
-<!-- Show list of products with button to view one, if u go there BigQuery is recorded -->
+<!-- Laravel Scout + Algolia on Product model -->
 <x-app-layout>
 
     {{-- Header Slot --}}

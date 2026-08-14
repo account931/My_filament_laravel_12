@@ -1,6 +1,7 @@
 <?php
 
-//  Before that you should login via Socialite to get refresh token
+//  Before using it you should login via Socialite to get 'access_token' and 'refresh token' and go back to this app page.
+// 'access_token' is used to grant access to Google, but when token is expired, we use 'refresh token' to get new 'access_token'. It is implemented in function getAccessToken(User $userModel) in App\Services\GoogleDriveSqlBackupService.php OR same function but in separate Service in App\Services\GoogleRefreshToken\GoogleRefreshTokenService.php
 
 namespace App\Http\Controllers\SQL_Backup_toGDive;
 

@@ -1,6 +1,6 @@
 <?php
 
-// Scout + Algolia
+// Scout + Algolia search on Models/Product
 
 namespace App\Http\Controllers\Scout;
 
@@ -17,18 +17,20 @@ class ScoutSearchController extends Controller
         // $this->middleware('auth'); //logged users only
     }
 
+    // Search box and display result at the same page
     public function index(?Product $product = null)
     {
         if ($product) {
-            // Product was selected.
-            // Record BigQuery event here.
+            // Product was selected, e.g localhost:8000/scout/6. Get product details from local Db by implicit binding
+            // Record BigQuery event here if needed.
 
             return view('scout.index', [
                 'product' => $product,
             ]);
         }
 
-        // No product selected — just show the search form.
+        // No product selected — just show the search form. Search box is a Algolia InstantSearch's built-in widget with js in /resources/js/algolia_scout/algolia-search.js
+        // It forms links like localhost:8000/scout/6. When you click it, the rest is handled by local Db by implicit binding, get product by id and display result, see if ($product) part
         return view('scout.index', [
             'product' => null,
         ]);

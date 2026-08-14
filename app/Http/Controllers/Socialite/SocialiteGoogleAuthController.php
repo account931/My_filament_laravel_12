@@ -42,6 +42,7 @@ class SocialiteGoogleAuthController extends Controller
                 'https://www.googleapis.com/auth/drive.file',        // scopes/permissions to work with
                 'https://www.googleapis.com/auth/userinfo.email',
                 'https://www.googleapis.com/auth/userinfo.profile',
+                'https://www.googleapis.com/auth/spreadsheets.readonly',  // mega fix, for reading Google sheet
             ])
             // use below to force getting refresh_token, if not visiting first time ever
             /*

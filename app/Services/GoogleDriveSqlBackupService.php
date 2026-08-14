@@ -136,10 +136,8 @@ class GoogleDriveSqlBackupService
     /**
      * generate Google 'access_token'  using Google 'google_refresh_token' saved in DB table 'users' in 'google_refresh_token'
      * 'google_refresh_token' is generate in other flow Controllers/Socialite/SocialiteGoogleAuthController
-     *
-     * @param  User  $userModel
      */
-    public function getAccessToken($userModel): string
+    public function getAccessToken(User $userModel): string
     {
         // Hardcode token temporarily or load from file
         // return 'YOUR_OAUTH_ACCESS_TOKEN';
@@ -163,7 +161,7 @@ class GoogleDriveSqlBackupService
             'grant_type' => 'refresh_token',
         ]);
 
-        if ($response->successful()) {
+        if ($response->successful() && $response->json('access_token')) {
             $newAccessToken = $response->json()['access_token'];
             $expiresIn = $response->json()['expires_in'];
 

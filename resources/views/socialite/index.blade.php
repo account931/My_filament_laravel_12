@@ -26,6 +26,7 @@
                 Socialite package, login via Google account (or FB, Git, etc), login with user flow, i.e asking for Google pass, Google consent. Needs registering web app at https://console.cloud.google.com </br>
                 Use a Google Service Account if your app only needs access to your own Google Drive (for example, for Job to save SQL dump to G drive in CRON)
                 </br> <i class='fas fa-certificate' style='font-size:24px'></i>
+                 </br> uses Google console project 'Laravel DB Backup'
 
               </div> 
             

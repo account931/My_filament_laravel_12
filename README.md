@@ -7,7 +7,7 @@
 Contains 80% of Laravel_2024_migration transfered from Laravel 6 to 12 + Filament + Stripe + E-commerce shop, etc</br>
 What is new: Filament 3, Sail, Sanctum, CI/CD, Laravel Audit, PHPStan static analysis tool 2.1.17, Pint, Tailwind CSS out of the box, Vue 3, Pinia insead of Vuex store, dotswan/filament-map-picker, Laravel Cashier with Stripe, Sentry, Prometheus_and_Grafana, 
 Scramble – Laravel OpenAPI (Swagger), one-time expirable signed routes(signed means that URL includes a signature hash), send emails,
-auto SQL db back-up via sheduled job + save it at G Drive (saves to pre-defined G Drive at dim***1@gmail.com), Socialite to get oAuth access token (login via Google), images at Google Cloud Storage bucket, upload files to personal Google Drive, Google BigQuery (saving analytics), displaying BQ data in Blade, Vue (Options API), git cola, Sanctum type 2 (SPA Authentication (Session-Based / Cookie Authentication)),Booking on Vue, Translate , Redis (Prometeus + Queques + Cache + Sessions), Horizon, Supabse cloud storage, Inertia, Scout search with Algolia, Prism AI agent.
+auto SQL db back-up via sheduled job + save it at G Drive (saves to pre-defined G Drive at dim***1@gmail.com), Socialite to get oAuth access token (login via Google), images at Google Cloud Storage bucket, upload files to personal Google Drive, Google BigQuery (saving analytics), displaying BQ data in Blade, Vue (Options API), git cola, Sanctum type 2 (SPA Authentication (Session-Based / Cookie Authentication)),Booking on Vue, Translate , Redis (Prometeus + Queques + Cache + Sessions), Horizon, Supabase cloud storage, Inertia, Scout search with Algolia, read Google Spreadsheet via Oauth and "google/apiclient", Prism AI agent.
 
 <p>  .env, can be found at  drafts at acc***1@u**.net or at G Drive </p>
 
@@ -65,8 +65,9 @@ git restore .  git clean -fd
 - [28. Tableplus](#28-tableplus)
 - [29. Supabase cloud storage](29-supabase-cloud-storage)
 - [30. Inertia](30-inertia)
-- [31. Scout search](31-scout-search)
-- [32. Prism AI](32-prism-ai)
+- [31. Scout and Algolia](31-scout-and=algolia)
+- [32. Read G Spreadsheet](32-read-g-preadsheet)
+- [33. Prism AI](33-prism-ai)
 
 
 - [111.V.A](#111-va)
@@ -768,9 +769,17 @@ GOOGLE_REDIRECT_URI=http://localhost:8000/auth/google/callback
 
 
 </br>Socialite Oauth</br>
-Socialite is package for easy Oauth  authentication in Google, Facebook, etc. </br>
+Socialite is package for easy Oauth  authentication in Google, Facebook, etc. Uses Google console project 'Laravel DB Backup' for login</br>
 
 When you login via Socialite you get 'access_token' (which lives for 1 hour and used for access) + 'refresh_token' (which is long live and used to issue new access_token). So, 'access_token' and 'refresh_token' is unique for every user, while client_id, secret_id is common. </br>
+
+Login via Socialite is implemented at Http\Controllers\Socialite\SocialiteGoogleAuthController, login via authed page and callback.
+In callback you get logged used info and save 'google_access_token', 'google_refresh_token', 'google_user_email', 'google_expires_at' to DB table 'users' (of course add/migrate these columns first). We encrypt 'google_refresh_token' before saving in table </br>
+
+
+# Get 'access_token' using 'refresh_token'
+Have to implement it manually without using Socialite. Example: function getAccessToken(User $userModel) in App\Services\GoogleDriveSqlBackupService.php OR same function but in separate Service in App\Services\GoogleRefreshToken\GoogleRefreshTokenService.php
+
 
 # Note
 When you implement the functionality when logged user saves some files to his personal Google Drive: first user loggs to Socialite,  gets 'access_token' and 'refresh_token' on login and we save them to db (table 'users' or separate). </br>
@@ -1193,7 +1202,7 @@ return Inertia::render('InertiaComponents/Users', [  //Users' is frontend compon
 
 <p> ----------------------------------------------------------------------------------------- </p>
 
-# 31. Scout search
+# 31. Scout and Algolia search
 
 Scout is a search adopter. You can used it standalone or with Algolia or Meilisearch  <br>
 Meilisearch is easier but requires deploying additional docker container which is not good for production at Render.
@@ -1212,7 +1221,7 @@ ALGOLIA_APP_ID=your_algolia_app_id
 ALGOLIA_SECRET=your_algolia_admin_api_key
 </code>
 
-3. Make your model searchable, add to desired model
+3. Make your model searchable, add to desired model, e.g Models/Product
 <code>
 use Laravel\Scout\Searchable; //Scout + Algolia Cloud
 use Searchable;
@@ -1234,8 +1243,28 @@ use Searchable;
 
 
 5. For search form you can use your form, ajax and back-end search method in Controller or Algolia InstantSearch's built-in widgets.
-We use Algolia InstantSearch's built-in widget.
+We use Algolia InstantSearch's built-in widget with js in /resources/js/algolia_scout/algolia-search.js
 <code> npm install algoliasearch @algolia/autocomplete-js @algolia/autocomplete-theme-classic</code>
+
+
+
+Flow: searchbox is looking for search in Algolia Cloud index, return result and link e.g localhost:8000/scout/6. When you click it, the rest is handled by local Db by implicit binding, get product by id and display result
+
+
+
+
+
+<p> ----------------------------------------------------------------------------------------- </p>
+
+
+# 32. Read G Spreadsheet
+Using ready Socialite oauth login from /socialite/index  which uses  Google console project 'Laravel DB Backup'<br>
+Using  library "google/apiclient" <br>
+Had to add  scope 'https://www.googleapis.com/auth/spreadsheets.readonly' to SocialiteGoogleAuthController <br>
+See details in  => Controllers\GoogleSpreadsheet\GoogleSpreadsheetController.php
+
+
+
 
 
 
@@ -1245,7 +1274,7 @@ We use Algolia InstantSearch's built-in widget.
 <p> ----------------------------------------------------------------------------------------- </p>
 
 
-# 32. Prism AI
+# 33. Prism AI
 
 
 
@@ -1395,6 +1424,12 @@ add to config/filesystem.php to
 
 <p> Inertia </p>
 ![Screenshot](public/img/screenshots/flmt-20-inertia.png)    </br>
+
+<p> Scout and Algolia</p>
+![Screenshot](public/img/screenshots/flmt-21-scout.png)    </br>
+
+<p> Read Spreadsheet</p>
+![Screenshot](public/img/screenshots/flmt-22-spread)    </br>
 
 
 
