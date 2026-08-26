@@ -34,7 +34,7 @@ class GoogleSpreadsheetController extends Controller
 
             $user = Auth::user();
 
-            if ($user->google_user_email && $user->google_refresh_token) {
+            if ($user->google_user_email && $user->google_refresh_token) {  // if user has already performed Socialite login, got callback and saved 'google_user_email/google_refresh_token' fields to table 'users'
 
                 $client = new Client;
                 $client->setClientId(config('services.google.client_id'));
@@ -43,7 +43,7 @@ class GoogleSpreadsheetController extends Controller
                 // Read-only access to Google Sheets
                 $client->addScope(Sheets::SPREADSHEETS_READONLY);
 
-                // Variant 1. Working Get a new 'access token' using the stored 'refresh token'.
+                // Variant 1. Working. Get a new 'access token' using the stored 'refresh token'.
                 // get and decrypt 'google_refresh_token' from table 'users'
                 $refreshToken = Crypt::decryptString(
                     $user->google_refresh_token
@@ -64,7 +64,7 @@ class GoogleSpreadsheetController extends Controller
                 }
                 // End 1. Working Get a new 'access token' using the stored 'refresh token'.
 
-                // Variant 2. Same as Var 1. Working Get a new 'access token' using the stored 'refresh token' using Service.
+                // Variant 2. Same as Var 1. Working. Get a new 'access token' using the stored 'refresh token' using Service.
                 // $service = new GoogleRefreshTokenService;  // Service with core logic
                 // $accessToken = $service->getAccessToken(Auth::user());  //NB: returns 'access_token' only
                 // Variant 2. Working Get a new 'access token' using the stored 'refresh token' sing Service.

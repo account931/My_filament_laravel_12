@@ -36,7 +36,23 @@ class SocialiteGoogleAuthController extends Controller
         // using Policy. There 3 possible ways
         // $this->authorize('index', Owner::class); //must have, Policy check (403 if fails)
 
+        // switch Socialite google redirect url between local and Render.com
+        $redirect = app()->environment('production')
+        ? config('services.google.redirect_for_render')
+        : config('services.google.redirect');
+
+        // test varaiables
+        /*
+        dd([
+            'environment' => app()->environment(),
+            'redirect' => $redirect,
+            'local' => config('services.google.redirect'),
+            'render' => config('services.google.redirect_for_render'),
+        ]);
+        */
+
         return Socialite::driver('google')
+            ->redirectUrl($redirect) // switch Socialite google redirect url between local and Render.com
             // necessary scopes for Google drive
             ->scopes([
                 'https://www.googleapis.com/auth/drive.file',        // scopes/permissions to work with
@@ -71,7 +87,16 @@ class SocialiteGoogleAuthController extends Controller
      */
     public function googleLoginCallback()
     {
-        $googleUser = Socialite::driver('google')->stateless()->user();
+
+        // switch Socialite google redirect url between local and Render.com
+        $redirect = app()->environment('production')
+        ? config('services.google.redirect_for_render')
+        : config('services.google.redirect');
+
+        $googleUser = Socialite::driver('google')
+            ->redirectUrl($redirect) // switch Socialite google redirect url between local and Render.com
+            ->stateless()
+            ->user();
 
         // Store logged user in session
         // Session::put('google_oauthed_user', $googleUser);

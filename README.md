@@ -7,7 +7,7 @@
 Contains 80% of Laravel_2024_migration transfered from Laravel 6 to 12 + Filament + Stripe + E-commerce shop, etc</br>
 What is new: Filament 3, Sail, Sanctum, CI/CD, Laravel Audit, PHPStan static analysis tool 2.1.17, Pint, Tailwind CSS out of the box, Vue 3, Pinia insead of Vuex store, dotswan/filament-map-picker, Laravel Cashier with Stripe, Sentry, Prometheus_and_Grafana, 
 Scramble – Laravel OpenAPI (Swagger), one-time expirable signed routes(signed means that URL includes a signature hash), send emails,
-auto SQL db back-up via sheduled job + save it at G Drive (saves to pre-defined G Drive at dim***1@gmail.com), Socialite to get oAuth access token (login via Google), images at Google Cloud Storage bucket, upload files to personal Google Drive, Google BigQuery (saving analytics), displaying BQ data in Blade, Vue (Options API), git cola, Sanctum type 2 (SPA Authentication (Session-Based / Cookie Authentication)),Booking on Vue, Translate , Redis (Prometeus + Queques + Cache + Sessions), Horizon, Supabase cloud storage, Inertia, Scout search with Algolia, read Google Spreadsheet via Oauth and "google/apiclient", Prism AI agent.
+auto SQL db back-up via sheduled job + save it at G Drive (saves to pre-defined G Drive at dim***1@gmail.com), Socialite to get oAuth access token (login via Google), images at Google Cloud Storage bucket, upload files to personal Google Drive, Google BigQuery (saving analytics), displaying BQ data in Blade, Vue (Options API), git cola, Sanctum type 2 (SPA Authentication (Session-Based / Cookie Authentication)),Booking on Vue, Translate , Redis (Prometeus + Queques + Cache + Sessions), Horizon, Spatie permission, Supabase cloud storage, Inertia, Scout search with Algolia, read Google Spreadsheet via Oauth and "google/apiclient", Prism AI agent on Gemini.
 
 <p>  .env, can be found at  drafts at acc***1@u**.net or at G Drive </p>
 
@@ -773,12 +773,14 @@ Socialite is package for easy Oauth  authentication in Google, Facebook, etc. 
 
 When you login via Socialite you get 'access_token' (which lives for 1 hour and used for access) + 'refresh_token' (which is long live and used to issue new access_token). So, 'access_token' and 'refresh_token' is unique for every user, while client_id, secret_id is common. </br>
 
-Login via Socialite is implemented at Http\Controllers\Socialite\SocialiteGoogleAuthController, login via authed page and callback.
-In callback you get logged used info and save 'google_access_token', 'google_refresh_token', 'google_user_email', 'google_expires_at' to DB table 'users' (of course add/migrate these columns first). We encrypt 'google_refresh_token' before saving in table </br>
+Login via Socialite is implemented at Http\Controllers\Socialite\SocialiteGoogleAuthController, login via authed page and callback. </br>
+Callback url must be added in 2 places:  a.)Google console project 'Laravel DB Backup' in Api & Services->Credentials->Auth redirect Urls and b.)
+config/services + in .env (GOOGLE_REDIRECT_URI) </br>
+In callback in SocialiteGoogleAuthController you get logged used info and save 'google_access_token', 'google_refresh_token', 'google_user_email', 'google_expires_at' to DB table 'users' (of course add/migrate these columns first). We encrypt 'google_refresh_token' before saving in table </br>
 
 
 # Get 'access_token' using 'refresh_token'
-Have to implement it manually without using Socialite. Example: function getAccessToken(User $userModel) in App\Services\GoogleDriveSqlBackupService.php OR same function but in separate Service in App\Services\GoogleRefreshToken\GoogleRefreshTokenService.php
+Have to implement it manually without||OR using Socialite. See example: function getAccessToken(User $userModel) in App\Services\GoogleDriveSqlBackupService.php OR same function but in separate Service in App\Services\GoogleRefreshToken\GoogleRefreshTokenService.php OR good example at \Controllers\GoogleSpreadsheet\GoogleSpreadsheetController
 
 
 # Note
@@ -1292,6 +1294,8 @@ Ai agent on Gemeni using Prism package  <br>
 
 
 
+
+Pest test =>  ./vendor/bin/pest tests/Feature/App/Http/Controllers/PrismAIAgent/PrismAIAgentControllerTest.php
 
 
 

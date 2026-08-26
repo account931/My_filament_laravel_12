@@ -35,7 +35,7 @@ return [
         ],
     ],
 
-    // Telegram
+    // Telegram credentials
     'telegram' => [
         'bot_token' => env('TELEGRAM_BOT_TOKEN'),
         'chat_id' => env('TELEGRAM_CHAT_ID'),
@@ -47,19 +47,21 @@ return [
         'secret' => env('STRIPE_SECRET'),
     ],
 
-    // google
+    // Google Socialite Oauth credentials
     'google' => [
         'client_id' => env('GOOGLE_CLIENT_ID'),
         'client_secret' => env('GOOGLE_CLIENT_SECRET'),
-        'redirect' => env('GOOGLE_REDIRECT_URI'),
+
+        'redirect' => env('GOOGLE_REDIRECT_URI'),  // on local host
+        'redirect_for_render' => env('GOOGLE_REDIRECT_URI_FOR_RENDER'),  // on production Render.com
     ],
 
-    // mapbox
+    // Mapbox api key
     'mapbox' => [
         'token' => env('MAPBOX_API_KEY'),
     ],
 
-    // horizon allowed emails
+    // Horizon allowed emails
     'horizon' => [
         'allowed_emails' => env('HORIZON_ALLOWED_EMAILS'),
     ],

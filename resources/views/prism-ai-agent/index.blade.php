@@ -67,8 +67,11 @@
 
 									<div class="message assistant">
 										<div class="message-content">
-											Hello! I am your hardcore AI agent.
-											Ask me to find a customer or ask about dnb.
+											<i class="fas fa-users"></i>
+											Hello! I am your hardcore AI agent. 
+											<span class="small">
+											Ask me to find a user, users role, shop products or ask about dnb, UA cities, cats, etc.
+                                            </span>
 										</div>
 									</div>
 
@@ -577,7 +580,11 @@
 
 
 
+
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>  <!-- mark down library -->
+
 <script>
+	
 
 	const form = document.getElementById('chat-form');
 	const input = document.getElementById('message');
@@ -585,19 +592,24 @@
 	const sendButton = document.getElementById('send');
 
 	function addMessage(message, type)
-	{
-		const wrapper = document.createElement('div');
+    {
+      const wrapper = document.createElement('div');
+      wrapper.className = `message ${type}`;
+      const content = document.createElement('div');
+      content.className = 'message-content';
 
-		wrapper.className = `message ${type}`;
+      if (type === 'assistant') {
+        content.innerHTML = marked.parse(message);
+      } else {
+        content.textContent = message;
+      }
 
-		const content = document.createElement('div');
-		content.className = 'message-content';
-		content.textContent = message;
-		wrapper.appendChild(content);
-		messages.appendChild(wrapper);
-		messages.scrollTop = messages.scrollHeight;
-		return wrapper;
-	}
+      wrapper.appendChild(content);
+      messages.appendChild(wrapper);
+      messages.scrollTop = messages.scrollHeight;
+
+      return wrapper;
+    }
 
 	form.addEventListener('submit', async function(event)
 	{
