@@ -79,7 +79,8 @@
                         </x-dropdown-link>
 
                         <x-dropdown-link :href="route('sql-dump.save-to-gdive')"  :class="request()->routeIs('sql-dump.save-to-gdive') ? 'bg-gray-300 text-gray-900 font-semibold' : ''">
-                            {{ __('Back-up SQL DB to GDrive') }}
+                        <i class="fas fa-cloud-sun" style="font-size:12px"></i>    
+                        {{ __('Back-up SQL DB to GDrive') }}
                         </x-dropdown-link>
 
                         <x-dropdown-link :href="route('my.google.drive.start')"  :class="request()->routeIs('my.google.drive.start') ? 'bg-gray-300 text-gray-900 font-semibold' : ''">

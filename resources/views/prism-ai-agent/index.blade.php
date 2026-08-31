@@ -70,7 +70,7 @@
 											<i class="fas fa-users"></i>
 											Hello! I am your hardcore AI agent. 
 											<span class="small">
-											Ask me to find a user, users role, shop products or ask about dnb, UA cities, cats, etc.
+											Ask me to find/list a user, users role, list shop products or ask about dnb, UA cities, cats, etc.
                                             </span>
 										</div>
 									</div>

@@ -871,7 +871,7 @@ Paste the access token into your .env:
 
 
 
-
+NB: it was failing on Render.com, as wants default-mysql-client  for dumping DB, added it to /docker_db_setup/render.com/Dockerfile
 
 
 

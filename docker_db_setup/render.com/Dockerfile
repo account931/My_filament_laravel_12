@@ -69,6 +69,7 @@ RUN npm run build
 FROM php:8.4-apache
 
 RUN apt-get update && apt-get install -y \
+    default-mysql-client \
     libicu-dev libzip-dev libpng-dev libonig-dev libcurl4-openssl-dev \
     && docker-php-ext-install intl zip mbstring pdo pdo_mysql bcmath pcntl \
     && pecl install redis \
