@@ -40,6 +40,7 @@ class MyGoogleCloudStorageImagesController extends Controller
     }
 
     // uploads image to GCS and saves to local DB table 'user_images_gcloud'
+    // auth via Json GOOGLE_CLOUD_KEY_FILE=service-account.json
     public function uploadGoogleCloudStorageImage(Request $request)
     {
         // Step 1: Validate the form input

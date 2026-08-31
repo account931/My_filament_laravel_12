@@ -49,11 +49,15 @@ class GoogleSpreadsheetController extends Controller
                     $user->google_refresh_token
                 );
 
+                // dd(['encrypted' => $user->google_refresh_token,'decrypted' => Crypt::decryptString($user->google_refresh_token),]);
+
                 // Get a new access token using the stored refresh token. Using the Google API PHP Client.
                 // Can do the same with Laravel HTTP client in \Services\GoogleDriveSqlBackupService.php
                 $accessToken = $client->fetchAccessTokenWithRefreshToken(
                     $refreshToken
                 ); // returns ['access_token', 'expires_in', 'created' ]
+
+                // dd($accessToken);
 
                 if (isset($accessToken['error'])) {
                     abort(
@@ -76,7 +80,8 @@ class GoogleSpreadsheetController extends Controller
                 $service = new Sheets($client);
 
                 // $spreadsheetId = config('services.google.sheet_id');
-                $spreadsheetId = env('GOOGLE_SHEET_ID');
+                $spreadsheetId = config('services.google.sheet_id');  // env('GOOGLE_SHEET_ID');
+                // dd($spreadsheetId);
 
                 // Read first visible sheet
                 $range = 'A1:D100';
@@ -133,7 +138,7 @@ class GoogleSpreadsheetController extends Controller
             $service = new Sheets($client);
 
             // $spreadsheetId = config('services.google.sheet_id');
-            $spreadsheetId = env('GOOGLE_SHEET_ID');
+            $spreadsheetId = config('services.google.sheet_id');  //env('GOOGLE_SHEET_ID');
             // dd  ($spreadsheetId);
 
 

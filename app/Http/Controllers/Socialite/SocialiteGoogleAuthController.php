@@ -60,13 +60,13 @@ class SocialiteGoogleAuthController extends Controller
                 'https://www.googleapis.com/auth/userinfo.profile',
                 'https://www.googleapis.com/auth/spreadsheets.readonly',  // mega fix, for reading Google sheet
             ])
-            // use below to force getting refresh_token, if not visiting first time ever
-            /*
+            // use below to force getting refresh_token, if not visiting first time ever. MUST BE ON, caused crashes
+
             ->with([
-               'access_type' => 'offline',  //To force Google OAuth to return a refresh_token, otherwise returned on first login only
-               'prompt' => 'consent',       //To force Google OAuth to return a refresh_token, otherwise returned on first login only
+                'access_type' => 'offline',  // To force Google OAuth to return a refresh_token, otherwise returned on first login only
+                'prompt' => 'consent',       // To force Google OAuth to return a refresh_token, otherwise returned on first login only
             ])
-           */
+
             ->redirect();
     }
 
@@ -113,6 +113,13 @@ class SocialiteGoogleAuthController extends Controller
         // Session::put('google_oauth_user', $googleUser->email);
 
         $user = Auth::user(); // or find/create user using $googleUser->getEmail()
+
+        // additional check
+        if (! $googleUser->refreshToken) {
+            throw new \Exception(
+                'Google did not return a refresh token. Please authorize Google again.'
+            );
+        }
 
         // save google_access_token, google_refresh_token, etc to db table 'users'. Encrypt values, use Laravel's built-in encryption with app key
         $user->google_access_token = Crypt::encryptString($googleUser->token);  // Encrypt values

@@ -6,7 +6,11 @@ namespace App\Http\Controllers\PrismAIAgent;
 
 use App\Ai_Gemini\Tools\CountUsers;
 use App\Ai_Gemini\Tools\FindUser;
+use App\Ai_Gemini\Tools\ListUsers;
+use App\Ai_Gemini\Tools\ProductsTools\CountProducts;
 use App\Ai_Gemini\Tools\ProductsTools\FindProducts;
+use App\Ai_Gemini\Tools\ProductsTools\ListProducts;
+use App\Ai_Gemini\Tools\SpatieRoles\ListRoles;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -82,9 +86,16 @@ PROMPT
             ->withPrompt($request->message)
             // ->withTools([new FindCustomer,])
             ->withTools([
+                // Users
                 FindUser::create(),
                 CountUsers::create(),
+                ListUsers::create(),
+                // Products
                 FindProducts::create(),
+                CountProducts::create(),
+                ListProducts::create(),
+                // Spatie
+                ListRoles::create(),
             ])  // your tools
             ->withMaxSteps(5)
             ->asText();

@@ -54,6 +54,8 @@ return [
 
         'redirect' => env('GOOGLE_REDIRECT_URI'),  // on local host
         'redirect_for_render' => env('GOOGLE_REDIRECT_URI_FOR_RENDER'),  // on production Render.com
+
+        'sheet_id' => env('GOOGLE_SHEET_ID'),  // used in GoogleSpreadsheetController
     ],
 
     // Mapbox api key

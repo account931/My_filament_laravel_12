@@ -243,8 +243,7 @@ Run one method from test Class => --filter {methodName} {pathToClass} =>  <code>
  <p>Before testing, first time ever, do migrate tables to test database (dont seed as we run them in test itself), if have issues  <code> php artisan migrate:fresh --env=testing </code>  </p>
 
 
-
-
+For 26.08.2026 we have 98 tests (470 assertions)
 
 
 <p> ----------------------------------------------------------------------------------------- </p>
@@ -769,12 +768,12 @@ GOOGLE_REDIRECT_URI=http://localhost:8000/auth/google/callback
 
 
 </br>Socialite Oauth</br>
-Socialite is package for easy Oauth  authentication in Google, Facebook, etc. Uses Google console project 'Laravel DB Backup' for login</br>
+Socialite is package for easy Oauth  authentication in Google, Facebook, etc. Must create Google console oAuth Client (web-application type, not Desktop) 'Laravel_12_Oauth_login_2026' for login, before we used 'Laravel DB Backup' </br>
 
 When you login via Socialite you get 'access_token' (which lives for 1 hour and used for access) + 'refresh_token' (which is long live and used to issue new access_token). So, 'access_token' and 'refresh_token' is unique for every user, while client_id, secret_id is common. </br>
 
 Login via Socialite is implemented at Http\Controllers\Socialite\SocialiteGoogleAuthController, login via authed page and callback. </br>
-Callback url must be added in 2 places:  a.)Google console project 'Laravel DB Backup' in Api & Services->Credentials->Auth redirect Urls and b.)
+Callback url must be added in 2 places:  a.)Google console project 'Laravel_12_Oauth_login_2026' in Api & Services->Credentials->Auth redirect Urls and b.)
 config/services + in .env (GOOGLE_REDIRECT_URI) </br>
 In callback in SocialiteGoogleAuthController you get logged used info and save 'google_access_token', 'google_refresh_token', 'google_user_email', 'google_expires_at' to DB table 'users' (of course add/migrate these columns first). We encrypt 'google_refresh_token' before saving in table </br>
 

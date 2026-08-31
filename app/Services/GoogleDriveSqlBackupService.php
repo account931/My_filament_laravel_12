@@ -34,10 +34,10 @@ class GoogleDriveSqlBackupService
     public function createDatabaseDump(string $path): void
     {
         $db = [
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'username' => env('DB_USERNAME', 'root'),
-            'password' => env('DB_PASSWORD', ''),
-            'database' => env('DB_DATABASE', 'laravel'),
+            'host' => config('database.connections.mysql.host'),         // env('DB_HOST', '127.0.0.1'),
+            'username' => config('database.connections.mysql.username'),   // env('DB_USERNAME', 'root'),
+            'password' => config('database.connections.mysql.password'),  // env('DB_PASSWORD', ''),
+            'database' => config('database.connections.mysql.database'), // env('DB_DATABASE', 'laravel'),
         ];
 
         $command = sprintf(
