@@ -5,6 +5,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Support\Facades\App;
+use Sentry\Laravel\Integration;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -52,6 +53,11 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     // instead of /app/Exceptions/Handler.php ( used in Laravev < 10) handle your exceptions here
     ->withExceptions(function (Exceptions $exceptions): void {
+
+        // enable Sentry to catch the errors on production only
+        if (app()->environment('production')) {
+            Integration::handles($exceptions);
+        }
 
         $exceptions->render(function (\Throwable $e, $request) {
 

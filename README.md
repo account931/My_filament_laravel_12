@@ -7,7 +7,7 @@
 Contains 80% of Laravel_2024_migration transfered from Laravel 6 to 12 + Filament + Stripe + E-commerce shop, etc</br>
 What is new: Filament 3, Sail, Sanctum, CI/CD, Laravel Audit, PHPStan static analysis tool 2.1.17, Pint, Tailwind CSS out of the box, Vue 3, Pinia insead of Vuex store, dotswan/filament-map-picker, Laravel Cashier with Stripe, Sentry, Prometheus_and_Grafana, 
 Scramble – Laravel OpenAPI (Swagger), one-time expirable signed routes(signed means that URL includes a signature hash), send emails,
-auto SQL db back-up via sheduled job + save it at G Drive (saves to pre-defined G Drive at dim***1@gmail.com), Socialite to get oAuth access token (login via Google), images at Google Cloud Storage bucket, upload files to personal Google Drive, Google BigQuery (saving analytics), displaying BQ data in Blade, Vue (Options API), git cola, Sanctum type 2 (SPA Authentication (Session-Based / Cookie Authentication)),Booking on Vue, Translate , Redis (Prometeus + Queques + Cache + Sessions), Horizon, Spatie permission, Supabase cloud storage, Inertia, Scout search with Algolia, read Google Spreadsheet via Oauth and "google/apiclient", Prism AI agent on Gemini.
+auto SQL db back-up via sheduled job + save it at G Drive (saves to pre-defined G Drive at dim***1@gmail.com), Socialite to get oAuth access token (login via Google), images at Google Cloud Storage bucket, upload files to personal Google Drive, Google BigQuery (saving analytics), displaying BQ data in Blade, Vue (Options API), git cola, Sanctum type 2 (SPA Authentication (Session-Based / Cookie Authentication)),Booking on Vue, Translate , Redis (Prometeus + Queques + Cache + Sessions), Horizon, Spatie permission, Supabase cloud storage, Inertia, Scout search with Algolia, read Google Spreadsheet via Oauth and "google/apiclient", Prism AI agent on Gemini, Grafana Cloud with Live Render.com metrics (alwaysdata sql, sentry logs, loki logs,prometeus)
 
 <p>  .env, can be found at  drafts at acc***1@u**.net or at G Drive </p>
 
@@ -560,15 +560,40 @@ https://expose.dev   </br>
 
 
 ## 16. Sentry with Laravel
-https://sentry.io
+https://sentry.io, reged to acc***1@u**.n**
 1.<code> composer require sentry/sentry-laravel </code> 
 2.<code> php artisan vendor:publish --provider="Sentry\Laravel\ServiceProvider" </code> 
 3. add to .env  by running (u get this in sentry.io) <code>  php artisan sentry:publish --dsn=https://2703***.ingest.de.sentry.io/45* </code> 
 
 SENTRY_LARAVEL_DSN=https://yourPublicKey@o0.ingest.sentry.io/yourProjectId
 
- U may test error with manual <code>php artisan sentry:test </code>
+<br>
+4. In bootstrap/app.php add
+<code> 
+use Sentry\Laravel\Integration;
+//...
+->withExceptions(function (Exceptions $exceptions) {
+        //enable Sentry to catch the errors on production only
+        if (app()->environment('production')) {
+            Integration::handles($exceptions); 
+        }
+})
+</code> 
 
+ U may test error with manual <code>php artisan sentry:test </code>
+ or  in code add <code>\Sentry\captureException($e);   you can fire an error manually to see if  Sentry picking errors</code>
+
+
+
+ <p> Integration Sentry with Grafana dashboard </p> 
+In Grafana create: Datasoursce -> Sentry </br>
+
+Add settings:
+<code> 
+Sentry url https://de.sentry.io/
+Sentry org   use your slug, i.e acc*****1
+Auth token -> go Sentry/Settings/Account/API/Personal Tokens -> create token with Read permission
+</code> 
 
 
 

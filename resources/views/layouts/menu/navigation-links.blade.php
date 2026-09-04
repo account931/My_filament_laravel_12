@@ -60,7 +60,7 @@
 
                         <x-dropdown-link href="/metrics">
                             <i class="fas fa-cloud-sun" style="font-size:12px"></i>
-                            {{ __('Prometheus metrics') }}
+                            {{ __('Prometheus metrics pure response') }}
                         </x-dropdown-link>
 
                         <x-dropdown-link href="/docs/api">
@@ -149,4 +149,10 @@
                         <x-dropdown-link :href="route('prism.ai.agent.index')"  :class="request()->routeIs('prism.ai.agent.index') ? 'bg-gray-300 text-gray-900 font-semibold' : ''">
                             <i class="fas fa-cloud-sun" style="font-size:12px"></i>
                             {{ __('Prism AI agent') }}
+                        </x-dropdown-link>
+
+                        <!-- Just external link to Grafana Cloud -->
+                        <x-dropdown-link :href="route('grafana.link')"  :class="request()->routeIs('grafana.link') ? 'bg-gray-300 text-gray-900 font-semibold' : ''">
+                            <i class="fas fa-cloud-sun" style="font-size:12px"></i>
+                            {{ __('External Grafana Cloud') }}
                         </x-dropdown-link>

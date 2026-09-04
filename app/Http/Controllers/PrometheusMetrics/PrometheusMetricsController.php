@@ -17,6 +17,7 @@ class PrometheusMetricsController extends Controller
     public function index()
     {
         // Prometheus Redis adapter config
+        /*
         $storage = new PrometheusRedis([
             'host' => 'redis',  // container name
             'port' => 6379,
@@ -24,6 +25,39 @@ class PrometheusMetricsController extends Controller
             'read_timeout' => 10,
             'persistent_connections' => false,
         ]);
+        */
+
+        // dd (config('database.redis.redis_url')) ;
+
+        // set up  for both local and production
+        if (app()->environment('production')) {
+            $redisUrl = config('database.redis.redis_url'); // $redisUrl = env('REDIS_URL');
+
+            if (! $redisUrl) {
+                throw new RuntimeException('REDIS_URL is not configured.');
+            }
+
+            $parsed = parse_url($redisUrl);
+
+            $storage = new PrometheusRedis([
+                'host' => $parsed['host'],
+                'port' => $parsed['port'] ?? 6379,
+                'timeout' => 0.1,
+                'read_timeout' => 10,
+                'persistent_connections' => false,
+            ]);
+        } else {
+            // localhost
+            $storage = new PrometheusRedis([
+                'host' => 'redis',
+                'port' => 6379,
+                'timeout' => 0.1,
+                'read_timeout' => 10,
+                'persistent_connections' => false,
+            ]);
+        }
+
+        // end set up  for both local and production
 
         $registry = new CollectorRegistry($storage);
 

@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth_Api\SanctumCSRFbasedSessionAuthentication\CSRFbase
 use App\Http\Controllers\BigQuery\BigQueryController;   // Api cotrollers
 use App\Http\Controllers\Booking\BookingController;
 use App\Http\Controllers\GoogleSpreadsheet\GoogleSpreadsheetController;
+use App\Http\Controllers\GrafanaLink\GrafanaLinkController;
 use App\Http\Controllers\Inertia\InertiaController;
 use App\Http\Controllers\MyGoogleCloudStorageImages\MyGoogleCloudStorageImagesController;
 use App\Http\Controllers\MyGoogleDrive\MyGoogleDriveController;
@@ -13,9 +14,9 @@ use App\Http\Controllers\OneTimeLink\OneTimeLinkController;
 use App\Http\Controllers\OwnerController\OwnerController;
 use App\Http\Controllers\PrismAIAgent\PrismAIAgentController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\PrometheusMetrics\PrometheusMetricsController;
 // Prometheus_and_Redis
 // use Illuminate\Support\Facades\Redis;
+use App\Http\Controllers\PrometheusMetrics\PrometheusMetricsController;
 use App\Http\Controllers\Questions\QuestionVueController;
 use App\Http\Controllers\Scout\ScoutSearchController;
 use App\Http\Controllers\SendEmail\SendEmailController;
@@ -225,11 +226,14 @@ Route::middleware('auth')->group(function () {
     Route::get('prism-ai-agent/index', [PrismAIAgentController::class, 'index'])->name('prism.ai.agent.index');  //
     Route::post('/ai-agent/chat', [PrismAIAgentController::class, 'chat'])->name('ai-agent.chat');
 
+    // Just external link to Grafana Cloud
+    Route::get('grafana/link', [GrafanaLinkController::class, 'index'])->name('grafana.link');  //
+
 });
 // End Auth (logged) users only------------------------------------------------------------------------------------------
 
-// Prometheus_and_Redis
+// Prometheus metrics stored in_Redis, return jusr response, can be json or array based on your header
 Route::get('/metrics', [PrometheusMetricsController::class, 'index']); // ->middleware('prometheus.auth');
-// End Prometheus_and_Redis
+// End Prometheus metrics stored in_Redis
 
 require __DIR__.'/auth.php';
