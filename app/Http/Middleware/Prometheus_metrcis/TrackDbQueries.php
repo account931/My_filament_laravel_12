@@ -17,9 +17,13 @@ use Prometheus\Storage\Redis as PrometheusRedis;
 
 class TrackDbQueries
 {
+    public function __construct(private PrometheusRedis $redisStorage)  // PrometheusRedis anywhere through dependency injection. Registered in AppServiceProvider.php
+    {}
+
     public function handle($request, Closure $next)
     {
-        // Setup Prometheus Redis storage once
+        // Setup Prometheus Redis storage, works for local host only
+        /*
         $storage = new PrometheusRedis([
             'host' => env('REDIS_HOST', 'redis'),
             'port' => env('REDIS_PORT', 6379),
@@ -28,6 +32,11 @@ class TrackDbQueries
             'read_timeout' => 10,
             'persistent_connections' => false,
         ]);
+        */
+
+        // Setup Prometheus Redis storage via Service, works for local and production Render
+        $storage = $this->redisStorage; // should have dependency injection in constructor
+
         $registry = new CollectorRegistry($storage);
 
         // Register or get counters/histograms for DB queries

@@ -20,9 +20,13 @@ class RegisterIPVisits
 
     protected $exceptionCounter;
 
+    // PrometheusRedis anywhere through dependency injection. Registered in AppServiceProvider.php
+    public function __construct(private PrometheusRedis $redisStorage) {}
+
     public function handle($request, Closure $next)
     {
-        // Setup Prometheus Redis storage
+        // Setup Prometheus Redis storage, works for local host only
+        /*
         $storage = new PrometheusRedis([
             'host' => env('REDIS_HOST', 'redis'),
             'port' => env('REDIS_PORT', 6379),
@@ -31,6 +35,10 @@ class RegisterIPVisits
             'read_timeout' => 10,
             'persistent_connections' => false,
         ]);
+        */
+
+        // Setup Prometheus Redis storage via Service, works for local and production Render
+        $storage = $this->redisStorage; // should have dependency injection in constructor
 
         $this->registry = new CollectorRegistry($storage);
 

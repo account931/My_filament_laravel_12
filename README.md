@@ -68,6 +68,8 @@ git restore .  git clean -fd
 - [31. Scout and Algolia](31-scout-and=algolia)
 - [32. Read G Spreadsheet](32-read-g-preadsheet)
 - [33. Prism AI](33-prism-ai)
+- [34. Grafana](34-grafana)
+
 
 
 - [111.V.A](#111-va)
@@ -573,7 +575,7 @@ SENTRY_LARAVEL_DSN=https://yourPublicKey@o0.ingest.sentry.io/yourProjectId
 use Sentry\Laravel\Integration;
 //...
 ->withExceptions(function (Exceptions $exceptions) {
-        //enable Sentry to catch the errors on production only
+        //enable Sentry to catch the errors on production only not to overload display with localhost errors
         if (app()->environment('production')) {
             Integration::handles($exceptions); 
         }
@@ -628,6 +630,7 @@ How to: <br>
 To add your metrics you have to add middlewares and register them to bootrsap/app.php. E.g CountExceptions, CountHttpStatusCodes, CountVisits, etc. All your added metrics will be auto displayed at /metrics<br>
 The kernel.php was removed in Laravel 11. So you should now configure middleware via the application builder instance in your bootstrap/app.php file.<br>
 
+Switch on/off middleware for local/production with  if ($env === 'local') { in bootstrap/app.php  <br>
 
 If u want to store metrics to sql, create migration, but we we will use Redis, so add to .env 
 <code>
@@ -636,6 +639,7 @@ If u want to store metrics to sql, create migration, but we we will use Redis, s
     REDIS_PORT=6379
     REDIS_CLIENT=phpredis
     REDIS_PASSWORD=null
+    REDIS_URL=redis://red-******:6***  #Redis for production Render.com, on local must be null
 </code>
 
 4. Metrics are available at http://localhost:8000/metrics, set up Prometheus to use this endpoint, in prometheus.yml =>
@@ -1020,7 +1024,7 @@ Render.com set up:
 <p> 2. Create external sql db at alwaysdata,com, as native render.com  DB will be erased in 30 days </p>
 <p> 3. Create redis instance at render.com </p>
 
-<p> 4. Fix 1: Disable redis for production as it crashes, in /botstrap/app.hp
+<p> 4. Fix 1: Disable redis for production as it crashes, in /botstrap/app.hp. UPDATE: it was fixed
  <code>
    // Prometheus metrics middleware
         $env = getenv('APP_ENV') ?: 'production';
@@ -1065,7 +1069,7 @@ REDIS_DB=0
 REDIS_PASSWORD=null
 REDIS_PORT=6379
 REDIS_PREFIX=laravel_database_
-REDIS_URL=redis://red-d5v***********  # redis separate service at render.com
+REDIS_URL=redis://red-d5v*** # redis separate service at render.com. App reads REDIS_URL first and if not null, ignore REDIS_PORT, HOST, etc
 SESSION_DRIVER=file
 MAPBOX_API_KEY=pk.eyJ1**********
 SCOUT_DRIVER=algolia
@@ -1099,18 +1103,27 @@ BIGQUERY_KEY_FILE=laravel-bigquery-8****f.json
 <p> 10. Email implementation, to use real emails instead of Mailtrap, do......... Still use Mailtrap sandbox, as it requires separate domain </p>
 
 
+
+
+
+
+
+
+
 <p> ----------------------------------------------------------------------------------------- </p>
 
-
-
-
-
 ## 26. Redis
-Redis is used for Prometeus (Prometeus works with Redis only).
-Also Redis is used for QUEUE_CONNECTION + Horizon.
+Redis is used for Prometeus (Prometeus works with Redis only) + for QUEUE_CONNECTION + Horizon. <br>
 
-Redis can also be used for Cache + Sessions instead of DB (make changes in env)
-On local host we create Redis container, on production at Render.com we use Cloud Redis from Render.com
+Redis can also be used for Cache + Sessions instead of DB (make changes in env) <br>
+
+On local host we create Redis Docker container(along with Php container, so Redis runs always). On production at Render.com we use Cloud Redis from Render.com and providing REDIS_URL in .env <br>
+
+For local host in .env we use  REDIS_HOST=redis, REDIS_PASSWORD=null,REDIS_PORT=**. For Production at Render we use REDIS_URL. <br>
+NB: REDIS_URL is loaded by default, so on local it must be REDIS_URL=null, otherwise it takes it and ignores REDIS_HOST, REDIS_PASSWORD, etc
+
+
+
 
 
 <p> ----------------------------------------------------------------------------------------- </p>
@@ -1322,6 +1335,25 @@ Ai agent on Gemeni using Prism package  <br>
 Pest test =>  ./vendor/bin/pest tests/Feature/App/Http/Controllers/PrismAIAgent/PrismAIAgentControllerTest.php
 
 
+
+
+
+
+
+
+
+<p> ----------------------------------------------------------------------------------------- </p>
+
+
+# 34. Grafana
+
+For local host we use Grafana docker from other separate project 'Prometheus_and_Grafana' <br>
+For live Render.com we use Grafana Cloud, reg to acc****1@u**.n**.
+Grafana Cloud has dashboard for alwaysdata.com SQL, Sentry exceptions, Prometeus, etc  <br>
+
+
+
+See Sentry integration in Sentry section
 
 
 

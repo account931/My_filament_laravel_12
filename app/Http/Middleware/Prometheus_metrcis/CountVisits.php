@@ -15,11 +15,15 @@ use Prometheus\Storage\Redis as PrometheusRedis;
 
 class CountVisits
 {
+    public function __construct(private PrometheusRedis $redisStorage)  // PrometheusRedis anywhere through dependency injection. Registered in AppServiceProvider.php
+    {}
+
     public function handle($request, Closure $next)
     {
         $response = $next($request);
 
-        // Setup Prometheus Redis storage
+        // Setup Prometheus Redis storage, works for local host only
+        /*
         $storage = new PrometheusRedis([
             'host' => env('REDIS_HOST', 'redis'),
             'port' => env('REDIS_PORT', 6379),
@@ -28,6 +32,10 @@ class CountVisits
             'read_timeout' => 10,
             'persistent_connections' => false,
         ]);
+        */
+
+        // Setup Prometheus Redis storage via Service, works for local and production Render
+        $storage = $this->redisStorage; // should have dependency injection in constructor
 
         $registry = new CollectorRegistry($storage);
 

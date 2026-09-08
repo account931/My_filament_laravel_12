@@ -2,13 +2,15 @@
 
 namespace App\Providers;
 
-use Filament\Tables\Columns\TextColumn;
+use App\Services\PrometheusStorage\PrometheusStorageService;
 // use to create custom method for TextInput
+use Filament\Tables\Columns\TextColumn;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
 use Inertia\Inertia;
+use Prometheus\Storage\Redis as PrometheusRedis;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -17,6 +19,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        // register PrometheusStorageService as a singleton, so Laravel can resolve PrometheusRedis anywhere through dependency injection.
+        // call as $storage = $this->storage; //when have dependency injection in constructor only => construct(private PrometheusRedis $storage,)
+        // Or $storage = app(PrometheusRedis::class); //when you need it somewhere without dependency injection in constructor
+        $this->app->singleton(PrometheusRedis::class, function () {
+            return app(PrometheusStorageService::class)->make();
+        });
         //
     }
 

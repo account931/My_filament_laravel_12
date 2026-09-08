@@ -18,9 +18,9 @@ return Application::configure(basePath: dirname(__DIR__))
         // Global middleware (applied to every request)
         // register middleware here
 
-        // Prometheus metrics middleware, set to work only on local and when not testing, because of crash at Render.com
+        // Prometheus metrics middleware, set to work only on local||production and when not testing, because of crash at Render.com. UPDATED: now for local and prod, exclude testing
         $env = getenv('APP_ENV') ?: 'production';
-        if ($env === 'local') {
+        if ($env === 'local' || $env === 'production') {
             if (getenv('APP_ENV') !== 'testing') { // fix to prevent github action Pest tests from failing
                 // if (!app()->environment('testing')) {//caused error Uncaught ReflectionException: Class "env" does not exist as is not safe to call inside bootstrap/app.php or before the app is fully
                 $middleware->append(\App\Http\Middleware\Prometheus_metrcis\CountVisits::class);           // Prometheus metrics, how many times a page is visited
