@@ -68,4 +68,10 @@ return [
         'allowed_emails' => env('HORIZON_ALLOWED_EMAILS'),
     ],
 
+    // Prometeus endpont /metrics basic auth
+    'prometheus' => [
+        'username' => env('PROMETHEUS_METRICS_ENDPOINT_USERNAME'),
+        'password' => env('PROMETHEUS_METRICS_ENDPOINT_PASSWORD'),
+    ],
+
 ];

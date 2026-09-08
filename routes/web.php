@@ -31,6 +31,7 @@ use App\Http\Controllers\Translate\TranslateController;
 use App\Http\Controllers\VenuesStoreLocator\VenuesLocatorController;
 use App\Http\Controllers\VuePages\VuePagesController;
 use App\Http\Controllers\VuePagesWithRouter\VuePagesWithRouterController;
+use App\Http\Middleware\PrometheusAuth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
@@ -233,7 +234,7 @@ Route::middleware('auth')->group(function () {
 // End Auth (logged) users only------------------------------------------------------------------------------------------
 
 // Prometheus metrics stored in_Redis, return jusr response, can be json or array based on your header
-Route::get('/metrics', [PrometheusMetricsController::class, 'index']); // ->middleware('prometheus.auth');
+Route::get('/metrics', [PrometheusMetricsController::class, 'index'])->middleware(PrometheusAuth::class); // ->middleware('prometheus.auth');
 // End Prometheus metrics stored in_Redis
 
 require __DIR__.'/auth.php';

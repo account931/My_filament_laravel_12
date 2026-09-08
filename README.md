@@ -701,8 +701,12 @@ Command to enter Filament sql container: <code> docker exec -it my_filament_lara
 
 
 
+Prometheus on Render.com
+ Metrics Endpoint integration is still available and is explicitly described as “no-collector scraping directly from Grafana Cloud.” It scrapes your endpoint automatically every 60 seconds.
 
-
+No Prometheus. No Alloy. No extra Render service
+1. Make sure /metrics is publicly accessible
+2. Grafana  Add connection     Home → Connections → Add connection → Metrics Endpoin
 
 
 
