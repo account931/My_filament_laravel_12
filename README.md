@@ -69,6 +69,7 @@ git restore .  git clean -fd
 - [32. Read G Spreadsheet](32-read-g-preadsheet)
 - [33. Prism AI](33-prism-ai)
 - [34. Grafana](34-grafana)
+- [35. Loki](35-loki)
 
 
 
@@ -610,18 +611,25 @@ Auth token -> go Sentry/Settings/Account/API/Personal Tokens -> create token wit
 
 ## 17. Prometheus and Grafana and Redis
 
-Brief Overview: <br>
+On local we use Prometheus and Grafana on Docker containers in a separate folder. Redis is a Docker container in same dockerfile as Php/Laravel <br>
+On production Render.com we use Redis from Render.com(REDIS_URL). Grafana is online Cloud. We dont use Prometheus as Grafana Cloud can directly scrape out /metrics endpoint. See details below.<br>
 
-Laravel App (with prometheus_client_php):
-→ Collects metrics (e.g. request count, response time, errors) and Exposes them via an HTTP endpoint (usually /metrics) in Prometheus format.<br>
+<p>General brief Overview: </p>
 
-Prometheus Server:
+Laravel App (with prometheus_client_php):<br>
+→ Collects metrics (e.g. request count, response time, errors) and Exposes them via an HTTP endpoint (/metrics) in Prometheus format. Endpoint is protected via Basic Auth, middleware/PrometheusAuth. Add PROMETHEUS_METRICS_ENDPOINT_USERNAME, PROMETHEUS_METRICS_ENDPOINT_PASSWORD to .env<br>
+
+Prometheus Server:<br>
 → Periodically scrapes (GET) the Laravel /metrics endpoint and Stores the numeric time-series data in its database. <br>
 
-Grafana Dashboard:
+Grafana Dashboard:<br>
 → Connects to Prometheus as a data source + queries metrics (e.g. my_app_request_count, http_requests_total) using PromQL + visualizes the data with charts, panels, alerts, etc. <br><br>
 
-How to: <br>
+We have a Sinleton Service to configure Redis connection for Prometheus both for local(REDIS_HOST) and production(REDIS_URL) at => Services/PrometheusStorage/PrometheusStorageService.php<br>
+
+
+
+<p>How to on local: </p>
 1. Create a folder with Prometheus and Grafana on Docker (in this case we create a separate folder outside of 'My_Filament_Laravel_12' project )
 2. Intsall <code>  composer require endclothing/prometheus_client_php </code>, use this  - it is well-maintained fork of the original Jimdo package. <br>
 <code> composer require jimdo/prometheus_client_php </code> it is abandoned <br>
@@ -643,9 +651,13 @@ If u want to store metrics to sql, create migration, but we we will use Redis, s
 </code>
 
 4. Metrics are available at http://localhost:8000/metrics, set up Prometheus to use this endpoint, in prometheus.yml =>
-    - targets: ['my_filament_laravel_12-laravel.test-1:80']  # dont foregt to create common network first before , see Readme
+    - targets: ['my_filament_laravel_12-laravel.test-1:80'] . Basic auth is set there as well, working in pair with /middleware/PrometheusAuth.php on Laravel.
+    # dont foregt to create common network first before , see Readme
 
-5. In Grafana use Prometheus as datasource
+5. In Grafana use Prometheus as datasource, see details at => <p>How add Prometheus panel to Grafana: </p>  <br>
+
+
+
 
 
 
@@ -701,12 +713,6 @@ Command to enter Filament sql container: <code> docker exec -it my_filament_lara
 
 
 
-Prometheus on Render.com
- Metrics Endpoint integration is still available and is explicitly described as “no-collector scraping directly from Grafana Cloud.” It scrapes your endpoint automatically every 60 seconds.
-
-No Prometheus. No Alloy. No extra Render service
-1. Make sure /metrics is publicly accessible
-2. Grafana  Add connection     Home → Connections → Add connection → Metrics Endpoin
 
 
 
@@ -1348,16 +1354,65 @@ Pest test =>  ./vendor/bin/pest tests/Feature/App/Http/Controllers/PrismAIAgent/
 
 <p> ----------------------------------------------------------------------------------------- </p>
 
-
 # 34. Grafana
 
 For local host we use Grafana docker from other separate project 'Prometheus_and_Grafana' <br>
 For live Render.com we use Grafana Cloud, reg to acc****1@u**.n**.
 Grafana Cloud has dashboard for alwaysdata.com SQL, Sentry exceptions, Prometeus, etc  <br>
 
+Grafana Cloud Dashboard name is 'my_filament_12_render_com_dashboard'
 
+---------------------
 
+1.<p>How add Sentry panel to Grafana: </p>
 See Sentry integration in Sentry section
+
+---------------------
+
+2.<p>How add Prometheus panel to Grafana: </p>
+<p>How to Prometheus on production Render.com. 
+On local we use Prometheus on docker on connect it to Grafana, on Render we just use Grafana with the scrape job connected to /metrics without Prometheus server </p>
+Grafana Cloud has Metrics Endpoint integration as “no-collector scraping directly from Grafana Cloud.” It scrapes your endpoint automatically every 60 seconds.
+No Prometheus. No Alloy. No extra Render service. <br> 
+The Metrics Endpoint integration collects the metrics; your Grafana panel queries the metrics that Grafana Cloud has stored.
+<br> 
+
+a. Make sure /metrics is publicly accessible or has basic auth (our case) <br> 
+b. In Grafana Cloud => Connections => Add new connection => Metrics Endpoint => Create the scrape job  'my_scrape_job_from_larafilament_metrics_endpoint' =>  set 'Scrape Job URL', scrape time interval, Basic Auth username, password<br>
+
+
+---------------------
+
+3.<p>How add BigQuery panel to Grafana: </p>
+Connections => Add new connection => select 'Google BigQuery' => Install.<br>
+Then => Data sources => Add new datasource  => select 'Google BigQuery', name it like 'my-grafana-bigquery-datasource' =>  upload Google JWT Key from storage/app/bigQuery_keys.<br>
+Then => Create new panel with created datasource  <br>
+Create 2 most viewed products => paste code from BigQueryService, see below => Bar chart + X-asis set to total_views
+
+<code>
+SELECT
+  product_id, COUNT(product_id) AS total_views
+FROM
+  `laravel-bigquery.analytics_dataset.product_views`  #BIGQUERY_PROJECT_ID.BIGQUERY_DATASET.BIGQUERY_TABLE
+GROUP BY product_id ORDER BY  total_views DESC  LIMIT  2 #50 
+</code>
+---------------------
+
+4.<p>How add Loki panel to Grafana: </p>
+
+
+4.<p>How add Infinity panel to Grafana: </p>
+Infinity datasource => set url => and Use $.data in Parsing options 
+
+
+---------------------
+
+
+
+
+<p> ----------------------------------------------------------------------------------------- </p>
+# 35. Loki
+
 
 
 
@@ -1461,6 +1516,13 @@ add to config/filesystem.php to
      chown -R www-data:www-data storage bootstrap/cache
      chmod -R 775 storage bootstrap/cache
     </code>
+
+7.1 If you get Operation not permitted => outside of container =>
+    <code>
+    sudo chown -R $USER:$USER storage bootstrap/cache
+    sudo chmod -R 775 storage bootstrap/cache
+    </code>
+
 
 8. Image is not displayed/forbidden =>  php artisan storage:link
 

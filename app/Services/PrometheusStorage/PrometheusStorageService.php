@@ -1,6 +1,8 @@
 <?php
 
-// Service to configure Redis connection for Prometheus both for local(local Docker container) and production(Render Redis cloud which uses REDIS_URL)
+// Sinleton Service to configure Redis connection for Prometheus both for local(local Docker container) and production(Render Redis cloud which uses REDIS_URL)
+// Use by: public function __construct(private PrometheusRedis $redisStorage) {} $storage = $this->redisStorage;  OR without constructor $storage = app(PrometheusRedis::class);
+// reged in AppServiceProvider
 
 namespace App\Services\PrometheusStorage;
 

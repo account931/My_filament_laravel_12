@@ -1,6 +1,6 @@
 <?php
 
-//
+// It output metrics in Prometheus format. Metrics are collected via middleware /Prometheus_metrcis
 
 namespace App\Http\Controllers\PrometheusMetrics;
 
@@ -15,8 +15,9 @@ use RuntimeException;
 
 class PrometheusMetricsController extends Controller
 {
-    public function __construct(private PrometheusRedis $redisStorage)  // PrometheusRedis anywhere through dependency injection. Registered in AppServiceProvider.php
-    {}
+    // Use PrometheusRedis service anywhere through dependency injection. Registered in AppServiceProvider.php
+    // Service to configure Redis connection for Prometheus both for local
+    public function __construct(private PrometheusRedis $redisStorage) {}
 
     public function index()
     {

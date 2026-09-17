@@ -15,7 +15,8 @@ use Prometheus\Storage\Redis as PrometheusRedis;
 
 class CountHttpStatusCodes
 {
-    // PrometheusRedis anywhere through dependency injection. Registered in AppServiceProvider.php
+    // Use PrometheusRedis service anywhere through dependency injection. Registered in AppServiceProvider.php
+    // Service to configure Redis connection for Prometheus both for local
     public function __construct(private PrometheusRedis $redisStorage) {}
 
     public function handle($request, Closure $next)

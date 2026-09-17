@@ -233,7 +233,7 @@ Route::middleware('auth')->group(function () {
 });
 // End Auth (logged) users only------------------------------------------------------------------------------------------
 
-// Prometheus metrics stored in_Redis, return jusr response, can be json or array based on your header
+// Prometheus metrics stored in_Redis, return just response, can be json or array based on your header
 Route::get('/metrics', [PrometheusMetricsController::class, 'index'])->middleware(PrometheusAuth::class); // ->middleware('prometheus.auth');
 // End Prometheus metrics stored in_Redis
 

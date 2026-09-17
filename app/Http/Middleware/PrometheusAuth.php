@@ -1,6 +1,7 @@
 <?php
 
-// Prometeus endpont /metrics basic auth
+// Basic auth for Prometeus endpont '/metrics'.
+// Add to .env your any own created 'PROMETHEUS_METRICS_ENDPOINT_USERNAME', 'PROMETHEUS_METRICS_ENDPOINT_PASSWORD'. Just any, just .env vat must be the same as set in Prometeus auth
 
 namespace App\Http\Middleware;
 

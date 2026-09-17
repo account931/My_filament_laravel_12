@@ -12,8 +12,9 @@
                     Grafana Link  <br><br>
 
                      <!-- Grafana Link -->
-                     <a href="https://account931.grafana.net/d/ac9dc6s/my-filament-12-core-dashboard" target="_blank" class="btn btn-sm btn-outline-secondary me-2 ">
-                        <img src="https://flagcdn.com/w20/us.png" alt="EN" class="me-1">
+                     <a href="https://account931.grafana.net/d/ac9dc6s/my-filament-12-core-dashboard" target="_blank" class="btn btn-sm btn-outline-secondary me-2 text-center">
+                       <img src="{{ asset('img/grafana.svg') }}" alt="Image" class="d-block mx-auto mb-2" style="width: 50px; height: auto;">
+                       <!--<img src="https://flagcdn.com/w20/us.png" alt="EN" class="me-1"> -->
                            Grafana Cloud Link
                     </a>
 
