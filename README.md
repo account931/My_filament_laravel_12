@@ -7,7 +7,7 @@
 Contains 80% of Laravel_2024_migration transfered from Laravel 6 to 12 + Filament + Stripe + E-commerce shop, etc</br>
 What is new: Filament 3, Sail, Sanctum, CI/CD, Laravel Audit, PHPStan static analysis tool 2.1.17, Pint, Tailwind CSS out of the box, Vue 3, Pinia insead of Vuex store, dotswan/filament-map-picker, Laravel Cashier with Stripe, Sentry, Prometheus_and_Grafana, 
 Scramble – Laravel OpenAPI (Swagger), one-time expirable signed routes(signed means that URL includes a signature hash), send emails,
-auto SQL db back-up via sheduled job + save it at G Drive (saves to pre-defined G Drive at dim***1@gmail.com), Socialite to get oAuth access token (login via Google), images at Google Cloud Storage bucket, upload files to personal Google Drive, Google BigQuery (saving analytics), displaying BQ data in Blade, Vue (Options API), git cola, Sanctum type 2 (SPA Authentication (Session-Based / Cookie Authentication)),Booking on Vue, Translate , Redis (Prometeus + Queques + Cache + Sessions), Horizon, Spatie permission, Supabase cloud storage, Inertia, Scout search with Algolia, read Google Spreadsheet via Oauth and "google/apiclient", Prism AI agent on Gemini, Grafana Cloud with Live Render.com metrics (alwaysdata sql, sentry logs, loki logs,prometeus)
+auto SQL db back-up via sheduled job + save it at G Drive (saves to pre-defined G Drive at dim***1@gmail.com), Socialite to get oAuth access token (login via Google), images at Google Cloud Storage bucket, upload files to personal Google Drive, Google BigQuery (saving analytics), displaying BQ data in Blade, Vue (Options API), git cola, Sanctum type 2 (SPA Authentication (Session-Based / Cookie Authentication)),Booking on Vue, Translate , Redis (Prometeus + Queques + Cache + Sessions), Horizon, Spatie permission, Supabase cloud storage, Inertia, Scout search with Algolia, read Google Spreadsheet via Oauth and "google/apiclient", Prism AI agent on Gemini, Grafana Cloud with Live Render.com metrics (alwaysdata sql, sentry logs, loki logs, Prometeus, BigQuery)
 
 <p>  .env, can be found at  drafts at acc***1@u**.net or at G Drive </p>
 
@@ -15,7 +15,7 @@ auto SQL db back-up via sheduled job + save it at G Drive (saves to pre-defined 
 
 Visual Studio Code ()
      -> VS package extension -> 
-           -> PHP Namespace Resolver (to import class -> RMC -> import class)(https://marketplace.visualstudio.com/items?itemName=MehediDracula.php-namespace-resolver)
+           -> PHP Namespace Resolver (to import class -> RigtMClick -> import class)(https://marketplace.visualstudio.com/items?itemName=MehediDracula.php-namespace-resolver)
            -> Git History, GitLense, Php Intellisense, Prittier, Highlight Matching Tag, GitLens — Git supercharged, Notepad VS theme
 
 
@@ -1286,7 +1286,7 @@ use Searchable;
 </code>
 
 
-4. Import existing model to Algolia Cloud, after you scan see a products index in Algolia. Can find it Algolia dashbord/index
+4. Import existing model to Algolia Cloud, after you scan see a products index in Algolia. Can find it at => Algolia dashbord/index
 <code>php artisan scout:import "App\Models\Product"</code>
 
 
@@ -1401,8 +1401,17 @@ GROUP BY product_id ORDER BY  total_views DESC  LIMIT  2 #50
 4.<p>How add Loki panel to Grafana: </p>
 
 
+---------------------
+
+
+
+
+
+
 4.<p>How add Infinity panel to Grafana: </p>
-Infinity datasource => set url => and Use $.data in Parsing options 
+Infinity datasource => set url => and Use $.data in Parsing options <br>
+If url is protected by Sanctum, generate Sanctum token in console and add to Auth in Grafana. 
+Go in Grafana Panel => Headers => add header => in filed Key add Authorization, in field Value add sanctum token, must be in format ID|token
 
 
 ---------------------

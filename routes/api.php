@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Route;
 
 // ---------------- Sanctum Protected routes (requires token) -------------------------
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum', 'force.json'])->group(function () {
 
     Route::get('/user', function (Request $request) {
         return $request->user();
