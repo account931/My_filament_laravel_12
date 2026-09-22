@@ -25,7 +25,8 @@
 							},
 							{
 								"key": "Authorization",
-								"value": "Bearer 1|G0****************",
+								"value": "Bearer 11|6*************",
+								"description": "If token is expired, run php artisan get_sanctum_token on local",
 								"type": "text"
 							}
 						],
@@ -55,7 +56,8 @@
 							},
 							{
 								"key": "Authorization",
-								"value": "Bearer 1|G0***************",
+								"value": "Bearer 11|6************",
+								"description": "If token is expired, run php artisan get_sanctum_token on local",
 								"type": "text"
 							}
 						],

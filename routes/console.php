@@ -69,7 +69,7 @@ Artisan::command('get_route', function () {
 // Test Get sanctum token
 Artisan::command('get_sanctum_token', function () {
 
-    $user = User::find(1)->first();
+    $user = User::find(1)->first();   //apart all user 1 has Admin rights, whuch is usefull for for routes protected by not only Sanctum but also RBAC
     // Create a token with optional name and scopes
     $token = $user->createToken('postman-token')->plainTextToken;
     dd($token);

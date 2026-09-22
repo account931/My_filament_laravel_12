@@ -342,6 +342,14 @@ images go to  /storage/app/public
 
 ## 8. Postman
 
+All my working routes goes to Collection => My Filament Owner API  routes (includes CRUD /api/owner + sanctum || sanctum and RBAC ptotected routes)<br>
+
+On first start: <br>
+Create environment "LocalHost"             with {{my_base_url}} with value "http://localhost:8000" <br>
+Create environment "Production-Render.com" with {{my_base_url}} with value "https://my-filament-la**-12.onrender.com/" <br>
+After, no need to create dublicate Collection route for local and prod, just switch Environment my_base_url. NB: after re-seeding sanctum token will be invalid. Create new, see last paragraph of this section. <br>
+
+
 When send Post, for example, to /api/owner/create,  in Postman go to Body-> Raw -> Json
 <code> 
 {
@@ -357,7 +365,7 @@ When send Post, for example, to /api/owner/create,  in Postman go to Body-> Raw 
 </br> 
  Make sure to add in Postman "Headers" => <code>  Accept: application/json </code> , so $this->wantsJson() is working, e.g in OwnerRequest.php
 
-<p> For Sanctum, generate token in console  with <code> php artisan get_sanctum_token </code>,   and add in Postman in Headers -> Key/Value:  Authorization  Bearer 4|uYx01a2 </p> 
+<p> For Sanctum, generate token in console  with <code> php artisan get_sanctum_token </code>,   and add in Postman in Headers -> Key/Value:  Authorization  Bearer 4|uYx01a2 </p> . Token is saved at table `personal_access_tokens`
 
 
 
@@ -381,7 +389,7 @@ How it works: Uses Laravel’s built-in session authentication. Authenticated vi
 <code> 
   //generate token 
   $user = User::find(1)->first();
-  // Create a token with optional name and scopes
+  // Create a token with optional name and scopes, token is saved at table `personal_access_tokens`
   $token = $user->createToken('postman-token')->plainTextToken;
 </code> 
 
@@ -595,8 +603,10 @@ Add settings:
 <code> 
 Sentry url https://de.sentry.io/
 Sentry org   use your slug, i.e acc*****1
-Auth token -> go Sentry/Settings/Account/API/Personal Tokens -> create token with Read permission
+Auth token -> go Sentry/Settings/Account/API/Personal Tokens -> create token with Read permission </br>
 </code> 
+
+Create Panel with datasource, i.e 'sentry-filament12-datasource', query type: 'event.type:error'
 
 
 
@@ -1167,7 +1177,8 @@ On local host we create Redis container, on production at Render.com we use Clou
 <p> ----------------------------------------------------------------------------------------- </p>
 
 # 28. Tableplus
- Connect SQL connection to host '127.0.0.1' instead of 'sql' as in .env
+ SQL connection =>  host '127.0.0.1' instead of 'sql' as in .env. Port: 3306. User and password is as in .env, i.e user: 'sail' <br>
+ Redis connection => host: '127.0.0.1', port: 6379. User and password: empty
 
 
 
@@ -1396,6 +1407,9 @@ FROM
   `laravel-bigquery.analytics_dataset.product_views`  #BIGQUERY_PROJECT_ID.BIGQUERY_DATASET.BIGQUERY_TABLE
 GROUP BY product_id ORDER BY  total_views DESC  LIMIT  2 #50 
 </code>
+
+
+
 ---------------------
 
 4.<p>How add Loki panel to Grafana: </p>
@@ -1410,8 +1424,8 @@ GROUP BY product_id ORDER BY  total_views DESC  LIMIT  2 #50
 
 4.<p>How add Infinity panel to Grafana: </p>
 Infinity datasource => set url => and Use $.data in Parsing options <br>
-If url is protected by Sanctum, generate Sanctum token in console and add to Auth in Grafana. 
-Go in Grafana Panel => Headers => add header => in filed Key add Authorization, in field Value add sanctum token, must be in format ID|token
+If url is protected by Sanctum, generate Sanctum token in console and add it to Auth in Grafana. 
+Go in Grafana Panel => Headers => add header => in field "Key" add "Authorization", in field "Value" add sanctum token, must be in format "Bearer ID|token".  ID must match the column ID of the token in table `personal_access_tokens` (in case you you generate it at local and paste to prod Alwaysdata table `personal_access_tokens`). Can generate with <code> php artisan get_sanctum_token </code>
 
 
 ---------------------
