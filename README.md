@@ -1042,7 +1042,7 @@ Is registered with acc****1@u**.net
 Render.com set up:
 <p> 1 Create Dockerfile specifically for Render and set it in Render settins => ./docker_db_setup/render.com/Dockerfile </p>
 <p> 2. Create external sql db at alwaysdata,com, as native render.com  DB will be erased in 30 days </p>
-<p> 3. Create redis instance at render.com </p>
+<p> 3. Create redis instance at render.com. Render Redis service is created via => '+ New' => 'Key Value'</p>
 
 <p> 4. Fix 1: Disable redis for production as it crashes, in /botstrap/app.hp. UPDATE: it was fixed
  <code>
@@ -1137,7 +1137,7 @@ Redis is used for Prometeus (Prometeus works with Redis only) + for QUEUE_CONNEC
 
 Redis can also be used for Cache + Sessions instead of DB (make changes in env) <br>
 
-On local host we create Redis Docker container(along with Php container, so Redis runs always). On production at Render.com we use Cloud Redis from Render.com and providing REDIS_URL in .env <br>
+On local host we create Redis Docker container(along with Php container, so Redis runs always). On production at Render.com we use Cloud Redis from Render.com and providing REDIS_URL in .env. Render Redis service is created via => '+ New' => 'Key Value' <br>
 
 For local host in .env we use  REDIS_HOST=redis, REDIS_PASSWORD=null,REDIS_PORT=**. For Production at Render we use REDIS_URL. <br>
 NB: REDIS_URL is loaded by default, so on local it must be REDIS_URL=null, otherwise it takes it and ignores REDIS_HOST, REDIS_PASSWORD, etc
@@ -1390,7 +1390,22 @@ The Metrics Endpoint integration collects the metrics; your Grafana panel querie
 
 a. Make sure /metrics is publicly accessible or has basic auth (our case) <br> 
 b. In Grafana Cloud => Connections => Add new connection => Metrics Endpoint => Create the scrape job  'my_scrape_job_from_larafilament_metrics_endpoint' =>  set 'Scrape Job URL', scrape time interval, Basic Auth username, password<br>
+ND: currently scrape job is disabled not to consume Instance minutes at Render.com<br>
 
+c. Create panel, datasource is => Prometeus icon type => grafanacloud-account931-prom. Then in Metrics browser for e.g:
+"Count by ip"
+<code>
+sum by (ip) ( laravel_requests_by_ip_total{
+    scrape_job=~"my_scrape_job_from_larafilament_metrics_endpoint"
+  })
+</code>
+
+OR "Samples Received".
+<code>
+count by (__name__) ({__name__=~".+", job=~"integrations/metrics_endpoint/.+", scrape_job=~"my_scrape_job_from_larafilament_metrics_endpoint"})
+</code>
+
+<br>
 
 ---------------------
 
@@ -1413,7 +1428,27 @@ GROUP BY product_id ORDER BY  total_views DESC  LIMIT  2 #50
 ---------------------
 
 4.<p>How add Loki panel to Grafana: </p>
+You can send Laravel logs directly to Loki without Promtail or Grafana Alloy.
+The cleanest approach is to create a custom Laravel Monolog handler that sends each log record to Loki's HTTP API. <br>
+Grafana Cloud includes hosted Loki, so you don't need to install Loki yourself. You can use Grafana Cloud Logs (Loki) and send your Laravel logs directly to its Loki HTTP API. You also don't need Docker, Promtail, or Grafana Alloy if you implement the direct HTTP integration in Laravel. Laravel → Grafana Cloud Loki → Grafana <br>
+1. Create a Loki logging channel In config/logging.php:
+<code>
+'channels' => [
+    // ...
+    'loki' => [
+        'driver' => 'monolog',
+        'handler' => App\Logging\LokiHandler::class,
+        'level' => env('LOG_LEVEL', 'debug'),
+    ],],
+  </code>
 
+2. Create app/Logging/LokiHandler.php => see this project <br>
+
+3. Add to .env 
+<code>
+LOG_CHANNEL=loki
+LOKI_URL=http://loki:3100
+</code>
 
 ---------------------
 
@@ -1435,7 +1470,6 @@ Go in Grafana Panel => Headers => add header => in field "Key" add "Authorizatio
 
 <p> ----------------------------------------------------------------------------------------- </p>
 # 35. Loki
-
 
 
 

@@ -14,17 +14,22 @@ class ListProducts
     public static function create()
     {
         return Tool::as('list_products')
-            ->for('List products from the database, 10 products per page. Use the page parameter to navigate through the products.')
+            ->for('List products from the database, 10 products per page. Use the page parameter to navigate through the products. Optionally sort products by price ascending or descending.')
             ->withNumberParameter(
                 'page',
                 'The page number to retrieve. Page 1 returns products 1-10, page 2 returns products 11-20, etc.',
                 false
             )
-            ->using(function (int $page = 1): string {
+            ->withStringParameter(
+                'price_sort',
+                'Optional price sorting. Use "asc" for lowest price first or "desc" for highest price first. If omitted, products are sorted by ID.',
+                false
+            )
+            ->using(function (int $page = 1, ?string $price_sort = null): string {
 
                 $page = max(1, $page);
 
-                $products = Product::query()
+                $productsQuery = Product::query()
                     ->select([
                         'id',
                         'name',
@@ -36,9 +41,20 @@ class ListProducts
                         'stock',
                         'image',
                         'is_active',
-                    ])
-                    ->orderBy('id')
-                    ->paginate(10, ['*'], 'page', $page);
+                    ]);
+
+                if (in_array($price_sort, ['asc', 'desc'], true)) {
+                    $productsQuery->orderBy('price', $price_sort);
+                } else {
+                    $productsQuery->orderBy('id');
+                }
+
+                $products = $productsQuery->paginate(
+                    10,
+                    ['*'],
+                    'page',
+                    $page
+                );
 
                 return json_encode([
                     'current_page' => $products->currentPage(),
