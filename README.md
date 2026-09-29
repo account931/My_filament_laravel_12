@@ -1391,6 +1391,7 @@ The Metrics Endpoint integration collects the metrics; your Grafana panel querie
 a. Make sure /metrics is publicly accessible or has basic auth (our case) <br> 
 b. In Grafana Cloud => Connections => Add new connection => Metrics Endpoint => Create the scrape job  'my_scrape_job_from_larafilament_metrics_endpoint' =>  set 'Scrape Job URL', scrape time interval, Basic Auth username, password<br>
 ND: currently scrape job is disabled not to consume Instance minutes at Render.com<br>
+Later you can find this scarpe job to enable/disable at => Integrations -> Metrics Endpoint -> my_scrape_job_from_larafilament_metrics_endpoint <br>
 
 c. Create panel, datasource is => Prometeus icon type => grafanacloud-account931-prom. Then in Metrics browser for e.g:
 "Count by ip"
@@ -1405,6 +1406,8 @@ OR "Samples Received".
 count by (__name__) ({__name__=~".+", job=~"integrations/metrics_endpoint/.+", scrape_job=~"my_scrape_job_from_larafilament_metrics_endpoint"})
 </code>
 
+OR "Top visited endpoints". NB: Important: to get results in format: endpoint -> visits count, do: find "Options" below you PromL query and change "Format" to "Table" or "Time series" and "Type" to "Instant". When bar chart has one endpoint with a much larger value (6655) than the others (32, 19, etc.) use "Scale -> Logarithmic"
+<code>topk(15, app_visits_total)</code>  
 <br>
 
 ---------------------
@@ -1431,7 +1434,8 @@ GROUP BY product_id ORDER BY  total_views DESC  LIMIT  2 #50
 You can send Laravel logs directly to Loki without Promtail or Grafana Alloy.
 The cleanest approach is to create a custom Laravel Monolog handler that sends each log record to Loki's HTTP API. <br>
 Grafana Cloud includes hosted Loki, so you don't need to install Loki yourself. You can use Grafana Cloud Logs (Loki) and send your Laravel logs directly to its Loki HTTP API. You also don't need Docker, Promtail, or Grafana Alloy if you implement the direct HTTP integration in Laravel. Laravel → Grafana Cloud Loki → Grafana <br>
-1. Create a Loki logging channel In config/logging.php:
+
+1. Create a Loki logging channel in config/logging.php:
 <code>
 'channels' => [
     // ...
@@ -1444,10 +1448,13 @@ Grafana Cloud includes hosted Loki, so you don't need to install Loki yourself. 
 
 2. Create app/Logging/LokiHandler.php => see this project <br>
 
-3. Add to .env 
+3. Get your Grafana Cloud Loki credentials add to .env 
 <code>
 LOG_CHANNEL=loki
-LOKI_URL=http://loki:3100
+LOG_LEVEL=debug
+LOKI_URL=https://logs-prod-xxx.grafana.net
+LOKI_USERNAME=123456
+LOKI_PASSWORD=glc_your_token_here
 </code>
 
 ---------------------

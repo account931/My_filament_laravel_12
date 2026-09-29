@@ -51,14 +51,13 @@ class MyGoogleDriveController extends Controller
             $googleDrive = new Google_Service_Drive($client);
 
             $parameters = [
-                'q' => "mimeType = 'application/vnd.google-apps.folder' and trashed = false", // q' => "mimeType='application/vnd.google-apps.folder' and trashed=false",
+                'q' => "'root' in parents and mimeType = 'application/vnd.google-apps.folder' and trashed = false", // q' => "mimeType='application/vnd.google-apps.folder' and trashed=false",
                 'fields' => 'files(id, name)',  //    'fields' => 'nextPageToken, files(id, name)',
                 'pageSize' => 100,
             ];
 
-            // get G Drive folders
-            $folders = $googleDrive->files->listFiles($parameters)->getFiles();
-
+            // get Google Drive folders
+            $folders = $googleDrive->files->listFiles($parameters)->getFiles(); // this returns folders from all levels unless you restrict the query above with: root' in parents
             // dd($folders->getFiles());
         }
 

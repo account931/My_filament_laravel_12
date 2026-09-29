@@ -55,10 +55,11 @@ class SocialiteGoogleAuthController extends Controller
             ->redirectUrl($redirect) // switch Socialite google redirect url between local and Render.com
             // necessary scopes for Google drive
             ->scopes([
-                'https://www.googleapis.com/auth/drive.file',        // scopes/permissions to work with
-                'https://www.googleapis.com/auth/userinfo.email',
-                'https://www.googleapis.com/auth/userinfo.profile',
-                'https://www.googleapis.com/auth/spreadsheets.readonly',  // mega fix, for reading Google sheet
+                'https://www.googleapis.com/auth/drive.file',    // Access to Google Drive files that your app creates or that the user explicitly opens/shares with your app. It does not give your app unrestricted access to the user's entire Drive.
+                'https://www.googleapis.com/auth/userinfo.email', // Read the user's email address associated with their Google account.
+                'https://www.googleapis.com/auth/userinfo.profile', // Read basic profile information, such as the user's name and profile picture.
+                'https://www.googleapis.com/auth/spreadsheets.readonly',  // mega fix, for reading Google sheet. Read Google Sheets/spreadsheets, but cannot modify them.
+                'https://www.googleapis.com/auth/drive',   // road access to the user's Drive files, Apps that need to browse/search the user's Drive
             ])
             // use below to force getting refresh_token, if not visiting first time ever. MUST BE ON, caused crashes
 

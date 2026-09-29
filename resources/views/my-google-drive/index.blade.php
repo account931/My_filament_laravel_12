@@ -63,9 +63,9 @@
 						<br>
 						<!-- End Log out Socialite Google form --> 
 
-						<p>Your folders list</p>
+						<p>Your folder list count: <?= count($folders) ?></p>
 						@foreach ($folders as $folder)
-							Folder Name: <strong>{{ $folder->getName() }}</strong> | ID: <code>{{ $folder->getId() }}</code> 
+							<span style="font-size: 10px;"> Folder Name: <strong>{{ $folder->getName() }}</strong> | ID: <code>{{ $folder->getId() }}</code> </span><br>
 						@endforeach
 						<br>
 
