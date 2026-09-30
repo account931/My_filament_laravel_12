@@ -1,6 +1,6 @@
 <?php
 
-//
+// Needs /storage/app/bigQuery_keys/laravel-big******.json for Google auth. No Socilaite needed.
 
 namespace App\Http\Controllers\BigQuery;
 

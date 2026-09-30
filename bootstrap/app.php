@@ -4,6 +4,7 @@ use App\Http\Middleware\SetLocale;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Sentry\Laravel\Integration;
 
@@ -21,14 +22,14 @@ return Application::configure(basePath: dirname(__DIR__))
         // Prometheus metrics middleware, set to work only on local||production and when not testing, because of crash at Render.com. UPDATED: now for local and prod, exclude testing
         $env = getenv('APP_ENV') ?: 'production';
         if ($env === 'local' || $env === 'production') {
-            if (getenv('APP_ENV') !== 'testing') { // fix to prevent github action Pest tests from failing
-                // if (!app()->environment('testing')) {//caused error Uncaught ReflectionException: Class "env" does not exist as is not safe to call inside bootstrap/app.php or before the app is fully
-                $middleware->append(\App\Http\Middleware\Prometheus_metrcis\CountVisits::class);           // Prometheus metrics, how many times a page is visited
-                $middleware->append(\App\Http\Middleware\Prometheus_metrcis\TrackRequestDuration::class);  // Prometheus metrics, measure how long requests take
-                $middleware->append(\App\Http\Middleware\Prometheus_metrcis\CountHttpStatusCodes::class);  // Prometheus metrics, counts 200/400/500 responses
-                $middleware->append(\App\Http\Middleware\Prometheus_metrcis\CountExceptions::class);       // Prometheus metrics, tracks exceptions thrown during request
-                $middleware->append(\App\Http\Middleware\Prometheus_metrcis\RegisterIPVisits::class);      // Prometheus metrics, tracks IP visits
-            }
+            // if (getenv('APP_ENV') !== 'testing') { // fix to prevent github action Pest tests from failing. Now works without it
+            // if (!app()->environment('testing')) {//caused error Uncaught ReflectionException: Class "env" does not exist as is not safe to call inside bootstrap/app.php or before the app is fully
+            $middleware->append(\App\Http\Middleware\Prometheus_metrcis\CountVisits::class);           // Prometheus metrics, how many times a page is visited
+            $middleware->append(\App\Http\Middleware\Prometheus_metrcis\TrackRequestDuration::class);  // Prometheus metrics, measure how long requests take
+            $middleware->append(\App\Http\Middleware\Prometheus_metrcis\CountHttpStatusCodes::class);  // Prometheus metrics, counts 200/400/500 responses
+            $middleware->append(\App\Http\Middleware\Prometheus_metrcis\CountExceptions::class);       // Prometheus metrics, tracks exceptions thrown during request
+            $middleware->append(\App\Http\Middleware\Prometheus_metrcis\RegisterIPVisits::class);      // Prometheus metrics, tracks IP visits
+            // }
         }
         // End Prometheus metrics
 
@@ -49,6 +50,16 @@ return Application::configure(basePath: dirname(__DIR__))
             'auth.one_time_token' => \App\Http\Middleware\CheckOneTimeSignedToken::class,
             'force.json' => \App\Http\Middleware\ForceJsonResponse::class,   // force return json
         ]);
+
+        // fix for live Render.com. Without it every visitor appears to have a local IP(it interfiers Prometeus metrics), because Laravel likely isn’t trusting Render’s reverse proxy.
+        $middleware->trustProxies(
+            at: '*',
+            headers: Request::HEADER_X_FORWARDED_FOR |
+                    Request::HEADER_X_FORWARDED_HOST |
+                    Request::HEADER_X_FORWARDED_PORT |
+                    Request::HEADER_X_FORWARDED_PROTO
+        );
+        // End fix for live Render.com. Without it every visitor appears to have a local IP(it interfiers Prometeus metrics), because Laravel likely isn’t trusting Render’s reverse proxy.
 
     })
     // instead of /app/Exceptions/Handler.php ( used in Laravev < 10) handle your exceptions here

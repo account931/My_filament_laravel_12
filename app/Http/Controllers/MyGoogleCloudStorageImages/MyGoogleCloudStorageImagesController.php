@@ -1,6 +1,7 @@
 <?php
 
 // It uploads images to Google cloud storage
+// Needs /storage/app/gcs/service-account.json for Google auth. No Socialite needed.
 
 namespace App\Http\Controllers\MyGoogleCloudStorageImages;
 

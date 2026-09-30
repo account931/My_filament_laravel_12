@@ -33,8 +33,9 @@
             <!--  Socialite   --> 
             <div  class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
              
-            <!--  Show user if already logged based on session value --> 
-            @if (session('google_oauthed_user'))
+            <!-- Show when user is logged to Google via Socialite --> <!--  Show user if already logged based on session value --> 
+            @if (Auth::user()->google_refresh_token AND session('google_oauthed_user')) <!-- session('google_oauthed_user' is fix to work with Socialite login/logout -->
+
                <div class="alert alert-info alert-dismissible fade show" role="alert">
                Logged as: {{ session('google_oauthed_user')->email ?? 'No email found' }}  </br>
                Name: {{ session('google_oauthed_user')->name ?? 'No name found' }} </br>

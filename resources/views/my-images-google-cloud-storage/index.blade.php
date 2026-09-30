@@ -1,4 +1,5 @@
 <x-app-layout>
+    <!-- Needs /storage/app/gcs/service-account.json for Google auth. No Socialite needed.-->
 
     @push('styles')
     <style>

@@ -38,8 +38,10 @@
 
 			<!-- Socialite content part --> 
 			<div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-				<!-- Show user has logged to Google --> 
-				@if (Auth::user()->google_user_email)
+				<!-- Show when user is logged to Google via Socialite --> <!-- Show user has logged to Google --> 
+				{{-- @if (Auth::user()->google_user_email) --}}
+				@if (Auth::user()->google_refresh_token AND session('google_oauthed_user')) <!-- session('google_oauthed_user' is fix to work with Socialite login/logout -->
+
 					<div class="alert alert-info alert-dismissible fade show" role="alert">
 						Logged as: {{ Auth::user()->google_user_email }}  
 						<br>

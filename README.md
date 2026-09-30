@@ -170,7 +170,7 @@ then go container  <code> docker exec -it my_filament_laravel_12-laravel.test-1 
 and run <code> composer install </code> inside container. After then you can start with <code>./vendor/bin/sail bash </code>
 </p>
 <p>4. Create /node_modules with <code> npm install </code> and create build <code> npm run build </code> </p>
-<p>5. Paste json credentials files for BigQuery, GCS and other stuff, like /storage/app/bigQuery_keys/laravel-bigquery-8c7d1271c73f.json OR /gcs/service-account.json </p>
+<p>5. Paste json credentials files for BigQuery, GCS and other stuff, like /storage/app/bigQuery_keys/laravel-bigquery-8c7d1271c73f.json and /gcs/service-account.json </p>
 <p>6. Follow missing steps from 1. Install Laravel 12, like generate key, create DB, migrate, seed, etc</p>
 
 
@@ -930,7 +930,8 @@ NB: it was failing on Render.com, as wants default-mysql-client  for dumping DB,
 
 
 ## 22. Save Images to Google Cloud Storage bucket in Laravel
- ./vendor/bin/pest tests/Feature/App/Http/Controllers/MyGoogleCloudStorageImages/MyGoogleCloudStorageImagesControllerTest.php
+
+Needs /storage/app/gcs/service-account.json for Google auth. No Socialite needed.
  
 GCS Image bucket goes here  =>  https://console.cloud.google.com/storage/browser, find by >> go to console >> select project 'L-Images-Google-Cloud-Storage' >> Cloud Storage >> Buckets </br>
 As it uses Google bucket with billing, it works as long trial period is valid (till 5 January 2026)</br>
@@ -968,7 +969,7 @@ GOOGLE_CLOUD_KEY_FILE=app/gcs/service-account.json
 Display  => <img src="{{ Storage::disk('gcs')->url($relativePath) }}" style="width:20%;">      </br>
 
 
-
+Pest test =>  ./vendor/bin/pest tests/Feature/App/Http/Controllers/MyGoogleCloudStorageImages/MyGoogleCloudStorageImagesControllerTest.php
 
 
 <p> ----------------------------------------------------------------------------------------- </p>
@@ -1040,9 +1041,9 @@ Is registered with acc****1@u**.net
 
 
 Render.com set up:
-<p> 1 Create Dockerfile specifically for Render and set it in Render settins => ./docker_db_setup/render.com/Dockerfile </p>
+<p> 1 Create Dockerfile specifically for Render and set it in Render settings => ./docker_db_setup/render.com/Dockerfile </p>
 <p> 2. Create external sql db at alwaysdata,com, as native render.com  DB will be erased in 30 days </p>
-<p> 3. Create redis instance at render.com. Render Redis service is created via => '+ New' => 'Key Value'</p>
+<p> 3. Create redis instance at render.com. Render Redis service is created via => '+ New' => 'Key Value'. NB: As it is Render Free Tier disk does not persist, resets data</p>
 
 <p> 4. Fix 1: Disable redis for production as it crashes, in /botstrap/app.hp. UPDATE: it was fixed
  <code>
@@ -1137,7 +1138,7 @@ Redis is used for Prometeus (Prometeus works with Redis only) + for QUEUE_CONNEC
 
 Redis can also be used for Cache + Sessions instead of DB (make changes in env) <br>
 
-On local host we create Redis Docker container(along with Php container, so Redis runs always). On production at Render.com we use Cloud Redis from Render.com and providing REDIS_URL in .env. Render Redis service is created via => '+ New' => 'Key Value' <br>
+On local host we create Redis Docker container(along with Php container, so Redis runs always). On production at Render.com we use Cloud Redis from Render.com and providing REDIS_URL in .env. Render Redis service is created via => '+ New' => 'Key Value'. NB: As it is Render Free Tier disk does not persist, resets data <br>
 
 For local host in .env we use  REDIS_HOST=redis, REDIS_PASSWORD=null,REDIS_PORT=**. For Production at Render we use REDIS_URL. <br>
 NB: REDIS_URL is loaded by default, so on local it must be REDIS_URL=null, otherwise it takes it and ignores REDIS_HOST, REDIS_PASSWORD, etc
@@ -1392,9 +1393,16 @@ a. Make sure /metrics is publicly accessible or has basic auth (our case) <br>
 b. In Grafana Cloud => Connections => Add new connection => Metrics Endpoint => Create the scrape job  'my_scrape_job_from_larafilament_metrics_endpoint' =>  set 'Scrape Job URL', scrape time interval, Basic Auth username, password<br>
 ND: currently scrape job is disabled not to consume Instance minutes at Render.com<br>
 Later you can find this scarpe job to enable/disable at => Integrations -> Metrics Endpoint -> my_scrape_job_from_larafilament_metrics_endpoint <br>
+How to use it in this limited mode? Go to your render web application to wake it up => visit some pages to get /metrics =>  enable scape job at Grafana  for several minutes.
+<br>
 
 c. Create panel, datasource is => Prometeus icon type => grafanacloud-account931-prom. Then in Metrics browser for e.g:
-"Count by ip"
+
+"Top visited endpoints", i.e /login, /dashboartd, etc 
+NB: Important: to get results in format: (endpoint <=> visits_count), do: find "Options" below you PromL query and change "Format" to "Table" or "Time series" and "Type" to "Instant". When bar chart has one endpoint with a much larger value (6655) than the others (32, 19, etc.) use "Scale -> Logarithmic" to set better visibility.
+<code>topk(15, app_visits_total)</code>  
+
+OR "Count by ip"
 <code>
 sum by (ip) ( laravel_requests_by_ip_total{
     scrape_job=~"my_scrape_job_from_larafilament_metrics_endpoint"
@@ -1406,8 +1414,7 @@ OR "Samples Received".
 count by (__name__) ({__name__=~".+", job=~"integrations/metrics_endpoint/.+", scrape_job=~"my_scrape_job_from_larafilament_metrics_endpoint"})
 </code>
 
-OR "Top visited endpoints". NB: Important: to get results in format: endpoint -> visits count, do: find "Options" below you PromL query and change "Format" to "Table" or "Time series" and "Type" to "Instant". When bar chart has one endpoint with a much larger value (6655) than the others (32, 19, etc.) use "Scale -> Logarithmic"
-<code>topk(15, app_visits_total)</code>  
+
 <br>
 
 ---------------------
@@ -1434,6 +1441,7 @@ GROUP BY product_id ORDER BY  total_views DESC  LIMIT  2 #50
 You can send Laravel logs directly to Loki without Promtail or Grafana Alloy.
 The cleanest approach is to create a custom Laravel Monolog handler that sends each log record to Loki's HTTP API. <br>
 Grafana Cloud includes hosted Loki, so you don't need to install Loki yourself. You can use Grafana Cloud Logs (Loki) and send your Laravel logs directly to its Loki HTTP API. You also don't need Docker, Promtail, or Grafana Alloy if you implement the direct HTTP integration in Laravel. Laravel → Grafana Cloud Loki → Grafana <br>
+Variant used: Laravel Monolog → OpenTelemetry Collector → Loki,<br>
 
 1. Create a Loki logging channel in config/logging.php:
 <code>
@@ -1448,7 +1456,7 @@ Grafana Cloud includes hosted Loki, so you don't need to install Loki yourself. 
 
 2. Create app/Logging/LokiHandler.php => see this project <br>
 
-3. Get your Grafana Cloud Loki credentials add to .env 
+3. Get your Grafana Cloud Loki credentials and add to .env 
 <code>
 LOG_CHANNEL=loki
 LOG_LEVEL=debug
@@ -1467,7 +1475,7 @@ LOKI_PASSWORD=glc_your_token_here
 4.<p>How add Infinity panel to Grafana: </p>
 Infinity datasource => set url => and Use $.data in Parsing options <br>
 If url is protected by Sanctum, generate Sanctum token in console and add it to Auth in Grafana. 
-Go in Grafana Panel => Headers => add header => in field "Key" add "Authorization", in field "Value" add sanctum token, must be in format "Bearer ID|token".  ID must match the column ID of the token in table `personal_access_tokens` (in case you you generate it at local and paste to prod Alwaysdata table `personal_access_tokens`). Can generate with <code> php artisan get_sanctum_token </code>
+Go in Grafana Panel => Headers => add header => in field "Key" add "Authorization", in field "Value" add sanctum token, must be in format "Bearer ID|token".  ID must match the column ID of the token in table `personal_access_tokens` (in case you you generate it at local and paste to prod Alwaysdata table `personal_access_tokens`). Can generate with <code> php artisan get_sanctum_token </code> at local and copy/paste
 
 
 ---------------------
@@ -1630,6 +1638,10 @@ add to config/filesystem.php to
  
 <p> Ai agent on Gemeni using Prism package</p>
 ![Screenshot](public/img/screenshots/flmt-23-ai-agent.png)    </br>
+
+<p> Grafana Cloud, data from live Render.com</p>
+![Screenshot](public/img/screenshots/flmt-24-grafana-from-render.png)    </br>
+![Screenshot](public/img/screenshots/flmt-24-grafana-from-render-promet.png)    </br>
 
 
 
