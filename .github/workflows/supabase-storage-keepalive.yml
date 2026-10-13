@@ -96,7 +96,7 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}  #github secrets
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}   #github secrets
         run: |
-          MESSAGE="💾 Supabase SQL DB table /keep_supabase_alive/ was hit (new record created) and  Supabase Storage keep-supabase-alive.txt was created successfully"   #U+1F680 is UTF-8 for "rocket-icon".
+          MESSAGE="💾 Supabase S3 storage was pinged. Supabase SQL DB table /keep_supabase_alive/ was hit (new record created) and  Supabase Storage keep-supabase-alive.txt was created successfully"   #U+1F680 is UTF-8 for "rocket-icon".
           curl -s -X POST "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage" \
             -d chat_id=$TELEGRAM_CHAT_ID \
             -d text="$MESSAGE" \

@@ -760,7 +760,7 @@ One-time link uses middleware '/Middleware/CheckOneTimeToken' registered in /con
 
 ## 19. Jobs
 
-1. DB for jobs should exist (if you use QUEUE_CONNECTION=database)
+1. DB table for jobs should exist (if you use QUEUE_CONNECTION=database)
 <code> php artisan queue:table   php artisan migrate </code>
 
 Optional:
@@ -781,7 +781,7 @@ php artisan queue:work   //only processes queued jobs — it does not trigger sc
                          //starts a worker that listens for new jobs on the queue and executes them in real-time.
 </code>
 
-
+Update: now we use Horizon + Redis for queued jobs. See => Horizon section
 
 
 
@@ -1045,7 +1045,7 @@ Render.com set up:
 <p> 2. Create external sql db at alwaysdata,com, as native render.com  DB will be erased in 30 days </p>
 <p> 3. Create redis instance at render.com. Render Redis service is created via => '+ New' => 'Key Value'. NB: As it is Render Free Tier disk does not persist, resets data</p>
 
-<p> 4. Fix 1: Disable redis for production as it crashes, in /botstrap/app.hp. UPDATE: it was fixed
+<p> 4. Fix 1: Disable redis for production as it crashes, in /botstrap/app.hp. UPDATE: it was fixed, Redis is runnung.
  <code>
    // Prometheus metrics middleware
         $env = getenv('APP_ENV') ?: 'production';
@@ -1099,12 +1099,12 @@ ALGOLIA_SECRET=your_write_api_key #SECRET
 </code>
 
 
-<p> 6. Add json keys Google bigQuery, etc 
+<p> 6. Add json keys Google bigQuery, Google cloud images storage, etc <br>
 
-add json files 'app/gcs/service-account.json' and  'storage/app/bigQuery_keys/laravel-bigquery-8****f.json' to Render as Secret Files and since in Render they go in root folder (unlike local), add fixed var to render env
+add json files 'app/gcs/service-account.json' and  'storage/app/bigQuery_keys/laravel-bigquery-8****f.json' to Render.com as Secret Files and since in Render they go in root folder (unlike local), add fixed var to render env:
 
 <code>
-GOOGLE_CLOUD_KEY_FILE=service-account.json .
+GOOGLE_CLOUD_KEY_FILE=service-account.json .  # Google cloud images storage
 BIGQUERY_KEY_FILE=laravel-bigquery-8****f.json 
 </code>
 </p>
@@ -1117,7 +1117,7 @@ BIGQUERY_KEY_FILE=laravel-bigquery-8****f.json
 
 <p> 8.Cant run migrations in Pre-Deploy Command at Render dashboard as it is paid option, so add it to Dockerfile for Render.</p>
 
-<p> 9. Implement Queue Jobs: to run queue jobs add to your /docker_db_setup/render.com/Dockerfile command "php artisan horizon" OR "php artisan queue:work". NB: it is bad practice, good practice - you should create a new instance where u run the command "php artisan horizon", but it will take free tier limits</p>
+<p> 9. Implement Queue Jobs: to run queue jobs add to your /docker_db_setup/render.com/Dockerfile command "php artisan horizon" OR "php artisan queue:work". NB: it is bad practice, good practice - you should create a new duplicate docker instance where u run the command "php artisan horizon", but it will take free tier limits</p>
 
 <p> 10. Implement job supervisor: cant do this as server on free tier sleeps after inactivity </p>
 
@@ -1157,8 +1157,14 @@ If you use Horizon, instead of "php artisan queue:work" you may just run "php ar
 1. <code> composer require laravel/horizon  </code>
 2. <code> php artisan horizon:install       </code> publish config file → config/horizon.php, Publish migration for failed_jobs
 3. <code>  php artisan migrate </code>
-4. In .env =>  QUEUE_CONNECTION=redis
-5. <code>  php artisan horizon</code>
+4. In .env => 
+   <code>
+    QUEUE_CONNECTION=redis  
+    REDIS_HOST=redis REDIS_PORT=6** #set up for local
+    REDIS_URL=null #set up for local
+    #REDIS_URL=redis://red-d5****** #set up for prod at Render.com
+    </code>
+5. To start => <code>  php artisan horizon </code>
 6. Dashboard =>   http://localhost:8000/horizon
 7. On live production allow access in app/Providers/HorizonServiceProvider.php:
  <code>
@@ -1172,7 +1178,14 @@ public function boot()     // OR protected function gate()
     });
 }
 </code>
-On local host we create Redis container, on production at Render.com we use Cloud Redis from Render.com
+On local host we create Redis Docker container, On production at Render.com we use Cloud Redis from Render.com and providing REDIS_URL in .env. Render Redis service is created via => '+ New' => 'Key Value'. NB: As it is Render Free Tier disk does not persist, resets data <br> .
+How enable <code>php artisan horizon</code> on Render see => Deploy at Render
+
+
+
+
+
+
 
 
 <p> ----------------------------------------------------------------------------------------- </p>
@@ -1392,11 +1405,11 @@ The Metrics Endpoint integration collects the metrics; your Grafana panel querie
 a. Make sure /metrics is publicly accessible or has basic auth (our case) <br> 
 b. In Grafana Cloud => Connections => Add new connection => Metrics Endpoint => Create the scrape job  'my_scrape_job_from_larafilament_metrics_endpoint' =>  set 'Scrape Job URL', scrape time interval, Basic Auth username, password<br>
 ND: currently scrape job is disabled not to consume Instance minutes at Render.com<br>
-Later you can find this scarpe job to enable/disable at => Integrations -> Metrics Endpoint -> my_scrape_job_from_larafilament_metrics_endpoint <br>
+Later you can find this scarpe job to enable/disable at Connections => Integrations -> Metrics Endpoint -> my_scrape_job_from_larafilament_metrics_endpoint <br>
 How to use it in this limited mode? Go to your render web application to wake it up => visit some pages to get /metrics =>  enable scape job at Grafana  for several minutes.
 <br>
 
-c. Create panel, datasource is => Prometeus icon type => grafanacloud-account931-prom. Then in Metrics browser for e.g:
+c. Create panel, datasource is => Prometeus icon type => grafanacloud-account931-prom. Then in Metrics browser for e.g: <br>
 
 "Top visited endpoints", i.e /login, /dashboartd, etc 
 NB: Important: to get results in format: (endpoint <=> visits_count), do: find "Options" below you PromL query and change "Format" to "Table" or "Time series" and "Type" to "Instant". When bar chart has one endpoint with a much larger value (6655) than the others (32, 19, etc.) use "Scale -> Logarithmic" to set better visibility.
@@ -1441,8 +1454,31 @@ GROUP BY product_id ORDER BY  total_views DESC  LIMIT  2 #50
 You can send Laravel logs directly to Loki without Promtail or Grafana Alloy.
 The cleanest approach is to create a custom Laravel Monolog handler that sends each log record to Loki's HTTP API. <br>
 Grafana Cloud includes hosted Loki, so you don't need to install Loki yourself. You can use Grafana Cloud Logs (Loki) and send your Laravel logs directly to its Loki HTTP API. You also don't need Docker, Promtail, or Grafana Alloy if you implement the direct HTTP integration in Laravel. Laravel → Grafana Cloud Loki → Grafana <br>
-Variant used: Laravel Monolog → OpenTelemetry Collector → Loki,<br>
 
+Variant_2 used: Laravel 12 → Monolog → OTLP/HTTP → OpenTelemetry Collector → Loki -> Grafana<br>
+
+
+1.Install the OpenTelemetry PHP packages: 
+<code>
+composer require open-telemetry/api open-telemetry/sdk
+composer require open-telemetry/api open-telemetry/sdk open-telemetry/exporter-otlp
+</code>
+
+2.Configure Laravel's logging channel to use a custom Monolog handler in config/logging.php:.
+<code>
+'channels' => [
+    'otel' => [
+        'driver' => 'monolog',
+        'handler' => App\Logging\OpenTelemetryHandler::class,
+        'level' => env('LOG_LEVEL', 'debug'),
+    ],],
+</code>
+
+3. Create app/Logging/OpenTelemetryHandler.php
+
+
+
+----------Delete below
 1. Create a Loki logging channel in config/logging.php:
 <code>
 'channels' => [
