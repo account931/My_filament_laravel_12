@@ -230,6 +230,12 @@ Route::middleware('auth')->group(function () {
     // Just external link to Grafana Cloud
     Route::get('grafana/link', [GrafanaLinkController::class, 'index'])->name('grafana.link');  //
 
+    // check php version
+    Route::get('/phpinfo', function () {
+        // abort_unless(app()->environment('local'), 404);
+        phpinfo();
+    });
+
 });
 // End Auth (logged) users only------------------------------------------------------------------------------------------
 

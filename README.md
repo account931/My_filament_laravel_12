@@ -3,7 +3,9 @@
 ![PHP Version](https://img.shields.io/badge/PHP-8.4.8-blue)
 
 
-> Laravel: 12.18, PHP: 8.4.8 , Filament: 3, mysql: 8.0.42, db: '', </br></br>
+> Laravel: 12.18, PHP: 8.4.8 , Filament: 3, mysql: 8.0.42, db: '', <br><br>
+Updated to 8.4.27 which includes patches for two critical security vulnerabilities CVE-2026-109618 and CVE-2026-109619. (27 is number of patches, so it greater than 8.4.8) <br> <br>
+
 Contains 80% of Laravel_2024_migration transfered from Laravel 6 to 12 + Filament + Stripe + E-commerce shop, etc</br>
 What is new: Filament 3, Sail, Sanctum, CI/CD, Laravel Audit, PHPStan static analysis tool 2.1.17, Pint, Tailwind CSS out of the box, Vue 3, Pinia insead of Vuex store, dotswan/filament-map-picker, Laravel Cashier with Stripe, Sentry, Prometheus_and_Grafana, 
 Scramble – Laravel OpenAPI (Swagger), one-time expirable signed routes(signed means that URL includes a signature hash), send emails,
@@ -452,7 +454,7 @@ computed: {
  Config =>  pint.json
 
 <code> ./vendor/bin/pint --test </code>   shows what would be fixed, without changing files.
-<code> ./vendor/bin/pint </code>  fix
+<code> ./vendor/bin/pint </code>  fix (use this before commit)
 
 </code> ./vendor/bin/sail pint </code> 
 
@@ -519,7 +521,7 @@ Owner::factory()->count(12) ->create();
 
 
 ## 14. Laravel cashier with Stripe
-Cashier provides an expressive, fluent interface to Stripe's subscription billing services.
+Cashier package provides an expressive, fluent interface to Stripe's billing services. If we use Cashier in 99% it means we use with Stripe.
 Laravel Cashier is mainly designed for subscriptions and recurring billing, but you can absolutely use it for one-time payments with Stripe too
 <code>
 composer require stripe/stripe-php
@@ -807,7 +809,9 @@ php artisan queue:work   //step 2 processes queued jobs.  //starts a worker that
 
 ## 20. Socialite Oauth
 
-<code> composer require laravel/socialite </code>  Google Drive integration package </br>
+NB: Oauth GOOGLE_CLIENT_ID is used for Socialite login + GoogleDriveSqlBackupService + GoogleSpreadsheetController only, others use json file:G_CLOUD_KEY_FILE,BIGQUERY_KEY_FILE<br>
+
+<code> composer require laravel/socialite </code>  Google Drive integration package <br>
 generate a Google Oauth Client app at Google Cloud Console, get this values and add to .env </br>
 
 #Google credentials to generate Google access token, for example via Socialite
