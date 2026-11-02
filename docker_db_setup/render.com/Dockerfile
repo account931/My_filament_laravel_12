@@ -70,6 +70,7 @@ FROM php:8.4-apache
 
 RUN apt-get update && apt-get install -y \
     default-mysql-client \
+    supervisor \
     libicu-dev libzip-dev libpng-dev libonig-dev libcurl4-openssl-dev \
     && docker-php-ext-install intl zip mbstring pdo pdo_mysql bcmath pcntl \
     && pecl install redis \
@@ -91,6 +92,9 @@ WORKDIR /var/www/html
 # COPY --from=builder /app/public/build ./public/build   # suppress vite error
 COPY --from=builder /app ./
 
+#supervisor for Horizon queque
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
 RUN mkdir -p storage bootstrap/cache \
     && chown -R www-data:www-data /var/www/html \
     && chmod -R 775 storage bootstrap/cache
@@ -99,4 +103,17 @@ EXPOSE 80
 # CMD ["apache2-foreground"]
 
 #run migrations, cache clear, horizon for jobs and other stuff here as can not use Render.com paid post-deploy command/hook 
-CMD sh -c "php artisan config:clear && php artisan cache:clear && php artisan route:clear && php artisan view:clear && php artisan config:cache && php artisan route:cache && php artisan view:cache && php artisan migrate --force || true && php artisan horizon & apache2-foreground"
+#CMD sh -c "php artisan config:clear && php artisan cache:clear && php artisan route:clear && php artisan view:clear && php artisan config:cache && php artisan route:cache && php artisan view:cache && php artisan migrate --force || true && php artisan horizon & apache2-foreground"
+
+# include running upervisor for Horizon queque
+CMD ["sh", "-c", "\
+    su -s /bin/sh www-data -c 'php artisan config:clear && \
+    php artisan cache:clear && \
+    php artisan route:clear && \
+    php artisan view:clear && \
+    php artisan config:cache && \
+    php artisan route:cache && \
+    php artisan view:cache' && \
+    (su -s /bin/sh www-data -c 'php artisan migrate --force' || echo 'WARNING: Migration failed') && \
+    exec supervisord -n -c /etc/supervisor/supervisord.conf \
+"]

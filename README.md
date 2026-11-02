@@ -4,7 +4,7 @@
 
 
 > Laravel: 12.18, PHP: 8.4.8 , Filament: 3, mysql: 8.0.42, db: '', <br><br>
-Updated to 8.4.27 which includes patches for two critical security vulnerabilities CVE-2026-109618 and CVE-2026-109619. (27 is number of patches, so it greater than 8.4.8) <br> <br>
+Php is updated to 8.4.27 which includes patches for security vulnerabilities CVE-2026-109618 and CVE-2026-109619. (27 is number of patches, so it is greater than 8.4.8) <br> <br>
 
 Contains 80% of Laravel_2024_migration transfered from Laravel 6 to 12 + Filament + Stripe + E-commerce shop, etc</br>
 What is new: Filament 3, Sail, Sanctum, CI/CD, Laravel Audit, PHPStan static analysis tool 2.1.17, Pint, Tailwind CSS out of the box, Vue 3, Pinia insead of Vuex store, dotswan/filament-map-picker, Laravel Cashier with Stripe, Sentry, Prometheus_and_Grafana, 
@@ -809,24 +809,32 @@ php artisan queue:work   //step 2 processes queued jobs.  //starts a worker that
 
 ## 20. Socialite Oauth
 
-NB: Oauth GOOGLE_CLIENT_ID is used for Socialite login + GoogleDriveSqlBackupService + GoogleSpreadsheetController only, others use json file:G_CLOUD_KEY_FILE,BIGQUERY_KEY_FILE<br>
+NB: Oauth GOOGLE_CLIENT_ID is used for Socialite login + GoogleDriveSqlBackupService + GoogleSpreadsheetController only, others [bigQuery, gCloude] use json files: G_CLOUD_KEY_FILE, BIGQUERY_KEY_FILE <br>
 
-<code> composer require laravel/socialite </code>  Google Drive integration package <br>
-generate a Google Oauth Client app at Google Cloud Console, get this values and add to .env </br>
+1. <code> composer require laravel/socialite </code>  Google Drive integration package <br>
 
-#Google credentials to generate Google access token, for example via Socialite
+2. Generate a Google Oauth Client app at Google Cloud Console, get credentials and add to .env <br>
+
+<code> 
 GOOGLE_CLIENT_ID=your-client-id.apps.googleusercontent.com
 GOOGLE_CLIENT_SECRET=your-client-secret
 GOOGLE_REDIRECT_URI=http://localhost:8000/auth/google/callback
+GOOGLE_REDIRECT_URI_FOR_RENDER=https://******.onrender.com/***/callback  #For production on Render.com
+</code> 
+
+<p> Steps to generate Oauth Client app:</p> 
+a. Create Google console oAuth Client ('Web-application' type, not 'Desktop'), e.g 'Laravel-12-Oauth-Login-2026' for login, before we used 'Laravel DB Backup'<br>
+b. Add callback urls, take values from .env and pasteto Api & Services->Credentials->Auth redirect Urls
+f. In your Gogle console application 'Laravel-12-Oauth-Login-2026' in -> Audience ->  add test users list and in API -> enable neccesary Api, like Google Drive etc <br>
 
 
-</br>Socialite Oauth</br>
-Socialite is package for easy Oauth  authentication in Google, Facebook, etc. Must create Google console oAuth Client (web-application type, not Desktop) 'Laravel_12_Oauth_login_2026' for login, before we used 'Laravel DB Backup' </br>
+<p>General flow of Socialite Oauth</p>
+Socialite is package for easy Oauth  authentication in Google, Facebook, etc.  </br>
 
 When you login via Socialite you get 'access_token' (which lives for 1 hour and used for access) + 'refresh_token' (which is long live and used to issue new access_token). So, 'access_token' and 'refresh_token' is unique for every user, while client_id, secret_id is common. </br>
 
 Login via Socialite is implemented at Http\Controllers\Socialite\SocialiteGoogleAuthController, login via authed page and callback. </br>
-Callback url must be added in 2 places:  a.)Google console project 'Laravel_12_Oauth_login_2026' in Api & Services->Credentials->Auth redirect Urls and b.)
+Callback url must be added in 2 places:  a.)Google console project 'Laravel-12-Oauth-Login-2026' in Api & Services->Credentials->Auth redirect Urls and b.)
 config/services + in .env (GOOGLE_REDIRECT_URI) </br>
 In callback in SocialiteGoogleAuthController you get logged used info and save 'google_access_token', 'google_refresh_token', 'google_user_email', 'google_expires_at' to DB table 'users' (of course add/migrate these columns first). We encrypt 'google_refresh_token' before saving in table </br>
 
@@ -855,9 +863,9 @@ Then use user's 'refresh_token' to generate 'access_token' if prev 'access_token
 
 ## 21. SQL DataBase auto back-up job
 
-Test not finished =>  ./vendor/bin/pest tests/Feature/App/Service/GoogleDriveSqlBackupServiceTest.php
+Uses Socialite Oauth <br>
 
-Job to create SQL DB dump and send it to to Google Drive at dim***1@gmail.com  </br>
+This is an example job to create SQL DB dump and send it to to Google Drive at dim***1@gmail.com  <br>
 Saves SQL dump locally to /var/www/html/storage/app/backup-2025-09-**-**, on Google Drive saves to folder 'Laravel_Sql_backup' </br></br>
 
 See how to start Scheduled jobs: 
