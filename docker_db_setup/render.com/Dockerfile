@@ -106,14 +106,15 @@ EXPOSE 80
 #CMD sh -c "php artisan config:clear && php artisan cache:clear && php artisan route:clear && php artisan view:clear && php artisan config:cache && php artisan route:cache && php artisan view:cache && php artisan migrate --force || true && php artisan horizon & apache2-foreground"
 
 # include running upervisor for Horizon queque
-CMD ["sh", "-c", "\
+CMD ["sh", "-c", " \
+    set -e; \
     su -s /bin/sh www-data -c 'php artisan config:clear && \
-    php artisan cache:clear && \
-    php artisan route:clear && \
-    php artisan view:clear && \
-    php artisan config:cache && \
-    php artisan route:cache && \
-    php artisan view:cache' && \
-    (su -s /bin/sh www-data -c 'php artisan migrate --force' || echo 'WARNING: Migration failed') && \
+        php artisan cache:clear && \
+        php artisan route:clear && \
+        php artisan view:clear && \
+        php artisan config:cache && \
+        php artisan route:cache && \
+        php artisan view:cache'; \
+    su -s /bin/sh www-data -c 'php artisan migrate --force'; \
     exec supervisord -n -c /etc/supervisor/supervisord.conf \
 "]
