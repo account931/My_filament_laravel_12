@@ -93,7 +93,7 @@ WORKDIR /var/www/html
 COPY --from=builder /app ./
 
 #supervisor for Horizon queque
-COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY docker_db_setup/render.com/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 RUN mkdir -p storage bootstrap/cache \
     && chown -R www-data:www-data /var/www/html \
