@@ -95,7 +95,7 @@
 
                         <x-dropdown-link :href="route('send.email.index')"  :class="request()->routeIs('send.email.index') ? 'bg-gray-300 text-gray-900 font-semibold' : ''">
                             <i class="fas fa-cloud-sun" style="font-size:12px"></i>
-                            {{ __('Send email') }}
+                            {{ __('Send email Job') }}
                         </x-dropdown-link>
 
                         <x-dropdown-link :href="route('bigQuery.index')"  :class="request()->routeIs('bigQuery.index') ? 'bg-gray-300 text-gray-900 font-semibold' : ''">

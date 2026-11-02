@@ -1643,6 +1643,14 @@ add to config/filesystem.php to
     sudo chmod -R 775 storage bootstrap/cache
     </code>
 
+If file_put_contents Permission denied => outside of container =>
+<code>
+sudo mkdir -p storage/framework/{cache,sessions,views}
+sudo mkdir -p storage/logs bootstrap/cache
+sudo chown -R $USER:www-data storage bootstrap/cache
+sudo chmod -R 775 storage bootstrap/cache
+</code>
+
 
 8. Image is not displayed/forbidden =>  php artisan storage:link
 

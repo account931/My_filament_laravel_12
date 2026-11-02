@@ -16,7 +16,7 @@
                 <span class="small text-danger">Note: it is not Queue job but console command (it is for convenience, if you wish switch to Job variant in controller)<br></span>
                 To run the job and save sql to GDrive u must have already have 'google_refresh_token' in table User which is generate in other Socialite login flow in Controllers/Socialite/SocialiteGoogleAuthController <br>
                 'access_token' is needed to send data to GDrive and it is is auto generated  using 'google_refresh_token <br>
-                <span class="small">Sql dump is saved to Google Drive => dimm**1 =>   So far, it is not Job, just Service so Laravel_sql_backup works even without php artisan queue:work  </span>         
+                <span class="small">Sql dump is saved to Google Drive => dimm**1 OR any other G account you'll log=>   So far, it is not Job, just Service so Laravel_sql_backup works even without php artisan queue:work  </span>         
                 </div>
 
                 <div class="card-body">
